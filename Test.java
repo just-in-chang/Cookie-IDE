@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -5,7 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-
+// git add . 
 public class Test extends Application
 {
     private double x = 0, y = 0;

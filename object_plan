@@ -1,0 +1,17 @@
+interface guiComponent{
+}
+
+guiMap extends HashMap implements guiComponent{
+Map type: Vertical or Horizontal
+Size
+Starting xvalue
+Starting yvalue
+}
+
+guiObject implements guiComponent{
+Object type: textbox, button, frame, etc. 
+Color
+Size
+Starting xvalue
+Starting yvalue
+}
