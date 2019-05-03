@@ -59,7 +59,6 @@ public class Test extends Application
         window.setCenter( v );
         
         stage.show();
-
     }
 
 }
