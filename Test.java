@@ -1,14 +1,15 @@
 import javafx.application.Application;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 
 
 public class Test extends Application
 {
+    private double x = 0, y = 0;
+    private boolean resize = false, activeDrag = false;
     /**
      * main class lmao
      * 
@@ -20,23 +21,63 @@ public class Test extends Application
         launch( args );
     }
 
-    public void addMouseDragEvent( Control...controls )
+    
+    public void setManipulative( Control...controls )
     {
-        EventHandler<MouseEvent> event = new EventHandler<MouseEvent>()
-        {
-            @Override
-            public void handle( MouseEvent e )
-            {
-                Control src = ((Control)e.getSource());
-                src.setTranslateX( e.getSceneX() - src.getWidth()/2 - src.getLayoutX());
-                src.setTranslateY( e.getSceneY() - src.getHeight() * 1.5 - src.getLayoutY());
-            }
-        };
         for ( Control control : controls )
         {
-            control.addEventFilter( MouseEvent.MOUSE_DRAGGED ,event);
+            control.setOnMouseMoved( e -> {
+                Control src = ((Control)e.getSource());
+                
+                if ( ( e.getX() > src.getWidth() - 6 && e.getY() > src.getHeight() - 6 ) )
+                {
+                    resize = true;
+                    control.getScene().setCursor( Cursor.NW_RESIZE );
+                }
+                else
+                {
+                    resize = false;
+                    control.getScene().setCursor( Cursor.DEFAULT );
+                }
+            });
+            control.setOnMouseExited( e -> {
+                if ( activeDrag == false )
+                {
+                    control.getScene().setCursor( Cursor.DEFAULT );
+                }
+            });
+            control.setOnMousePressed( e -> {
+                x = e.getX();
+                y = e.getY();
+                if (resize == false )
+                {
+                    control.getScene().setCursor( Cursor.MOVE );
+                }
+                activeDrag = true;
+            });
+            control.setOnMouseDragged( e -> {
+                Control src = ((Control)e.getSource());
+                src.setDisable( true );
+                if ( resize == false )
+                {
+                    src.setTranslateX( src.getTranslateX() + e.getX() - x );
+                    src.setTranslateY( src.getTranslateY() + e.getY() - y );
+                }
+                else
+                {
+                    src.setPrefSize( e.getX(), e.getY() );
+                }
+            });
+            control.setOnMouseReleased( e -> {
+                control.getScene().setCursor( Cursor.DEFAULT );
+                resize = false;
+                activeDrag = false;
+                control.setDisable( false );
+            });
         }
     }
+    
+    
     @Override
     public void start( Stage stage )
     {
@@ -45,18 +86,31 @@ public class Test extends Application
         Scene scene = new Scene( window, 1280, 720 );
         stage.setScene( scene );
         
+        VBox menuBar = new VBox();
         MenuBar menu = new MenuBar();
+        Menu file = new Menu("File");
+        menu.getMenus().addAll( file );
+        
+        HBox statusBar = new HBox(10);
+        Label mouseX = new Label("lmao");
+        Label mouseY = new Label("lmao");
         
         
-        StackPane v = new StackPane();
+        Pane workspace = new Pane();
         Button b1 = new Button( "one" );
-        Button b2 = new Button( "two" );
-        Label l1 = new Label("owo");
-
-        addMouseDragEvent(b1,b2,l1);
+        workspace.setOnMouseMoved( e -> {
+            mouseX.setText( "X: " + e.getX() );
+            mouseY.setText( "Y: " + e.getY() );
+        });
         
-        v.getChildren().addAll( b1, b2, l1 );
-        window.setCenter( v );
+        setManipulative(b1);
+        
+        menuBar.getChildren().addAll( menu );
+        statusBar.getChildren().addAll( mouseX, mouseY );
+        workspace.getChildren().addAll( b1 );
+        window.setTop( menuBar );
+        window.setCenter( workspace );
+        window.setBottom( statusBar );
         
         stage.show();
 
