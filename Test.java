@@ -9,8 +9,7 @@ import javafx.stage.Stage;
 // git add . 
 public class Test extends Application
 {
-//    private double x = 0, y = 0;
-//    private boolean resize = false, activeDrag = false;
+    private int bCount = 1;
     /**
      * main class lmao
      * 
@@ -82,6 +81,7 @@ public class Test extends Application
     @Override
     public void start( Stage stage )
     {
+        
         stage.setTitle( "lmao" );
         BorderPane window = new BorderPane();
         Scene scene = new Scene( window, 1280, 720 );
@@ -108,12 +108,18 @@ public class Test extends Application
         GridPane controlPanel = new GridPane();
         controlPanel.setHgap( 5 );
         controlPanel.setVgap( 5 );
+        Button add = new Button("Button");
+        add.setOnAction( e -> {
+            workspace.getChildren().add( new guiButton("Button" + bCount) );
+            bCount++;
+        });
         controlPanel.setPadding( new Insets(10,10,10,10) );
+        controlPanel.add( add, 0, 0 );
 
-        workspace.getChildren().addAll( new guiButton() );
         window.setTop( menuBar );
         window.setCenter( workspace );
         window.setBottom( statusBar );
+        window.setLeft( controlPanel );
         
         stage.show();
 
