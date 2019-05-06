@@ -1,5 +1,3 @@
-import java.util.HashMap;
-
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -10,8 +8,8 @@ import javafx.stage.Stage;
 // git add . 
 public class Test extends Application
 {
-    private double x = 0, y = 0;
-    private boolean resize = false, activeDrag = false;
+//    private double x = 0, y = 0;
+//    private boolean resize = false, activeDrag = false;
     /**
      * main class lmao
      * 
@@ -24,60 +22,60 @@ public class Test extends Application
     }
 
     
-    public void setManipulative( Control...controls )
-    {
-        for ( Control control : controls )
-        {
-            control.setOnMouseMoved( e -> {
-                Control src = ((Control)e.getSource());
-                
-                if ( ( e.getX() > src.getWidth() - 6 && e.getY() > src.getHeight() - 6 ) )
-                {
-                    resize = true;
-                    control.getScene().setCursor( Cursor.NW_RESIZE );
-                }
-                else
-                {
-                    resize = false;
-                    control.getScene().setCursor( Cursor.DEFAULT );
-                }
-            });
-            control.setOnMouseExited( e -> {
-                if ( activeDrag == false )
-                {
-                    control.getScene().setCursor( Cursor.DEFAULT );
-                }
-            });
-            control.setOnMousePressed( e -> {
-                x = e.getX();
-                y = e.getY();
-                if (resize == false )
-                {
-                    control.getScene().setCursor( Cursor.MOVE );
-                }
-                activeDrag = true;
-            });
-            control.setOnMouseDragged( e -> {
-                Control src = ((Control)e.getSource());
-                src.setDisable( true );
-                if ( resize == false )
-                {
-                    src.setTranslateX( src.getTranslateX() + e.getX() - x );
-                    src.setTranslateY( src.getTranslateY() + e.getY() - y );
-                }
-                else
-                {
-                    src.setPrefSize( e.getX(), e.getY() );
-                }
-            });
-            control.setOnMouseReleased( e -> {
-                control.getScene().setCursor( Cursor.DEFAULT );
-                resize = false;
-                activeDrag = false;
-                control.setDisable( false );
-            });
-        }
-    }
+//    public void setManipulative( Control...controls )
+//    {
+//        for ( Control control : controls )
+//        {
+//            control.setOnMouseMoved( e -> {
+//                Control src = ((Control)e.getSource());
+//                
+//                if ( ( e.getX() > src.getWidth() - 6 && e.getY() > src.getHeight() - 6 ) )
+//                {
+//                    resize = true;
+//                    control.getScene().setCursor( Cursor.NW_RESIZE );
+//                }
+//                else
+//                {
+//                    resize = false;
+//                    control.getScene().setCursor( Cursor.DEFAULT );
+//                }
+//            });
+//            control.setOnMouseExited( e -> {
+//                if ( activeDrag == false )
+//                {
+//                    control.getScene().setCursor( Cursor.DEFAULT );
+//                }
+//            });
+//            control.setOnMousePressed( e -> {
+//                x = e.getX();
+//                y = e.getY();
+//                if (resize == false )
+//                {
+//                    control.getScene().setCursor( Cursor.MOVE );
+//                }
+//                activeDrag = true;
+//            });
+//            control.setOnMouseDragged( e -> {
+//                Control src = ((Control)e.getSource());
+//                src.setDisable( true );
+//                if ( resize == false )
+//                {
+//                    src.setTranslateX( src.getTranslateX() + e.getX() - x );
+//                    src.setTranslateY( src.getTranslateY() + e.getY() - y );
+//                }
+//                else
+//                {
+//                    src.setPrefSize( e.getX(), e.getY() );
+//                }
+//            });
+//            control.setOnMouseReleased( e -> {
+//                control.getScene().setCursor( Cursor.DEFAULT );
+//                resize = false;
+//                activeDrag = false;
+//                control.setDisable( false );
+//            });
+//        }
+//    }
     
     
     @Override
@@ -91,25 +89,23 @@ public class Test extends Application
         VBox menuBar = new VBox();
         MenuBar menu = new MenuBar();
         Menu file = new Menu("File");
-        menu.getMenus().addAll( file );
+        menu.getMenus().addAll( file );        
+        menuBar.getChildren().addAll( menu );
         
         HBox statusBar = new HBox(10);
         Label mouseX = new Label("lmao");
         Label mouseY = new Label("lmao");
+        statusBar.getChildren().addAll( mouseX, mouseY );
         
         
         Pane workspace = new Pane();
-        Button b1 = new Button( "one" );
         workspace.setOnMouseMoved( e -> {
             mouseX.setText( "X: " + e.getX() );
             mouseY.setText( "Y: " + e.getY() );
         });
-        
-        setManipulative(b1);
-        
-        menuBar.getChildren().addAll( menu );
-        statusBar.getChildren().addAll( mouseX, mouseY );
-        workspace.getChildren().addAll( b1 );
+
+
+        workspace.getChildren().addAll( new guiButton("one") );
         window.setTop( menuBar );
         window.setCenter( workspace );
         window.setBottom( statusBar );
