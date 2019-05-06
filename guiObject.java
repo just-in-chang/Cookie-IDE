@@ -72,36 +72,42 @@ public class guiObject implements guiComponent
     }
 
 
+    @Override
     public double getSize()
     {
         return size;
     }
 
 
+    @Override
     public void setSize( double size )
     {
         this.size = size;
     }
 
 
+    @Override
     public double getStartingX()
     {
         return startingX;
     }
 
 
+    @Override
     public void setStartingX( double startingX )
     {
         this.startingX = startingX;
     }
 
 
+    @Override
     public double getStartingY()
     {
         return startingY;
     }
 
 
+    @Override
     public void setStartingY( double startingY )
     {
         this.startingY = startingY;
