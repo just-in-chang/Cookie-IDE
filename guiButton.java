@@ -3,14 +3,24 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 
 
-public class guiButton extends Button implements guiComponent
+public class guiButton extends Button
 {
     
-    private double x = 0, y = 0;
-    private boolean resize = false, activeDrag = false;
+    private double x = 0;
+    
+    
+    private double y = 0;
+    
+    
+    private boolean resize = false;
+    
+    
+    private boolean activeDrag = false;
+    
+    
     public guiButton()
     {
-        super("");
+        this("");
     }
     
     public guiButton( String label )

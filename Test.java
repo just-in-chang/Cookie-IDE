@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -104,8 +105,12 @@ public class Test extends Application
             mouseY.setText( "Y: " + e.getY() );
         });
 
+        GridPane controlPanel = new GridPane();
+        controlPanel.setHgap( 5 );
+        controlPanel.setVgap( 5 );
+        controlPanel.setPadding( new Insets(10,10,10,10) );
 
-        workspace.getChildren().addAll( new guiButton("one") );
+        workspace.getChildren().addAll( new guiButton() );
         window.setTop( menuBar );
         window.setCenter( workspace );
         window.setBottom( statusBar );
