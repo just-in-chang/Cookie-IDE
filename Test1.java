@@ -6,32 +6,31 @@ public class Test1 {
 	public static void main(String[] args) {
 
 		try {
-			String x = "bro";
+			String x = "";
 			Scanner sc = new Scanner(System.in);
-			Socket a = new Socket("localHost", 6666);
-			ObjectOutputStream OOS = new ObjectOutputStream(a.getOutputStream());
-			ObjectInputStream OIS = new ObjectInputStream(a.getInputStream());
-			   // Write data to the output stream of the Client Socket.
-	           OOS.writeUTF("HELO");
-	    
-	           // Flush data.
-	           OOS.flush();  
-	           OOS.writeUTF("I am Tom Cat");
-	           OOS.flush();
-			String responseLine;
-	           while ((responseLine = OIS.readUTF()) != null) {
-	               System.out.println("Server: " + responseLine);
-	               if (responseLine.indexOf("OK") != -1) {
-	                   break;
-	               }
-	           }
-			OOS.flush();
-			OOS.close();
+			ServerSocket a = new ServerSocket(6666);
+			Socket ab = a.accept();
+			ObjectInputStream Ois = new ObjectInputStream(ab.getInputStream());
+			ObjectOutputStream OOS = new ObjectOutputStream(ab.getOutputStream());
+			while(true)
+			{
+				x = (String) Ois.readUTF();
+				
+				if(x .equals("quit"))
+				{
+					OOS.writeUTF("OK");
+					OOS.flush();
+					break;
+				}
+				OOS.writeUTF(x);
+				OOS.flush();
+			}
 			a.close();
+			
+
 		} catch (Exception e) {
 			System.out.print(e);
 		}
-
 	}
 
 }
