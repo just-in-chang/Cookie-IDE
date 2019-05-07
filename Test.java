@@ -101,7 +101,20 @@ public class Test extends Application
         BorderPane window = new BorderPane();
         Scene scene = new Scene( window, 1280, 720 );
         stage.setScene( scene );
+        Pane workspace = new Pane();
 
+        window.setTop( menu() );
+        window.setCenter( workspace );
+        window.setBottom( status( workspace ) );
+        window.setLeft( controlPanel( workspace ) );
+
+        stage.show();
+
+    }
+
+
+    public VBox menu()
+    {
         VBox menuBar = new VBox();
         MenuBar menu = new MenuBar();
         Menu file = new Menu( "File" );
@@ -115,25 +128,36 @@ public class Test extends Application
             for ( Node n : test )
             {
                 Bounds boundsInScene = n.localToScene( n.getLayoutBounds() );
-                System.out.println( n.toString() + "(" + boundsInScene.getMaxX()
-                    + ", " + boundsInScene.getMaxY() + ")" + "\nWidth: "
-                    + boundsInScene.getWidth() + "\nHeight: "
-                    + boundsInScene.getHeight() + "\n" );
+                System.out.println( n.toString() + "\n("
+                    + boundsInScene.getMaxX() + ", " + boundsInScene.getMaxY()
+                    + ")" + "\nWidth: " + boundsInScene.getWidth()
+                    + "\nHeight: " + boundsInScene.getHeight() + "\n" );
             }
             System.out.println( "================" );
         } );
 
+        return menuBar;
+    }
+
+
+    public HBox status( Pane workspace )
+    {
         HBox statusBar = new HBox( 10 );
         Label mouseX = new Label( "lmao" );
         Label mouseY = new Label( "lmao" );
         statusBar.getChildren().addAll( mouseX, mouseY );
 
-        Pane workspace = new Pane();
         workspace.setOnMouseMoved( e -> {
             mouseX.setText( "X: " + e.getX() );
             mouseY.setText( "Y: " + e.getY() );
         } );
 
+        return statusBar;
+    }
+
+
+    public GridPane controlPanel( Pane workspace )
+    {
         GridPane controlPanel = new GridPane();
         controlPanel.setHgap( 5 );
         controlPanel.setVgap( 5 );
@@ -147,14 +171,7 @@ public class Test extends Application
 
         controlPanel.setPadding( new Insets( 10, 10, 10, 10 ) );
         controlPanel.add( add, 0, 0 );
-
-        window.setTop( menuBar );
-        window.setCenter( workspace );
-        window.setBottom( statusBar );
-        window.setLeft( controlPanel );
-
-        stage.show();
-
+        return controlPanel;
     }
 
 }
