@@ -12,6 +12,8 @@ public class Test1 {
 			Socket ab = a.accept();
 			ObjectInputStream Ois = new ObjectInputStream(ab.getInputStream());
 			ObjectOutputStream OOS = new ObjectOutputStream(ab.getOutputStream());
+			FileOutputStream FIS;
+			File file;
 			while(true)
 			{
 				x = (String) Ois.readUTF();
@@ -22,8 +24,12 @@ public class Test1 {
 					OOS.flush();
 					break;
 				}
-				OOS.writeUTF(x);
-				OOS.flush();
+				else
+				{
+					file = new File(x);
+					FIS = new FileOutputStream(x);
+				}
+
 			}
 			a.close();
 			
