@@ -23,6 +23,8 @@ public class Test extends Application
 {
     private int bCount = 1;
 
+    private Stack<Node> test = new Stack<Node>();
+
 
     /**
      * main class lmao
@@ -34,64 +36,6 @@ public class Test extends Application
     {
         launch( args );
     }
-
-    // public void setManipulative( Control...controls )
-    // {
-    // for ( Control control : controls )
-    // {
-    // control.setOnMouseMoved( e -> {
-    // Control src = ((Control)e.getSource());
-    //
-    // if ( ( e.getX() > src.getWidth() - 6 && e.getY() > src.getHeight() - 6 )
-    // )
-    // {
-    // resize = true;
-    // control.getScene().setCursor( Cursor.NW_RESIZE );
-    // }
-    // else
-    // {
-    // resize = false;
-    // control.getScene().setCursor( Cursor.DEFAULT );
-    // }
-    // });
-    // control.setOnMouseExited( e -> {
-    // if ( activeDrag == false )
-    // {
-    // control.getScene().setCursor( Cursor.DEFAULT );
-    // }
-    // });
-    // control.setOnMousePressed( e -> {
-    // x = e.getX();
-    // y = e.getY();
-    // if (resize == false )
-    // {
-    // control.getScene().setCursor( Cursor.MOVE );
-    // }
-    // activeDrag = true;
-    // });
-    // control.setOnMouseDragged( e -> {
-    // Control src = ((Control)e.getSource());
-    // src.setDisable( true );
-    // if ( resize == false )
-    // {
-    // src.setTranslateX( src.getTranslateX() + e.getX() - x );
-    // src.setTranslateY( src.getTranslateY() + e.getY() - y );
-    // }
-    // else
-    // {
-    // src.setPrefSize( e.getX(), e.getY() );
-    // }
-    // });
-    // control.setOnMouseReleased( e -> {
-    // control.getScene().setCursor( Cursor.DEFAULT );
-    // resize = false;
-    // activeDrag = false;
-    // control.setDisable( false );
-    // });
-    // }
-    // }
-
-    Stack<Node> test = new Stack<Node>();
 
 
     @Override
@@ -171,6 +115,7 @@ public class Test extends Application
 
         controlPanel.setPadding( new Insets( 10, 10, 10, 10 ) );
         controlPanel.add( add, 0, 0 );
+
         return controlPanel;
     }
 
