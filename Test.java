@@ -23,9 +23,6 @@ import javafx.stage.Stage;
 // git add .
 public class Test extends Application
 {
-    private int bCount = 1;
-
-
     /**
      * main class lmao
      * 
@@ -92,7 +89,6 @@ public class Test extends Application
         Label mouseX = new Label( "lmao" );
         Label mouseY = new Label( "lmao" );
         statusBar.getChildren().addAll( mouseX, mouseY );
-
         workspace.setOnMouseMoved( e -> {
             mouseX.setText( "X: " + e.getX() );
             mouseY.setText( "Y: " + e.getY() );
@@ -110,13 +106,8 @@ public class Test extends Application
             .addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
         controlPanel.setHgap( 5 );
         controlPanel.setVgap( 5 );
-        Button add = new Button( "Button" );
-        add.setOnAction( e -> {
-            guiButton meme = new guiButton( "Button" + bCount );
-            workspace.getChildren().add( meme );
-            bCount++;
-            test.push( meme );
-        } );
+        controlPanel.add( new controlButton("Button", workspace, guiButton.class, test), 0, 0 );
+        controlPanel.add( new controlButton("Label", workspace, guiLabel.class, test), 0, 1 );
 
         controlPanel.setPadding( new Insets( 10, 10, 10, 10 ) );
         return controlBox;

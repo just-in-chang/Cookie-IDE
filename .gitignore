@@ -5,4 +5,5 @@
 /guiObject.class
 /guiButton.class
 /Notification.class
-/compiler.class
+/controlButton.class
+/guiLabel.class

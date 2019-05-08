@@ -1,11 +1,10 @@
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 
 
-public class guiButton extends Button
+public class guiLabel extends Label
 {
-
     private double x = 0;
 
     private double y = 0;
@@ -17,13 +16,13 @@ public class guiButton extends Button
     private String name = "";
 
 
-    public guiButton()
+    public guiLabel()
     {
         this( "" );
     }
 
 
-    public guiButton( String label )
+    public guiLabel( String label )
     {
         super( label );
         name = label;
@@ -83,5 +82,4 @@ public class guiButton extends Button
     {
         return name;
     }
-
 }
