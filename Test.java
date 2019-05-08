@@ -3,13 +3,10 @@ import java.util.Stack;
 import javafx.application.Application;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -34,62 +31,6 @@ public class Test extends Application
     {
         launch( args );
     }
-
-    // public void setManipulative( Control...controls )
-    // {
-    // for ( Control control : controls )
-    // {
-    // control.setOnMouseMoved( e -> {
-    // Control src = ((Control)e.getSource());
-    //
-    // if ( ( e.getX() > src.getWidth() - 6 && e.getY() > src.getHeight() - 6 )
-    // )
-    // {
-    // resize = true;
-    // control.getScene().setCursor( Cursor.NW_RESIZE );
-    // }
-    // else
-    // {
-    // resize = false;
-    // control.getScene().setCursor( Cursor.DEFAULT );
-    // }
-    // });
-    // control.setOnMouseExited( e -> {
-    // if ( activeDrag == false )
-    // {
-    // control.getScene().setCursor( Cursor.DEFAULT );
-    // }
-    // });
-    // control.setOnMousePressed( e -> {
-    // x = e.getX();
-    // y = e.getY();
-    // if (resize == false )
-    // {
-    // control.getScene().setCursor( Cursor.MOVE );
-    // }
-    // activeDrag = true;
-    // });
-    // control.setOnMouseDragged( e -> {
-    // Control src = ((Control)e.getSource());
-    // src.setDisable( true );
-    // if ( resize == false )
-    // {
-    // src.setTranslateX( src.getTranslateX() + e.getX() - x );
-    // src.setTranslateY( src.getTranslateY() + e.getY() - y );
-    // }
-    // else
-    // {
-    // src.setPrefSize( e.getX(), e.getY() );
-    // }
-    // });
-    // control.setOnMouseReleased( e -> {
-    // control.getScene().setCursor( Cursor.DEFAULT );
-    // resize = false;
-    // activeDrag = false;
-    // control.setDisable( false );
-    // });
-    // }
-    // }
 
     Stack<Node> test = new Stack<Node>();
 
@@ -156,9 +97,11 @@ public class Test extends Application
     }
 
 
-    public GridPane controlPanel( Pane workspace )
+    public HBox controlPanel( Pane workspace )
     {
+        HBox controlBox = new HBox();
         GridPane controlPanel = new GridPane();
+        controlBox.getChildren().addAll( controlPanel, new Separator(Orientation.VERTICAL) );
         controlPanel.setHgap( 5 );
         controlPanel.setVgap( 5 );
         Button add = new Button( "Button" );
@@ -170,8 +113,7 @@ public class Test extends Application
         } );
 
         controlPanel.setPadding( new Insets( 10, 10, 10, 10 ) );
-        controlPanel.add( add, 0, 0 );
-        return controlPanel;
+        return controlBox;
     }
 
 }
