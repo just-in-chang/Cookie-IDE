@@ -111,6 +111,7 @@ public class Test extends Application
             bCount++;
             test.push( meme );
         } );
+        controlPanel.add( add, 0, 0 );
 
         controlPanel.setPadding( new Insets( 10, 10, 10, 10 ) );
         return controlBox;

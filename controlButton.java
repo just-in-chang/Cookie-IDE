@@ -8,9 +8,13 @@ public class controlButton extends Button
 //    {
 //        super();
 //    }
+    int count = 1;
     
-    public controlButton( String text, GridPane layout, Control control, int x, int y )
+    public controlButton( String text, Pane workspace, Control control, int x, int y )
     {
         super(text);
+        this.setOnMouseClicked( e -> {
+            workspace.getChildren().add(  );
+        });
     }
 }
