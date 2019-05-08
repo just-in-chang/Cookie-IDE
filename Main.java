@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 
 
 // git add .
-public class Test extends Application
+public class Main extends Application
 {
     /**
      * main class lmao
