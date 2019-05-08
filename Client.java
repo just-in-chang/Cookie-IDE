@@ -3,32 +3,28 @@ import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 
+import javax.xml.soap.Text;
+
 public class Client {
 
 	public static void main(String[] args) {
 		try {
-			int count = 0;
-			byte[] buff = new byte[8092];
-			String x = "bro";
+			String output = "bro";
+			String input = " ";
 			Scanner sc = new Scanner(System.in);
-			Socket a = new Socket("localHost", 6666);
-			File file = new File("Text.txt");
-			FileOutputStream OOS = new FileOutputStream(file);
+			Socket a = new Socket("127.0.0.1", 6666);
+			System.out.println("Give File or quit");
+			File file = new File(sc.nextLine());
+			InputStream FOS = new FileInputStream(file);
+			ObjectOutputStream OOS = new ObjectOutputStream(a.getOutputStream());
 			ObjectInputStream OIS = new ObjectInputStream(a.getInputStream());
 			// Write data to the output stream of the Client Socket.
-			while (!x.equals("quit")) {
-				System.out.println("Give File or quit");
-				x = sc.nextLine();
-				if (x.equals("quit")) {
-					x = OIS.readUTF();
-					if (x.contains("Ok")) {
-						break;
-					}
-				}
-				while ((count = OIS.read(buff)) > 0) {
-					OOS.write(buff, 0, count);
-				}
+			while (!output.equals("quit")) {
+				System.out.println("what do you want");
+				OOS.writeUTF(sc.nextLine());
 				OOS.flush();
+				input = OIS.readUTF();
+				System.out.println(input);
 			}
 			OOS.flush();
 			OOS.close();

@@ -8,15 +8,29 @@ public class Test1 {
 		try {
 			String x = "";
 			Scanner sc = new Scanner(System.in);
+			byte[] bytes = new byte[8192];
+			int count;
 			ServerSocket a = new ServerSocket(6666);
 			Socket ab = a.accept();
-			ObjectInputStream Ois = new ObjectInputStream(ab.getInputStream());
+			ObjectInputStream OIS = new ObjectInputStream(ab.getInputStream());
 			ObjectOutputStream OOS = new ObjectOutputStream(ab.getOutputStream());
-			FileOutputStream FIS;
+			OutputStream FOS = null;
 			File file;
+			x =  OIS.readUTF();
+			file = new File(x);
+			try {
+			FOS = new FileOutputStream(file);
+			}
+			catch(Exception e)
+			{
+				System.out.println("File Not Found");
+			}
+			while((count = OIS.read(bytes)) > 0)
+			{
+				FOS.write(bytes, 0, count);
+			}
 			while(true)
 			{
-				x = (String) Ois.readUTF();
 				
 				if(x .equals("quit"))
 				{
@@ -26,10 +40,10 @@ public class Test1 {
 				}
 				else
 				{
-					file = new File(x);
-					FIS = new FileOutputStream(x);
+					OOS.writeUTF("Client 1: " + x);
+					OOS.flush();
 				}
-
+				
 			}
 			a.close();
 			
