@@ -1,3 +1,4 @@
+package guiObjects;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;

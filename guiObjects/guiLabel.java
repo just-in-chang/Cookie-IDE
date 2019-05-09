@@ -1,3 +1,4 @@
+package guiObjects;
 import javafx.scene.Cursor;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;

@@ -1,17 +1,29 @@
+package App;
 import java.util.Stack;
 
+import Miscellaneous.Notification;
+import guiObjects.controlButton;
+import guiObjects.guiButton;
+import guiObjects.guiLabel;
 import javafx.application.Application;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
@@ -41,7 +53,7 @@ public class Main extends Application
         stage.setScene( scene );
         Pane workspace = new Pane();
 
-        window.setTop( menu() );
+        window.setTop( menu( stage ) );
         window.setCenter( workspace );
         window.setBottom( status( workspace ) );
         window.setLeft( controlPanel( workspace ) );
@@ -52,13 +64,14 @@ public class Main extends Application
 
 
     @SuppressWarnings("unused")
-    public VBox menu()
+    public VBox menu( Stage stage )
     {
         VBox menuBar = new VBox();
         MenuBar menu = new MenuBar();
         Menu file = new Menu( "File" );
         MenuItem save = new MenuItem( "Save" );
-        file.getItems().add( save );
+        MenuItem itemEdit = new MenuItem( "Node Edit" );
+        file.getItems().addAll( save, itemEdit );
         menu.getMenus().addAll( file );
         menuBar.getChildren().addAll( menu );
 
@@ -66,9 +79,9 @@ public class Main extends Application
             System.out.println( "================\n" );
             for ( Node n : test )
             {
-                Bounds boundsInScene = n.localToScene( n.getLayoutBounds() );
+                Bounds boundsInScene = n.localToParent( n.getLayoutBounds() );
                 System.out.println( n.toString() + "\n("
-                    + boundsInScene.getMaxX() + ", " + boundsInScene.getMaxY()
+                    + boundsInScene.getMinX() + ", " + boundsInScene.getMinY()
                     + ")" + "\nWidth: " + boundsInScene.getWidth()
                     + "\nHeight: " + boundsInScene.getHeight() + "\n" );
             }
@@ -113,8 +126,27 @@ public class Main extends Application
             1 );
 
         controlPanel.setPadding( new Insets( 10, 10, 10, 10 ) );
-        
+
         return controlBox;
+    }
+
+
+    public void editWindow( Stage stage )
+    {
+        final Stage popup = new Stage();
+
+        popup.initModality( Modality.APPLICATION_MODAL );
+        popup.initOwner( stage );
+
+        VBox vb = new VBox();
+        TextField name = new TextField();
+        Button ass = new Button( "Submit" );
+
+        vb.getChildren().addAll( name, ass );
+
+        Scene dialogScene = new Scene( vb, 300, 200 );
+        popup.setScene( dialogScene );
+        popup.show();
     }
 
 }
