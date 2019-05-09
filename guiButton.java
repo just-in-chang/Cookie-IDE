@@ -81,8 +81,8 @@ public class guiButton extends Button
                 }
                 else
                 {
-                    src.setTranslateX( Math.max( src.getMaxWidth(), moveX ) );
-                    src.setTranslateY( Math.max( src.getMaxHeight(), moveY ) );
+                    src.setTranslateX( Math.max( 0, moveX ) );
+                    src.setTranslateY( Math.max( 0, moveY ) );
                 }
             }
             else
