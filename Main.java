@@ -1,14 +1,12 @@
 import java.util.Stack;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -18,7 +16,7 @@ import javafx.stage.Stage;
 
 
 // git add .
-public class Test extends Application
+public class Main extends Application
 {
     /**
      * main class lmao
@@ -53,6 +51,7 @@ public class Test extends Application
     }
 
 
+    @SuppressWarnings("unused")
     public VBox menu()
     {
         VBox menuBar = new VBox();
@@ -74,6 +73,7 @@ public class Test extends Application
                     + "\nHeight: " + boundsInScene.getHeight() + "\n" );
             }
             System.out.println( "================" );
+            Notification saveNoti = new Notification();
         } );
 
         return menuBar;
@@ -99,11 +99,18 @@ public class Test extends Application
     {
         HBox controlBox = new HBox();
         GridPane controlPanel = new GridPane();
-        controlBox.getChildren().addAll( controlPanel, new Separator(Orientation.VERTICAL) );
+        controlBox.getChildren()
+            .addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
         controlPanel.setHgap( 5 );
         controlPanel.setVgap( 5 );
-        controlPanel.add( new controlButton("Button", workspace, guiButton.class, test), 0, 0 );
-        controlPanel.add( new controlButton("Label", workspace, guiLabel.class, test), 0, 1 );
+        controlPanel.add(
+            new controlButton( "Button", workspace, guiButton.class, test ),
+            0,
+            0 );
+        controlPanel.add(
+            new controlButton( "Label", workspace, guiLabel.class, test ),
+            0,
+            1 );
 
         controlPanel.setPadding( new Insets( 10, 10, 10, 10 ) );
         

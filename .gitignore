@@ -1,9 +1,4 @@
-/Test.class
-/poop.class
-/guiComponent.class
-/guiMap.class
-/guiObject.class
-/guiButton.class
-/Notification.class
-/controlButton.class
-/guiLabel.class
+.settings
+*.classpath
+*.project
+*.class
