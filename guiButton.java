@@ -72,8 +72,18 @@ public class guiButton extends Button
             src.setDisable( true );
             if ( resize == false )
             {
-                src.setTranslateX( src.getTranslateX() + e.getX() - x );
-                src.setTranslateY( src.getTranslateY() + e.getY() - y );
+                double moveX = src.getTranslateX() + e.getX() - x;
+                double moveY = src.getTranslateY() + e.getY() - y;
+                if (name.equals( "Mexican" ))
+                {
+                    src.setTranslateX( moveX  );
+                    src.setTranslateY( moveY  );
+                }
+                else
+                {
+                    src.setTranslateX( Math.max( src.getMaxWidth(), moveX ) );
+                    src.setTranslateY( Math.max( src.getMaxHeight(), moveY ) );
+                }
             }
             else
             {

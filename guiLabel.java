@@ -49,8 +49,10 @@ public class guiLabel extends Label
         this.setOnMouseDragged( e -> {
             Control src = ( (Control)e.getSource() );
             src.setDisable( true );
-            src.setTranslateX( src.getTranslateX() + e.getX() - x );
-            src.setTranslateY( src.getTranslateY() + e.getY() - y );
+            double moveX = src.getTranslateX() + e.getX() - x;
+            double moveY = src.getTranslateY() + e.getY() - y;
+            src.setTranslateX( Math.max( src.getMaxWidth(), moveX ) );
+            src.setTranslateY( Math.max( src.getMaxHeight(), moveY ) );
         } );
         this.setOnMouseReleased( e -> {
             this.getScene().setCursor( Cursor.DEFAULT );
