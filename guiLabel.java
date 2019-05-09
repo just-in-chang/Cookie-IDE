@@ -3,14 +3,22 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 
 
+/**
+ *  label that can be manipulated in size and position
+ *
+ *  @author  Andrew
+ *  @version May 8, 2019
+ *  @author  Period: 1
+ *  @author  Assignment: Cookie IDE
+ *
+ *  @author  Sources: TODO
+ */
 public class guiLabel extends Label
 {
     private double x = 0;
 
     private double y = 0;
-
-    private boolean resize = false;
-
+    
     private boolean activeDrag = false;
 
     private String name = "";
@@ -26,21 +34,6 @@ public class guiLabel extends Label
     {
         super( label );
         name = label;
-        this.setOnMouseMoved( e -> {
-            Control src = ( (Control)e.getSource() );
-
-            if ( ( e.getX() > src.getWidth() - 6
-                && e.getY() > src.getHeight() - 6 ) )
-            {
-                resize = true;
-                this.getScene().setCursor( Cursor.NW_RESIZE );
-            }
-            else
-            {
-                resize = false;
-                this.getScene().setCursor( Cursor.DEFAULT );
-            }
-        } );
         this.setOnMouseExited( e -> {
             if ( activeDrag == false )
             {
@@ -50,28 +43,17 @@ public class guiLabel extends Label
         this.setOnMousePressed( e -> {
             x = e.getX();
             y = e.getY();
-            if ( resize == false )
-            {
-                this.getScene().setCursor( Cursor.MOVE );
-            }
+            this.getScene().setCursor( Cursor.MOVE );
             activeDrag = true;
         } );
         this.setOnMouseDragged( e -> {
             Control src = ( (Control)e.getSource() );
             src.setDisable( true );
-            if ( resize == false )
-            {
-                src.setTranslateX( src.getTranslateX() + e.getX() - x );
-                src.setTranslateY( src.getTranslateY() + e.getY() - y );
-            }
-            else
-            {
-                src.setPrefSize( e.getX(), e.getY() );
-            }
+            src.setTranslateX( src.getTranslateX() + e.getX() - x );
+            src.setTranslateY( src.getTranslateY() + e.getY() - y );
         } );
         this.setOnMouseReleased( e -> {
             this.getScene().setCursor( Cursor.DEFAULT );
-            resize = false;
             activeDrag = false;
             this.setDisable( false );
         } );
