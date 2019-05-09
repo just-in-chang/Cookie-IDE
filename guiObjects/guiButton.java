@@ -14,7 +14,7 @@ import javafx.scene.control.Control;
  *
  *  @author  Sources: TODO
  */
-public class guiButton extends Button
+public class guiButton extends Button implements guiObject
 {
 
     private double x = 0;
@@ -104,6 +104,11 @@ public class guiButton extends Button
     public String getName()
     {
         return name;
+    }
+    
+    public void setName( String n )
+    {
+        name = n;
     }
 
 }

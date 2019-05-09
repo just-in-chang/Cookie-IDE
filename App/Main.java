@@ -5,6 +5,7 @@ import java.util.Stack;
 import guiObjects.controlButton;
 import guiObjects.guiButton;
 import guiObjects.guiLabel;
+import guiObjects.guiObject;
 import javafx.application.Application;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -76,7 +77,7 @@ public class Main extends Application
             for ( Node n : test )
             {
                 Bounds boundsInScene = n.localToParent( n.getLayoutBounds() );
-                System.out.println( n.toString() + "\n("
+                System.out.println( ((guiObject)n).getName() + "\n("
                     + boundsInScene.getMinX() + ", " + boundsInScene.getMinY()
                     + ")" + "\nWidth: " + boundsInScene.getWidth()
                     + "\nHeight: " + boundsInScene.getHeight() + "\n" );

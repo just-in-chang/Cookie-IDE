@@ -14,7 +14,7 @@ import javafx.scene.control.Label;
  *
  *  @author  Sources: TODO
  */
-public class guiLabel extends Label
+public class guiLabel extends Label implements guiObject
 {
     private double x = 0;
 
@@ -66,5 +66,10 @@ public class guiLabel extends Label
     public String getName()
     {
         return name;
+    }
+    
+    public void setName(String n)
+    {
+        name = n;
     }
 }
