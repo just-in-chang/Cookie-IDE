@@ -51,8 +51,8 @@ public class guiLabel extends Label
             src.setDisable( true );
             double moveX = src.getTranslateX() + e.getX() - x;
             double moveY = src.getTranslateY() + e.getY() - y;
-            src.setTranslateX( Math.max( src.getMaxWidth(), moveX ) );
-            src.setTranslateY( Math.max( src.getMaxHeight(), moveY ) );
+            src.setTranslateX( Math.max( 0, moveX ) );
+            src.setTranslateY( Math.max( 0, moveY ) );
         } );
         this.setOnMouseReleased( e -> {
             this.getScene().setCursor( Cursor.DEFAULT );
