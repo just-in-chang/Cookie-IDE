@@ -1,37 +1,35 @@
-
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 
-import javax.xml.soap.Text;
-
 public class Client {
-
 	public static void main(String[] args) {
 		try {
-			String output = "bro";
-			String name = " ";
+			byte[] bytes = new byte[8192];
 			Scanner sc = new Scanner(System.in);
-			Socket a = new Socket("127.0.0.1", 6666);
-			System.out.println("Give File or quit");
-			File file = new File(sc.nextLine());
-			InputStream FOS = new FileInputStream(file);
-			ObjectOutputStream OOS = new ObjectOutputStream(a.getOutputStream());
-			ObjectInputStream OIS = new ObjectInputStream(a.getInputStream());
-			// Write data to the output stream of the Client Socket.
-			if (!output.equals("quit")) {
-				OOS.writeUTF("hello there");
-				OOS.flush();
-				name = OIS.readUTF();
-				System.out.println("server says" + name);
+			String x, name;
+			Socket socket = new Socket("localHost", 6666);
+			System.out.println("IP Address" + socket.getInetAddress());
+			System.out.println("Input fileplease: ");
+			x = sc.nextLine();
+			File file = new File(x);
+			ObjectOutputStream OS = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream IS = new ObjectInputStream(socket.getInputStream());
+			InputStream FIS = new FileInputStream(file);
+			OS.writeUTF(x);
+			OS.flush();
+			name = IS.readUTF();
+			System.out.println(name);
+			int count;
+			while ((count = FIS.read(bytes)) > 0) {
+				OS.write(bytes, 0, count);
 			}
-			OOS.flush();
-			OOS.close();
-			a.close();
+
+			OS.close();
+			IS.close();
+			socket.close();
 		} catch (Exception e) {
-			System.out.print(e);
+			System.out.println(e);
 		}
-
 	}
-
 }
