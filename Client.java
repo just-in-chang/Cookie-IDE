@@ -10,7 +10,7 @@ public class Client {
 	public static void main(String[] args) {
 		try {
 			String output = "bro";
-			String input = " ";
+			String name = " ";
 			Scanner sc = new Scanner(System.in);
 			Socket a = new Socket("127.0.0.1", 6666);
 			System.out.println("Give File or quit");
@@ -19,12 +19,11 @@ public class Client {
 			ObjectOutputStream OOS = new ObjectOutputStream(a.getOutputStream());
 			ObjectInputStream OIS = new ObjectInputStream(a.getInputStream());
 			// Write data to the output stream of the Client Socket.
-			while (!output.equals("quit")) {
-				System.out.println("what do you want");
-				OOS.writeUTF(sc.nextLine());
+			if (!output.equals("quit")) {
+				OOS.writeUTF("hello there");
 				OOS.flush();
-				input = OIS.readUTF();
-				System.out.println(input);
+				name = OIS.readUTF();
+				System.out.println("server says" + name);
 			}
 			OOS.flush();
 			OOS.close();
