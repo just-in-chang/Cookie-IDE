@@ -2,6 +2,7 @@ package App;
 
 import java.util.Stack;
 
+import Miscellaneous.Notification;
 import guiObjects.controlButton;
 import guiObjects.guiButton;
 import guiObjects.guiLabel;
@@ -77,13 +78,13 @@ public class Main extends Application
             for ( Node n : test )
             {
                 Bounds boundsInScene = n.localToParent( n.getLayoutBounds() );
-                System.out.println( ((guiObject)n).getName() + "\n("
+                System.out.println( ( (guiObject)n ).getName() + "\n("
                     + boundsInScene.getMinX() + ", " + boundsInScene.getMinY()
                     + ")" + "\nWidth: " + boundsInScene.getWidth()
                     + "\nHeight: " + boundsInScene.getHeight() + "\n" );
             }
             System.out.println( "================" );
-            // Notification saveNoti = new Notification();
+            Notification saveNoti = new Notification();
         } );
 
         return menuBar;
