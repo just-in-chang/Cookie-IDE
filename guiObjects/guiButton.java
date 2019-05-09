@@ -60,6 +60,7 @@ public class guiButton extends Button
             }
         } );
         this.setOnMousePressed( e -> {
+            
             x = e.getX();
             y = e.getY();
             if ( resize == false )

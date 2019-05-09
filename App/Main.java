@@ -13,6 +13,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -54,10 +55,11 @@ public class Main extends Application
         stage.setScene( scene );
         Pane workspace = new Pane();
 
-        window.setTop( menu( stage ) );
+        window.setTop( menu( stage, workspace ) );
         window.setCenter( workspace );
         window.setBottom( status( workspace ) );
         window.setLeft( controlPanel( workspace ) );
+        window.setRight( editPanel(workspace) );
 
         stage.show();
 
@@ -65,7 +67,7 @@ public class Main extends Application
 
 
     @SuppressWarnings("unused")
-    public VBox menu( Stage stage )
+    public VBox menu( Stage stage, Pane workspace )
     {
         VBox menuBar = new VBox();
         MenuBar menu = new MenuBar();
@@ -87,8 +89,12 @@ public class Main extends Application
                     + "\nHeight: " + boundsInScene.getHeight() + "\n" );
             }
             System.out.println( "================" );
-            Notification saveNoti = new Notification();
+//            Notification saveNoti = new Notification();
         } );
+        
+        itemEdit.setOnAction( e -> {
+            editWindow(stage, workspace);
+        });
 
         return menuBar;
     }
@@ -130,9 +136,18 @@ public class Main extends Application
 
         return controlBox;
     }
+    
+    public HBox editPanel( Pane workspace )
+    {
+        HBox ePane = new HBox();
+        ePane.setMinWidth( 250 );
+        ePane.getChildren().add( new Separator(Orientation.VERTICAL ) );
+        Label label = new Label("label");
+        return ePane;
+    }
 
 
-    public void editWindow( Stage stage )
+    public void editWindow( Stage stage, Pane workspace )
     {
         final Stage popup = new Stage();
 
@@ -143,6 +158,11 @@ public class Main extends Application
         TextField name = new TextField();
         Button ass = new Button( "Submit" );
 
+        ass.setOnAction( e -> {
+            Button poop = (Button)workspace.getChildren().get( workspace.getChildren().size() - 1 );
+            poop.setText( name.getText() );
+            popup.close();
+        });
         vb.getChildren().addAll( name, ass );
 
         Scene dialogScene = new Scene( vb, 300, 200 );
