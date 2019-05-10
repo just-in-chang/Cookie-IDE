@@ -169,9 +169,9 @@ public class Main extends Application
     {
         HBox ePane = new HBox();
         VBox eItems = new VBox();
-        ePane.getChildren().add( eItems );
         ePane.setMinWidth( 250 );
         ePane.getChildren().add( new Separator( Orientation.VERTICAL ) );
+        ePane.getChildren().add( eItems );
         Label label = new Label();
         TextField x = new TextField();
         TextField y = new TextField();
