@@ -46,7 +46,7 @@ public class controlButton extends Button
      *            configuration
      */
     public controlButton(
-        String text, Main main,
+        String text,
         Pane workspace,
         Class<?> c,
         Stack<Node> s,
@@ -58,11 +58,11 @@ public class controlButton extends Button
             {
                 Control node = (Control)c.getConstructor( String.class )
                     .newInstance( text + count );
+//              editWindow( stage, workspace );
                 workspace.getChildren().add( node );
-                count++;
-                s.push( node );
-//                editWindow( stage, workspace );
                 ((WorkspacePane)workspace).addSelection( (guiObject)node );
+                s.push( node );
+                count++;
             }
             catch ( Exception ex )
             {

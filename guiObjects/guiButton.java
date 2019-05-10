@@ -1,7 +1,5 @@
 package guiObjects;
-import javafx.scene.Cursor;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 
 
 /**
@@ -17,17 +15,9 @@ import javafx.scene.control.Control;
 public class guiButton extends Button implements guiObject
 {
 
-    private double x = 0;
-
-    private double y = 0;
-
-    private boolean resize = false;
-
-    private boolean activeDrag = false;
-
-    private String name = "";
+    private String name;
     
-    private boolean select = false;
+    private boolean select;
 
 
     public guiButton()
@@ -40,66 +30,9 @@ public class guiButton extends Button implements guiObject
     {
         super( label );
         name = label;
-        this.setOnMouseMoved( e -> {
-            Control src = ( (Control)e.getSource() );
-
-            if ( ( e.getX() > src.getWidth() - 6
-                && e.getY() > src.getHeight() - 6 ) )
-            {
-                resize = true;
-                this.getScene().setCursor( Cursor.NW_RESIZE );
-            }
-            else
-            {
-                resize = false;
-                this.getScene().setCursor( Cursor.DEFAULT );
-            }
-        } );
-        this.setOnMouseExited( e -> {
-            if ( activeDrag == false )
-            {
-                this.getScene().setCursor( Cursor.DEFAULT );
-            }
-        } );
-        this.setOnMousePressed( e -> {
-            
-            x = e.getX();
-            y = e.getY();
-            if ( resize == false )
-            {
-                this.getScene().setCursor( Cursor.MOVE );
-            }
-            activeDrag = true;
-        } );
-        this.setOnMouseDragged( e -> {
-            Control src = ( (Control)e.getSource() );
-//            src.setDisable( true );
-            if ( resize == false )
-            {
-                double moveX = src.getTranslateX() + e.getX() - x;
-                double moveY = src.getTranslateY() + e.getY() - y;
-                if (name.equals( "Mexican" ))
-                {
-                    src.setTranslateX( moveX  );
-                    src.setTranslateY( moveY  );
-                }
-                else
-                {
-                    src.setTranslateX( Math.max( 0, moveX ) );
-                    src.setTranslateY( Math.max( 0, moveY ) );
-                }
-            }
-            else
-            {
-                src.setPrefSize( e.getX(), e.getY() );
-            }
-        } );
-        this.setOnMouseReleased( e -> {
-            this.getScene().setCursor( Cursor.DEFAULT );
-            resize = false;
-            activeDrag = false;
-//            this.setDisable( false );
-        } );
+        select = false;
+        Manipulate m = new Manipulate();
+        m.setManipulate( this, true );
     }
 
 
