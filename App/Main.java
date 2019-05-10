@@ -21,12 +21,18 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 
@@ -72,7 +78,18 @@ public class Main extends Application
         BorderPane window = new BorderPane();
         scene = new Scene( window, 1280, 720 );
         stage.setScene( scene );
+
         workspace = new WorkspacePane();
+        workspace.setStyle( "-fx-background-color: #ffffff" );
+        workspace.setBorder( new Border( new BorderStroke( Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT ) ) );
+        workspace.setMinWidth( 500 );
+        workspace.setMaxWidth( 500 );
+        workspace.setMinHeight( 500 );
+        workspace.setMaxHeight( 500 );
+
         menu = menu( stage, workspace );
         status = status( workspace );
         controlPanel = controlPanel( stage, workspace );
