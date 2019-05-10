@@ -1,4 +1,5 @@
 package guiObjects;
+
 import javafx.scene.Cursor;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
@@ -23,6 +24,8 @@ public class guiLabel extends Label implements guiObject
     private boolean activeDrag = false;
 
     private String name = "";
+    
+    private boolean select = false;
 
 
     public guiLabel()
@@ -72,4 +75,20 @@ public class guiLabel extends Label implements guiObject
     {
         name = n;
     }
+
+
+    @Override
+    public boolean isSelected()
+    {
+        return select;
+    }
+
+
+    @Override
+    public void setSelected( boolean b )
+    {
+        select = b;
+        
+    }
+
 }

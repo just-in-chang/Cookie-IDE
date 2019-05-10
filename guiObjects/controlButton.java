@@ -2,6 +2,7 @@ package guiObjects;
 
 import java.util.Stack;
 
+import App.Main;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -45,7 +46,7 @@ public class controlButton extends Button
      *            configuration
      */
     public controlButton(
-        String text,
+        String text, Main main,
         Pane workspace,
         Class<?> c,
         Stack<Node> s,
@@ -60,7 +61,8 @@ public class controlButton extends Button
                 workspace.getChildren().add( node );
                 count++;
                 s.push( node );
-                editWindow( stage, workspace );
+//                editWindow( stage, workspace );
+                ((WorkspacePane)workspace).addSelection( (guiObject)node );
             }
             catch ( Exception ex )
             {

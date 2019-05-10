@@ -2,10 +2,7 @@ package App;
 
 import java.util.Stack;
 
-import guiObjects.controlButton;
-import guiObjects.guiButton;
-import guiObjects.guiLabel;
-import guiObjects.guiObject;
+import guiObjects.*;
 import javafx.application.Application;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -17,6 +14,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -40,6 +38,15 @@ public class Main extends Application
     }
 
     Stack<Node> test = new Stack<Node>();
+    
+    int selected = 0;
+    
+    Scene scene;
+    VBox menu;
+    WorkspacePane workspace;
+    HBox status;
+    HBox controlPanel;
+    HBox editPanel;
 
 
     @Override
@@ -47,15 +54,20 @@ public class Main extends Application
     {
         stage.setTitle( "lmao" );
         BorderPane window = new BorderPane();
-        Scene scene = new Scene( window, 1280, 720 );
+        scene = new Scene( window, 1280, 720 );
         stage.setScene( scene );
-        Pane workspace = new Pane();
+        workspace = new WorkspacePane();
+        menu = menu(stage, workspace);
+        status = status(workspace);
+        controlPanel = controlPanel( stage, workspace );
+        editPanel = editPanel(workspace);
+        
 
-        window.setTop( menu( stage, workspace ) );
+        window.setTop( menu );
         window.setCenter( workspace );
-        window.setBottom( status( workspace ) );
-        window.setLeft( controlPanel( stage, workspace ) );
-        window.setRight( editPanel( workspace ) );
+        window.setBottom( status );
+        window.setLeft( controlPanel );
+        window.setRight( editPanel );
 
         stage.show();
 
@@ -95,10 +107,14 @@ public class Main extends Application
         HBox statusBar = new HBox( 10 );
         Label mouseX = new Label( "lmao" );
         Label mouseY = new Label( "lmao" );
-        statusBar.getChildren().addAll( mouseX, mouseY );
+        Label selected = new Label("Selected:  ");
+        statusBar.getChildren().addAll( mouseX, mouseY, selected );
         workspace.setOnMouseMoved( e -> {
             mouseX.setText( "X: " + e.getX() );
             mouseY.setText( "Y: " + e.getY() );
+            SelectableGroup tGroup = ((WorkspacePane)workspace).getToggleGroup();
+            if ( workspace.getChildren().size() > 0 )
+                selected.setText( "Selected:  '" + ((guiObject)tGroup.getSelected()).getName() + "'" );
         } );
 
         return statusBar;
@@ -112,12 +128,12 @@ public class Main extends Application
         controlBox.getChildren()
             .addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
         controlPanel.setVgap( 10 );
-        controlPanel.add( new controlButton( "Button",
+        controlPanel.add( new controlButton( "Button", this,
             workspace,
             guiButton.class,
             test,
             stage ), 0, 0 );
-        controlPanel.add( new controlButton( "Label",
+        controlPanel.add( new controlButton( "Label", this,
             workspace,
             guiLabel.class,
             test,
@@ -138,10 +154,26 @@ public class Main extends Application
     public HBox editPanel( Pane workspace )
     {
         HBox ePane = new HBox();
+        VBox eItems = new VBox();
+        ePane.getChildren().add( eItems );
         ePane.setMinWidth( 250 );
         ePane.getChildren().add( new Separator( Orientation.VERTICAL ) );
-        Label label = new Label( "label" );
+        Label label = new Label();
+        TextArea x = new TextArea();
+        TextArea y = new TextArea();
+        eItems.getChildren().addAll( label, x, y );
+        
         return ePane;
+    }
+    
+    public void setSelected( int i )
+    {
+        selected = i;
+    }
+    
+    public Scene getScene()
+    {
+        return scene;
     }
 
 }
