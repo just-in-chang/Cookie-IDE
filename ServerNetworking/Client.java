@@ -1,5 +1,7 @@
 package ServerNetworking;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -9,45 +11,38 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
+public class Client {
+	public static void main(String[] args) {
+		try {
+			byte[] bytes = new byte[8192];
+			Scanner sc = new Scanner(System.in);
+			String x, name, IP;
+			System.out.println("Server IP: ");
+			IP = sc.nextLine();
+			Socket socket = new Socket(IP, 6666);
+			System.out.println(" Server IP Address: " + socket.getInetAddress().getLocalHost().getHostAddress());
+			System.out.println("Input fileplease: ");
+			x = sc.nextLine();
+			File file = new File(x);
+			//initializing input and output
+			ObjectOutputStream OS = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream IS = new ObjectInputStream(socket.getInputStream());
+			InputStream FIS = new FileInputStream(file);
+			DataOutputStream DOS = new DataOutputStream(socket.getOutputStream());
+			OS.writeUTF(x);
+			OS.flush();
+			name = IS.readUTF();
+			System.out.println(name);
+			int count;
+			while ((count = FIS.read(bytes)) > 0) {
+				OS.write(bytes, 0, count);
+			}
 
-public class Client
-{
-    public static void main( String[] args )
-    {
-        try
-        {
-            byte[] bytes = new byte[8192];
-            Scanner sc = new Scanner( System.in );
-            String x, name,IP;   
-            System.out.println("Server IP: ");
-            IP = sc.nextLine();
-            Socket socket = new Socket( IP, 6666 );
-            System.out.println( "IP Address: " + socket.getInetAddress().getLocalHost().getHostAddress() );
-            System.out.println( "Input fileplease: " );
-            x = sc.nextLine();
-            File file = new File( x );
-            ObjectOutputStream OS = new ObjectOutputStream(
-                socket.getOutputStream() );
-            ObjectInputStream IS = new ObjectInputStream(
-                socket.getInputStream() );
-            InputStream FIS = new FileInputStream( file );
-            OS.writeUTF( x );
-            OS.flush();
-            name = IS.readUTF();
-            System.out.println( name );
-            int count;
-            while ( ( count = FIS.read( bytes ) ) > 0 )
-            {
-                OS.write( bytes, 0, count );
-            }
-
-            OS.close();
-            IS.close();
-            socket.close();
-        }
-        catch ( Exception e )
-        {
-            System.out.println( e );
-        }
-    }
+			OS.close();
+			IS.close();
+			socket.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 }
