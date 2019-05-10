@@ -1,16 +1,18 @@
 package guiObjects;
+
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 
 
 /**
- *  button that can be manipulated in size and position
+ * button that can be manipulated in size and position
  *
- *  @author  Andrew
- *  @version May 8, 2019
- *  @author  Period: 1
- *  @author  Assignment: Cookie IDE
+ * @author Andrew
+ * @version May 8, 2019
+ * @author Period: 1
+ * @author Assignment: Cookie IDE
  *
- *  @author  Sources: TODO
+ * @author Sources: TODO
  */
 public class guiButton extends Button implements guiObject
 {
@@ -36,11 +38,14 @@ public class guiButton extends Button implements guiObject
     }
 
 
+    @Override
     public String getName()
     {
         return name;
     }
-    
+
+
+    @Override
     public void setName( String n )
     {
         name = n;
@@ -59,6 +64,5 @@ public class guiButton extends Button implements guiObject
     {
         select = b;
     }
-   
 
 }
