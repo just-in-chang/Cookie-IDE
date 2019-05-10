@@ -26,6 +26,8 @@ public class guiButton extends Button implements guiObject
     private boolean activeDrag = false;
 
     private String name = "";
+    
+    private boolean select = false;
 
 
     public guiButton()
@@ -71,7 +73,7 @@ public class guiButton extends Button implements guiObject
         } );
         this.setOnMouseDragged( e -> {
             Control src = ( (Control)e.getSource() );
-            src.setDisable( true );
+//            src.setDisable( true );
             if ( resize == false )
             {
                 double moveX = src.getTranslateX() + e.getX() - x;
@@ -96,7 +98,7 @@ public class guiButton extends Button implements guiObject
             this.getScene().setCursor( Cursor.DEFAULT );
             resize = false;
             activeDrag = false;
-            this.setDisable( false );
+//            this.setDisable( false );
         } );
     }
 
@@ -110,5 +112,20 @@ public class guiButton extends Button implements guiObject
     {
         name = n;
     }
+
+
+    @Override
+    public boolean isSelected()
+    {
+        return select;
+    }
+
+
+    @Override
+    public void setSelected( boolean b )
+    {
+        select = b;
+    }
+   
 
 }
