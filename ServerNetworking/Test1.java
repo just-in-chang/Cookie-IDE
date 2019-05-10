@@ -8,41 +8,33 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
+public class Test1 {
+	public static void main(String[] args) {
 
-public class Test1
-{
-    public static void main( String[] args )
-    {
+		try {
+			String x = "";
+			Scanner sc = new Scanner(System.in);
+			byte[] bytes = new byte[8192];
+			int count;
+			int s = 0;
+			ServerSocket a = new ServerSocket(6666);
+			Socket ab = a.accept();
+			System.out.println(ab.getInetAddress().getHostAddress());
+			ObjectOutputStream OOS = new ObjectOutputStream(ab.getOutputStream());
+			ObjectInputStream OIS = new ObjectInputStream(ab.getInputStream());
+			OutputStream FOS = new FileOutputStream("xdxd.java");
+			x = OIS.readUTF();
+			OOS.writeUTF(x);
+			OOS.flush();
+			while ((count = OIS.read(bytes)) > 0) {
+				FOS.write(bytes, 0, count);
+			}
+			ab.close();
+			a.close();
 
-        try
-        {
-            String x = "";
-            Scanner sc = new Scanner( System.in );
-            byte[] bytes = new byte[8192];
-            int count;
-            int s = 0;
-            ServerSocket a = new ServerSocket( 6666 );
-            Socket ab = a.accept();
-            ObjectOutputStream OOS = new ObjectOutputStream(
-                ab.getOutputStream() );
-            ObjectInputStream OIS = new ObjectInputStream(
-                ab.getInputStream() );
-            OutputStream FOS = new FileOutputStream( "xdxd.txt" );
-            x = OIS.readUTF();
-            OOS.writeUTF( x );
-            OOS.flush();
-            while ( ( count = OIS.read( bytes ) ) > 0 )
-            {
-                FOS.write( bytes, 0, count );
-            }
-            ab.close();
-            a.close();
-
-        }
-        catch ( Exception e )
-        {
-            System.out.print( e );
-        }
-    }
+		} catch (Exception e) {
+			System.out.print(e);
+		}
+	}
 
 }

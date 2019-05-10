@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -17,9 +18,11 @@ public class Client
         {
             byte[] bytes = new byte[8192];
             Scanner sc = new Scanner( System.in );
-            String x, name;
-            Socket socket = new Socket( "localHost", 6666 );
-            System.out.println( "IP Address" + socket.getInetAddress() );
+            String x, name,IP;   
+            System.out.println("Server IP: ");
+            IP = sc.nextLine();
+            Socket socket = new Socket( IP, 6666 );
+            System.out.println( "IP Address: " + socket.getInetAddress().getLocalHost().getHostAddress() );
             System.out.println( "Input fileplease: " );
             x = sc.nextLine();
             File file = new File( x );
