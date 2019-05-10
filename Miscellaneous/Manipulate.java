@@ -35,12 +35,15 @@ public class Manipulate
         node.setOnMouseMoved( e -> {
             Control src = ( (Control)e.getSource() );
 
-            ( (WorkspacePane)src.getParent() ).setX( src.getTranslateX() + e.getX() );
-            ( (WorkspacePane)src.getParent() ).setY( src.getTranslateY() + e.getY() );
+            ( (WorkspacePane)src.getParent() )
+                .setX( src.getTranslateX() + e.getX() );
+            ( (WorkspacePane)src.getParent() )
+                .setY( src.getTranslateY() + e.getY() );
 
             if ( resizeable )
             {
-                if ( ( e.getX() > src.getWidth() - 6 && e.getY() > src.getHeight() - 6 ) )
+                if ( ( e.getX() > src.getWidth() - 6
+                    && e.getY() > src.getHeight() - 6 ) )
                 {
                     resize = true;
                     node.getScene().setCursor( Cursor.NW_RESIZE );
@@ -67,7 +70,8 @@ public class Manipulate
                 node.getScene().setCursor( Cursor.MOVE );
             }
             activeDrag = true;
-            ( (WorkspacePane)( (Control)e.getSource() ).getParent() ).getToggleGroup()
+            ( (WorkspacePane)( (Control)e.getSource() ).getParent() )
+                .getToggleGroup()
                 .setSelected( (guiObject)node );
         } );
         node.setOnMouseDragged( e -> {
@@ -86,18 +90,23 @@ public class Manipulate
                 }
                 else
                 {
-                    src.setTranslateX(
-                        Math.min( Math.max( 0, moveX ), parent.getMaxWidth() - src.getWidth() ) );
-                    src.setTranslateY(
-                        Math.min( Math.max( 0, moveY ), parent.getMaxHeight() - src.getHeight() ) );
+                    src.setTranslateX( Math.min( Math.max( 0, moveX ),
+                        parent.getMaxWidth() - src.getWidth() ) );
+                    src.setTranslateY( Math.min( Math.max( 0, moveY ),
+                        parent.getMaxHeight() - src.getHeight() ) );
                 }
-                ( (WorkspacePane)src.getParent() ).setX( src.getTranslateX() + x );
-                ( (WorkspacePane)src.getParent() ).setY( src.getTranslateY() + y );
+                ( (WorkspacePane)src.getParent() )
+                    .setX( src.getTranslateX() + x );
+                ( (WorkspacePane)src.getParent() )
+                    .setY( src.getTranslateY() + y );
             }
             else
             {
-                src.setPrefSize( Math.min( parent.getWidth() - src.getTranslateX(), e.getX() ),
-                    Math.min( parent.getHeight() - src.getTranslateY(), e.getY() ) );
+                src.setPrefSize(
+                    Math.min( parent.getWidth() - src.getTranslateX(),
+                        e.getX() ),
+                    Math.min( parent.getHeight() - src.getTranslateY(),
+                        e.getY() ) );
             }
         } );
         node.setOnMouseReleased( e -> {
@@ -108,16 +117,15 @@ public class Manipulate
         } );
 
         ContextMenu cMenu = new ContextMenu();
-        MenuItem delete = new MenuItem( "pp" );
+        MenuItem delete = new MenuItem( "Delete" );
         cMenu.getItems().add( delete );
 
         delete.setOnAction( e -> {
-            System.out.println( e.getSource() );
+            node.setVisible( false );
         } );
 
         node.setOnContextMenuRequested( e -> {
             cMenu.show( node, Side.BOTTOM, 0, 0 );
-            System.out.println( "pop" );
         } );
 
     }
