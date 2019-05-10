@@ -20,13 +20,14 @@ public class Test1
             Scanner sc = new Scanner( System.in );
             byte[] bytes = new byte[8192];
             int count;
+            int s = 0;
             ServerSocket a = new ServerSocket( 6666 );
             Socket ab = a.accept();
             ObjectOutputStream OOS = new ObjectOutputStream(
                 ab.getOutputStream() );
             ObjectInputStream OIS = new ObjectInputStream(
                 ab.getInputStream() );
-            OutputStream FOS = new FileOutputStream( "hihi.txt" );
+            OutputStream FOS = new FileOutputStream( "xdxd.txt" );
             x = OIS.readUTF();
             OOS.writeUTF( x );
             OOS.flush();
