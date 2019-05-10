@@ -203,37 +203,6 @@ public class Main extends Application
         });
         statusUpdate.setDaemon( true );
         statusUpdate.start();
-//=======
-//        workspace.setOnMouseMoved( e -> {
-//            mouseX.setText( "X: " + e.getX() );
-//            mouseY.setText( "Y: " + e.getY() );
-//            SelectableGroup tGroup = ( (WorkspacePane)workspace )
-//                .getToggleGroup();
-//            if ( workspace.getChildren().size() > 0 )
-//            {
-//                selected.setText(
-//                    "Selected:  '" + tGroup.getSelected().getName() + "'" );
-//
-//                selectedNode = tGroup.getSelected();
-//
-//                Bounds boundsInScene = ( (Node)selectedNode )
-//                    .localToParent( ( (Node)selectedNode ).getLayoutBounds() );
-//
-//                editPanelLabel.setText( tGroup.getSelected().getName() );
-//                coordPane.getxLabel()
-//                    .setText( Double.toString( boundsInScene.getMinX() ) );
-//                coordPane.getyLabel()
-//                    .setText( Double.toString( boundsInScene.getMinY() ) );
-//                coordPane.getWidthLabel()
-//                    .setText( Double.toString(
-//                        ( (Region)tGroup.getSelected() ).getWidth() ) );
-//                coordPane.getHeightLabel()
-//                    .setText( Double.toString(
-//                        ( (Region)tGroup.getSelected() ).getHeight() ) );
-//
-//            }
-//        } );
-//>>>>>>> 60da8701f72bc2d7a9070864d51c006569bcdd1e
 
         return statusBar;
     }
