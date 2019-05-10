@@ -14,7 +14,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -159,8 +159,8 @@ public class Main extends Application
         ePane.setMinWidth( 250 );
         ePane.getChildren().add( new Separator( Orientation.VERTICAL ) );
         Label label = new Label();
-        TextArea x = new TextArea();
-        TextArea y = new TextArea();
+        TextField x = new TextField();
+        TextField y = new TextField();
         eItems.getChildren().addAll( label, x, y );
         
         return ePane;
