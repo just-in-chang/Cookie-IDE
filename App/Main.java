@@ -2,8 +2,13 @@ package App;
 
 import java.util.Stack;
 
-import Miscellaneous.*;
-import guiObjects.*;
+import Miscellaneous.Notification;
+import Miscellaneous.SelectableGroup;
+import guiObjects.controlButton;
+import guiObjects.guiButton;
+import guiObjects.guiLabel;
+import guiObjects.guiObject;
+import guiObjects.guiTextField;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
@@ -13,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -46,6 +52,8 @@ public class Main extends Application
         launch( args );
     }
 
+    BorderPane window;
+
     Stack<Node> test = new Stack<Node>();
 
     Scene scene;
@@ -60,6 +68,8 @@ public class Main extends Application
 
     HBox editPanel;
 
+    VBox editPanelInside;
+
     Label editPanelLabel;
 
     CoordinatePane coordPane;
@@ -71,7 +81,7 @@ public class Main extends Application
     public void start( Stage stage )
     {
         stage.setTitle( "Cookie IDE" );
-        BorderPane window = new BorderPane();
+        window = new BorderPane();
         scene = new Scene( window, 1280, 720 );
         stage.setScene( scene );
 
@@ -98,7 +108,7 @@ public class Main extends Application
         window.setLeft( controlPanel );
         window.setRight( editPanel );
 
-        stage.setTitle( "lmao" );
+        stage.setTitle( "Cookie IDE" );
         stage.setScene( scene );
         stage.show();
 
@@ -120,12 +130,13 @@ public class Main extends Application
             for ( Node n : test )
             {
                 Bounds boundsInScene = n.localToParent( n.getLayoutBounds() );
-                System.out.println( ( (guiObject)n ).getName() + "\n(" + boundsInScene.getMinX()
-                    + ", " + boundsInScene.getMinY() + ")" + "\nWidth: " + boundsInScene.getWidth()
+                System.out.println( ( (guiObject)n ).getName() + "\n("
+                    + boundsInScene.getMinX() + ", " + boundsInScene.getMinY()
+                    + ")" + "\nWidth: " + boundsInScene.getWidth()
                     + "\nHeight: " + boundsInScene.getHeight() + "\n" );
             }
             System.out.println( "================" );
-            // Notification saveNoti = new Notification();
+            Notification saveNoti = new Notification();
         } );
 
         return menuBar;
@@ -141,7 +152,6 @@ public class Main extends Application
         statusBar.getChildren().addAll( mouseX, mouseY, selected );
         Thread statusUpdate = new Thread( new Runnable()
         {
-
             @Override
             public void run()
             {
@@ -157,41 +167,54 @@ public class Main extends Application
                     }
                     Platform.runLater( new Runnable()
                     {
-
                         @Override
                         public void run()
                         {
-                            mouseX.setText( "X: " + ( (WorkspacePane)workspace ).getX() );
-                            mouseY.setText( "Y: " + ( (WorkspacePane)workspace ).getY() );
-                            SelectableGroup tGroup = ( (WorkspacePane)workspace ).getToggleGroup();
+                            mouseX.setText(
+                                "X: " + ( (WorkspacePane)workspace ).getX() );
+                            mouseY.setText(
+                                "Y: " + ( (WorkspacePane)workspace ).getY() );
+                            SelectableGroup tGroup = ( (WorkspacePane)workspace )
+                                .getToggleGroup();
                             if ( workspace.getChildren().size() > 0 )
                             {
                                 selected.setText( "Selected:  '"
-                                    + ( (guiObject)tGroup.getSelected() ).getName() + "'" );
+                                    + tGroup.getSelected().getName() + "'" );
+
+                                if ( !tGroup.getSelected()
+                                    .equals( selectedNode ) )
+                                {
+                                    window.setRight( editPanel( workspace ) );
+
+                                }
+
                                 selectedNode = tGroup.getSelected();
 
                                 Bounds boundsInScene = ( (Node)selectedNode )
-                                    .localToParent( ( (Node)selectedNode ).getLayoutBounds() );
+                                    .localToParent( ( (Node)selectedNode )
+                                        .getLayoutBounds() );
 
-                                editPanelLabel.setText( tGroup.getSelected().getName() );
+                                editPanelLabel
+                                    .setText( tGroup.getSelected().getName() );
                                 coordPane.getxLabel()
-                                    .setText( Double.toString( boundsInScene.getMinX() ) );
+                                    .setText( Double
+                                        .toString( boundsInScene.getMinX() ) );
                                 coordPane.getyLabel()
-                                    .setText( Double.toString( boundsInScene.getMinY() ) );
+                                    .setText( Double
+                                        .toString( boundsInScene.getMinY() ) );
                                 coordPane.getWidthLabel()
-                                    .setText( Double
-                                        .toString( ( (Region)tGroup.getSelected() ).getWidth() ) );
+                                    .setText( Double.toString(
+                                        ( (Region)tGroup.getSelected() )
+                                            .getWidth() ) );
                                 coordPane.getHeightLabel()
-                                    .setText( Double
-                                        .toString( ( (Region)tGroup.getSelected() ).getHeight() ) );
+                                    .setText( Double.toString(
+                                        ( (Region)tGroup.getSelected() )
+                                            .getHeight() ) );
                             }
-
                         }
-
                     } );
                 }
             }
-
         } );
         statusUpdate.setDaemon( true );
         statusUpdate.start();
@@ -204,16 +227,24 @@ public class Main extends Application
     {
         HBox controlBox = new HBox();
         GridPane controlPanel = new GridPane();
-        controlBox.getChildren().addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
+        controlBox.getChildren()
+            .addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
         controlPanel.setVgap( 10 );
-        controlPanel
-            .add( new controlButton( "Button", workspace, guiButton.class, test, stage ), 0, 0 );
-        controlPanel
-            .add( new controlButton( "Label", workspace, guiLabel.class, test, stage ), 0, 1 );
-        controlPanel.add(
-            new controlButton( "TextField", workspace, guiTextField.class, test, stage ),
-            0,
-            2 );
+        controlPanel.add( new controlButton( "Button",
+            workspace,
+            guiButton.class,
+            test,
+            stage ), 0, 0 );
+        controlPanel.add( new controlButton( "Label",
+            workspace,
+            guiLabel.class,
+            test,
+            stage ), 0, 1 );
+        controlPanel.add( new controlButton( "TextField",
+            workspace,
+            guiTextField.class,
+            test,
+            stage ), 0, 2 );
 
         for ( Node ass : controlPanel.getChildren() )
         {
@@ -221,14 +252,12 @@ public class Main extends Application
         }
 
         controlPanel.setPadding( new Insets( 25, 25, 25, 25 ) );
-
         return controlBox;
     }
 
 
     public HBox editPanel( Pane workspace )
     {
-
         HBox rePane = new HBox();
         rePane.setAlignment( Pos.TOP_CENTER );
         rePane.setMinWidth( 250 );
@@ -237,11 +266,7 @@ public class Main extends Application
         ePane.setPadding( new Insets( 25, 25, 25, 25 ) );
         ePane.setAlignment( Pos.TOP_LEFT );
         ePane.setSpacing( 10 );
-
-        GridPane grid = new GridPane();
-        grid.setPadding( new Insets( 25, 25, 25, 25 ) );
-        grid.setVgap( 10 );
-        grid.setHgap( 10 );
+        editPanelInside = ePane;
 
         Label label = new Label( "<No Selection>" );
         label.setStyle( "-fx-font-weight: bold" );
@@ -249,8 +274,20 @@ public class Main extends Application
 
         rePane.getChildren().add( new Separator( Orientation.VERTICAL ) );
         rePane.getChildren().addAll( ePane );
-        ePane.getChildren().addAll( label, coordPane, grid );
-        grid.setVisible( true );
+        ePane.getChildren().addAll( label, coordPane );
+
+        if ( ( (WorkspacePane)workspace ).getToggleGroup()
+            .getSelected() instanceof Labeled )
+        {
+            LabeledPane labelPane = new LabeledPane();
+            ePane.getChildren().addAll( labelPane );
+
+            labelPane.getApplyButton().setOnAction( e -> {
+                ( (Labeled)selectedNode )
+                    .setText( labelPane.getTextField().getText() );
+            } );
+        }
+
         return rePane;
     }
 
