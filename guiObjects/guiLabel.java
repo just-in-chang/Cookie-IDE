@@ -1,5 +1,6 @@
 package guiObjects;
 
+import Miscellaneous.Manipulate;
 import javafx.scene.control.Label;
 
 
@@ -58,7 +59,7 @@ public class guiLabel extends Label implements guiObject
     public void setSelected( boolean b )
     {
         select = b;
-        
+
     }
 
 }

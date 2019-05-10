@@ -1,16 +1,21 @@
-package guiObjects;
+package Miscellaneous;
 
 import java.util.ArrayList;
+
+import guiObjects.guiObject;
+
 
 public class SelectableGroup
 {
     private ArrayList<guiObject> group;
-    
+
+
     public SelectableGroup()
     {
         group = new ArrayList<guiObject>();
     }
-    
+
+
     public boolean add( guiObject toggle )
     {
         group.add( toggle );
@@ -20,18 +25,20 @@ public class SelectableGroup
         }
         return true;
     }
-    
+
+
     public void setSelected( guiObject toggle )
     {
         for ( guiObject t : group )
         {
-            if ( t.equals( toggle ))
+            if ( t.equals( toggle ) )
                 t.setSelected( true );
             else
                 t.setSelected( false );
         }
     }
-    
+
+
     public guiObject getSelected()
     {
         guiObject selected = null;
@@ -42,7 +49,8 @@ public class SelectableGroup
         }
         return selected;
     }
-    
+
+
     public int getSelectedIndex()
     {
         return group.indexOf( getSelected() );

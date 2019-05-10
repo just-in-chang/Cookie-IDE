@@ -2,7 +2,7 @@ package guiObjects;
 
 import java.util.Stack;
 
-import App.Main;
+import App.WorkspacePane;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -45,11 +45,7 @@ public class controlButton extends Button
      *            stack to add instance to in order to be able to save the
      *            configuration
      */
-    public controlButton(
-        String text, Pane workspace,
-        Class<?> c,
-        Stack<Node> s,
-        Stage stage )
+    public controlButton( String text, Pane workspace, Class<?> c, Stack<Node> s, Stage stage )
     {
         super( text );
         this.setOnMouseClicked( e -> {
@@ -57,9 +53,9 @@ public class controlButton extends Button
             {
                 Control node = (Control)c.getConstructor( String.class )
                     .newInstance( text + count );
-//              editWindow( stage, workspace );
+                // editWindow( stage, workspace );
                 workspace.getChildren().add( node );
-                ((WorkspacePane)workspace).addSelection( (guiObject)node );
+                ( (WorkspacePane)workspace ).addSelection( (guiObject)node );
                 s.push( node );
                 count++;
             }
@@ -79,8 +75,9 @@ public class controlButton extends Button
         popup.initOwner( stage );
 
         VBox vb = new VBox();
-        TextField name = new TextField( ( (Labeled)workspace.getChildren()
-            .get( workspace.getChildren().size() - 1 ) ).getText() );
+        TextField name = new TextField(
+            ( (Labeled)workspace.getChildren().get( workspace.getChildren().size() - 1 ) )
+                .getText() );
         Button ass = new Button( "Submit" );
 
         ass.setOnAction( e -> {

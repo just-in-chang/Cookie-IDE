@@ -22,10 +22,8 @@ public class Test1
             int count;
             ServerSocket a = new ServerSocket( 6666 );
             Socket ab = a.accept();
-            ObjectOutputStream OOS = new ObjectOutputStream(
-                ab.getOutputStream() );
-            ObjectInputStream OIS = new ObjectInputStream(
-                ab.getInputStream() );
+            ObjectOutputStream OOS = new ObjectOutputStream( ab.getOutputStream() );
+            ObjectInputStream OIS = new ObjectInputStream( ab.getInputStream() );
             OutputStream FOS = new FileOutputStream( "hihi.txt" );
             x = OIS.readUTF();
             OOS.writeUTF( x );

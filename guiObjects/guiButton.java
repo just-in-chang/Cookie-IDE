@@ -1,6 +1,6 @@
 package guiObjects;
 
-import javafx.scene.Cursor;
+import Miscellaneous.Manipulate;
 import javafx.scene.control.Button;
 
 
@@ -18,7 +18,7 @@ public class guiButton extends Button implements guiObject
 {
 
     private String name;
-    
+
     private boolean select;
 
 

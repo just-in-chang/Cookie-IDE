@@ -2,14 +2,8 @@ package App;
 
 import java.util.Stack;
 
-import Miscellaneous.Notification;
-import guiObjects.SelectableGroup;
-import guiObjects.WorkspacePane;
-import guiObjects.controlButton;
-import guiObjects.guiButton;
-import guiObjects.guiLabel;
-import guiObjects.guiObject;
-import guiObjects.guiTextField;
+import Miscellaneous.*;
+import guiObjects.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
@@ -38,7 +32,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 
-
 // git add .
 public class Main extends Application
 {
@@ -60,7 +53,6 @@ public class Main extends Application
     VBox menu;
 
     WorkspacePane workspace;
-    
 
     HBox status;
 
@@ -128,13 +120,12 @@ public class Main extends Application
             for ( Node n : test )
             {
                 Bounds boundsInScene = n.localToParent( n.getLayoutBounds() );
-                System.out.println( ( (guiObject)n ).getName() + "\n("
-                    + boundsInScene.getMinX() + ", " + boundsInScene.getMinY()
-                    + ")" + "\nWidth: " + boundsInScene.getWidth()
+                System.out.println( ( (guiObject)n ).getName() + "\n(" + boundsInScene.getMinX()
+                    + ", " + boundsInScene.getMinY() + ")" + "\nWidth: " + boundsInScene.getWidth()
                     + "\nHeight: " + boundsInScene.getHeight() + "\n" );
             }
             System.out.println( "================" );
-            Notification saveNoti = new Notification();
+            // Notification saveNoti = new Notification();
         } );
 
         return menuBar;
@@ -148,89 +139,81 @@ public class Main extends Application
         Label mouseY = new Label( "lmao" );
         Label selected = new Label( "Selected:  " );
         statusBar.getChildren().addAll( mouseX, mouseY, selected );
-        Thread statusUpdate = new Thread( new Runnable() {
+        Thread statusUpdate = new Thread( new Runnable()
+        {
 
             @Override
             public void run()
             {
-                while (true)
+                while ( true )
                 {
                     try
                     {
-                        Thread.sleep(10);
+                        Thread.sleep( 10 );
                     }
                     catch ( Exception e )
                     {
                         System.out.println( e );
                     }
-                    Platform.runLater(new Runnable() {
+                    Platform.runLater( new Runnable()
+                    {
 
                         @Override
                         public void run()
                         {
-                            mouseX.setText( "X: " + ((WorkspacePane)workspace).getX() );
-                            mouseY.setText( "Y: " + ((WorkspacePane)workspace).getY() );
-                            SelectableGroup tGroup = ( (WorkspacePane)workspace )
-                              .getToggleGroup();
+                            mouseX.setText( "X: " + ( (WorkspacePane)workspace ).getX() );
+                            mouseY.setText( "Y: " + ( (WorkspacePane)workspace ).getY() );
+                            SelectableGroup tGroup = ( (WorkspacePane)workspace ).getToggleGroup();
                             if ( workspace.getChildren().size() > 0 )
                             {
-                              selected.setText( "Selected:  '"
-                                  + ( (guiObject)tGroup.getSelected() ).getName() + "'" );
-                              selectedNode = tGroup.getSelected();
+                                selected.setText( "Selected:  '"
+                                    + ( (guiObject)tGroup.getSelected() ).getName() + "'" );
+                                selectedNode = tGroup.getSelected();
 
-                              Bounds boundsInScene = ( (Node)selectedNode )
-                                  .localToParent( ( (Node)selectedNode ).getLayoutBounds() );
+                                Bounds boundsInScene = ( (Node)selectedNode )
+                                    .localToParent( ( (Node)selectedNode ).getLayoutBounds() );
 
-                              editPanelLabel.setText( tGroup.getSelected().getName() );
-                              coordPane.getxLabel()
-                                  .setText( Double.toString( boundsInScene.getMinX() ) );
-                              coordPane.getyLabel()
-                                  .setText( Double.toString( boundsInScene.getMinY() ) );
-                              coordPane.getWidthLabel()
-                                  .setText( Double.toString(
-                                      ( (Region)tGroup.getSelected() ).getWidth() ) );
-                              coordPane.getHeightLabel()
-                                  .setText( Double.toString(
-                                      ( (Region)tGroup.getSelected() ).getHeight() ) );
+                                editPanelLabel.setText( tGroup.getSelected().getName() );
+                                coordPane.getxLabel()
+                                    .setText( Double.toString( boundsInScene.getMinX() ) );
+                                coordPane.getyLabel()
+                                    .setText( Double.toString( boundsInScene.getMinY() ) );
+                                coordPane.getWidthLabel()
+                                    .setText( Double
+                                        .toString( ( (Region)tGroup.getSelected() ).getWidth() ) );
+                                coordPane.getHeightLabel()
+                                    .setText( Double
+                                        .toString( ( (Region)tGroup.getSelected() ).getHeight() ) );
                             }
-                            
+
                         }
-                        
-                    });
+
+                    } );
                 }
             }
-            
-        });
+
+        } );
         statusUpdate.setDaemon( true );
         statusUpdate.start();
 
         return statusBar;
     }
-    
 
 
     public HBox controlPanel( Stage stage, Pane workspace )
     {
         HBox controlBox = new HBox();
         GridPane controlPanel = new GridPane();
-        controlBox.getChildren()
-            .addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
+        controlBox.getChildren().addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
         controlPanel.setVgap( 10 );
-        controlPanel.add( new controlButton( "Button",
-            workspace,
-            guiButton.class,
-            test,
-            stage ), 0, 0 );
-        controlPanel.add( new controlButton( "Label",
-            workspace,
-            guiLabel.class,
-            test,
-            stage ), 0, 1 );
-        controlPanel.add( new controlButton( "TextField",
-            workspace,
-            guiTextField.class,
-            test,
-            stage ), 0, 2 );
+        controlPanel
+            .add( new controlButton( "Button", workspace, guiButton.class, test, stage ), 0, 0 );
+        controlPanel
+            .add( new controlButton( "Label", workspace, guiLabel.class, test, stage ), 0, 1 );
+        controlPanel.add(
+            new controlButton( "TextField", workspace, guiTextField.class, test, stage ),
+            0,
+            2 );
 
         for ( Node ass : controlPanel.getChildren() )
         {
@@ -245,7 +228,7 @@ public class Main extends Application
 
     public HBox editPanel( Pane workspace )
     {
-        
+
         HBox rePane = new HBox();
         rePane.setAlignment( Pos.TOP_CENTER );
         rePane.setMinWidth( 250 );

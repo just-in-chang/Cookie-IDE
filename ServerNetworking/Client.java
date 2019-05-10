@@ -23,10 +23,8 @@ public class Client
             System.out.println( "Input fileplease: " );
             x = sc.nextLine();
             File file = new File( x );
-            ObjectOutputStream OS = new ObjectOutputStream(
-                socket.getOutputStream() );
-            ObjectInputStream IS = new ObjectInputStream(
-                socket.getInputStream() );
+            ObjectOutputStream OS = new ObjectOutputStream( socket.getOutputStream() );
+            ObjectInputStream IS = new ObjectInputStream( socket.getInputStream() );
             InputStream FIS = new FileInputStream( file );
             OS.writeUTF( x );
             OS.flush();
