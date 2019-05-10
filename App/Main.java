@@ -13,6 +13,7 @@ import javafx.application.Application;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -20,11 +21,11 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -45,8 +46,6 @@ public class Main extends Application
 
     Stack<Node> test = new Stack<Node>();
 
-    int selected = 0;
-
     Scene scene;
 
     VBox menu;
@@ -59,11 +58,17 @@ public class Main extends Application
 
     HBox editPanel;
 
+    Label editPanelLabel;
+
+    CoordinatePane coordPane;
+
+    guiObject selectedNode = null;
+
 
     @Override
     public void start( Stage stage )
     {
-        stage.setTitle( "lmao" );
+        stage.setTitle( "Cookie IDE" );
         BorderPane window = new BorderPane();
         scene = new Scene( window, 1280, 720 );
         stage.setScene( scene );
@@ -71,6 +76,7 @@ public class Main extends Application
         menu = menu( stage, workspace );
         status = status( workspace );
         controlPanel = controlPanel( stage, workspace );
+        coordPane = new CoordinatePane();
         editPanel = editPanel( workspace );
 
         window.setTop( menu );
@@ -125,8 +131,28 @@ public class Main extends Application
             SelectableGroup tGroup = ( (WorkspacePane)workspace )
                 .getToggleGroup();
             if ( workspace.getChildren().size() > 0 )
+            {
                 selected.setText(
                     "Selected:  '" + tGroup.getSelected().getName() + "'" );
+
+                selectedNode = tGroup.getSelected();
+
+                Bounds boundsInScene = ( (Node)selectedNode )
+                    .localToParent( ( (Node)selectedNode ).getLayoutBounds() );
+
+                editPanelLabel.setText( tGroup.getSelected().getName() );
+                coordPane.getxLabel()
+                    .setText( Double.toString( boundsInScene.getMinX() ) );
+                coordPane.getyLabel()
+                    .setText( Double.toString( boundsInScene.getMinY() ) );
+                coordPane.getWidthLabel()
+                    .setText( Double.toString(
+                        ( (Region)tGroup.getSelected() ).getWidth() ) );
+                coordPane.getHeightLabel()
+                    .setText( Double.toString(
+                        ( (Region)tGroup.getSelected() ).getHeight() ) );
+
+            }
         } );
 
         return statusBar;
@@ -167,23 +193,29 @@ public class Main extends Application
 
     public HBox editPanel( Pane workspace )
     {
-        HBox ePane = new HBox();
-        VBox eItems = new VBox();
-        ePane.setMinWidth( 250 );
-        ePane.getChildren().add( new Separator( Orientation.VERTICAL ) );
-        ePane.getChildren().add( eItems );
-        Label label = new Label();
-        TextField x = new TextField();
-        TextField y = new TextField();
-        eItems.getChildren().addAll( label, x, y );
+        HBox rePane = new HBox();
+        rePane.setAlignment( Pos.TOP_CENTER );
+        rePane.setMinWidth( 250 );
 
-        return ePane;
-    }
+        VBox ePane = new VBox();
+        ePane.setPadding( new Insets( 25, 25, 25, 25 ) );
+        ePane.setAlignment( Pos.TOP_LEFT );
+        ePane.setSpacing( 10 );
 
+        GridPane grid = new GridPane();
+        grid.setPadding( new Insets( 25, 25, 25, 25 ) );
+        grid.setVgap( 10 );
+        grid.setHgap( 10 );
 
-    public void setSelected( int i )
-    {
-        selected = i;
+        Label label = new Label( "<No Selection>" );
+        label.setStyle( "-fx-font-weight: bold" );
+        editPanelLabel = label;
+
+        rePane.getChildren().add( new Separator( Orientation.VERTICAL ) );
+        rePane.getChildren().addAll( ePane );
+        ePane.getChildren().addAll( label, coordPane, grid );
+        grid.setVisible( true );
+        return rePane;
     }
 
 

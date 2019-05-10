@@ -46,7 +46,8 @@ public class controlButton extends Button
      *            configuration
      */
     public controlButton(
-        String text, Main main,
+        String text,
+        Main main,
         Pane workspace,
         Class<?> c,
         Stack<Node> s,
@@ -61,8 +62,8 @@ public class controlButton extends Button
                 workspace.getChildren().add( node );
                 count++;
                 s.push( node );
-//                editWindow( stage, workspace );
-                ((WorkspacePane)workspace).addSelection( (guiObject)node );
+                // editWindow( stage, workspace );
+                ( (WorkspacePane)workspace ).addSelection( (guiObject)node );
             }
             catch ( Exception ex )
             {
@@ -90,7 +91,7 @@ public class controlButton extends Button
                 Labeled poop = (Labeled)workspace.getChildren()
                     .get( workspace.getChildren().size() - 1 );
                 poop.setText( name.getText() );
-                ((guiObject)poop).setName( name.getText() );
+                ( (guiObject)poop ).setName( name.getText() );
                 popup.close();
             }
         } );
