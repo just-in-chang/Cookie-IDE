@@ -1,6 +1,7 @@
 package App;
 
 import java.io.BufferedWriter;
+import java.io.EOFException;
 import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -26,6 +27,8 @@ public class Compiler
                 socket.getOutputStream() );
             ObjectInputStream ois = new ObjectInputStream(
                 socket.getInputStream() );
+            PrintWriter out = new PrintWriter(
+                new BufferedWriter( new FileWriter( "out.java" ) ) );
 
             Thread putOut = new Thread()
             {
@@ -50,7 +53,6 @@ public class Compiler
                             }
                         }
                         oos.writeObject( "quit" );
-                        oos.close();
                     }
                     catch ( Exception ex )
                     {
@@ -66,15 +68,15 @@ public class Compiler
                 {
                     try
                     {
-                        PrintWriter out = new PrintWriter( new BufferedWriter(
-                            new FileWriter( "out.java" ) ) );
-
                         String meme = (String)ois.readObject();
                         while ( !meme.equals( "quit" ) )
                         {
                             out.println( meme );
                             meme = (String)ois.readObject();
                         }
+                    }
+                    catch ( EOFException ex )
+                    {
                         out.close();
                     }
                     catch ( Exception ex )
@@ -87,8 +89,6 @@ public class Compiler
 
             putOut.start();
             takeIn.start();
-
-            System.out.println( "lol? " );
         }
         catch (
 
