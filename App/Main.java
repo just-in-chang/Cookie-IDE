@@ -1,6 +1,6 @@
 package App;
 
-import java.util.Stack;
+import java.util.LinkedList;
 
 import Miscellaneous.Notification;
 import Miscellaneous.SelectableGroup;
@@ -54,7 +54,7 @@ public class Main extends Application
 
     BorderPane window;
 
-    Stack<Node> test = new Stack<Node>();
+    LinkedList<Node> nodeList = new LinkedList<Node>();
 
     Scene scene;
 
@@ -126,16 +126,9 @@ public class Main extends Application
         menuBar.getChildren().addAll( menu );
 
         save.setOnAction( e -> {
-            System.out.println( "================\n" );
-            for ( Node n : test )
-            {
-                Bounds boundsInScene = n.localToParent( n.getLayoutBounds() );
-                System.out.println( ( (guiObject)n ).getName() + "\n("
-                    + boundsInScene.getMinX() + ", " + boundsInScene.getMinY()
-                    + ")" + "\nWidth: " + boundsInScene.getWidth()
-                    + "\nHeight: " + boundsInScene.getHeight() + "\n" );
-            }
-            System.out.println( "================" );
+            Compiler compile = new Compiler();
+            compile.send( nodeList, workspace );
+
             Notification saveNoti = new Notification();
         } );
 
@@ -233,22 +226,25 @@ public class Main extends Application
         controlPanel.add( new controlButton( "Button",
             workspace,
             guiButton.class,
-            test,
+            nodeList,
             stage ), 0, 0 );
         controlPanel.add( new controlButton( "Label",
             workspace,
             guiLabel.class,
-            test,
+            nodeList,
             stage ), 0, 1 );
         controlPanel.add( new controlButton( "TextField",
             workspace,
             guiTextField.class,
-            test,
+            nodeList,
             stage ), 0, 2 );
+
+        controlPanel.add( new Separator( Orientation.HORIZONTAL ), 0, 3 );
 
         for ( Node ass : controlPanel.getChildren() )
         {
-            ( (controlButton)ass ).setMinWidth( 80 );
+            if ( ass instanceof controlButton )
+                ( (controlButton)ass ).setMinWidth( 80 );
         }
 
         controlPanel.setPadding( new Insets( 25, 25, 25, 25 ) );

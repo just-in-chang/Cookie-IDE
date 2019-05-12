@@ -1,5 +1,7 @@
 package guiObjects;
 
+import java.io.Serializable;
+
 import Miscellaneous.Manipulate;
 import javafx.scene.control.Button;
 
@@ -14,7 +16,7 @@ import javafx.scene.control.Button;
  *
  * @author Sources: TODO
  */
-public class guiButton extends Button implements guiObject
+public class guiButton extends Button implements guiObject, Serializable
 {
 
     private String name;
