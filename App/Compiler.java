@@ -3,6 +3,7 @@ package App;
 import java.io.BufferedWriter;
 import java.io.EOFException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
@@ -78,6 +79,14 @@ public class Compiler
                     catch ( EOFException ex )
                     {
                         out.close();
+                        try
+                        {
+                            socket.close();
+                        }
+                        catch ( IOException e )
+                        {
+                            e.printStackTrace();
+                        }
                     }
                     catch ( Exception ex )
                     {
