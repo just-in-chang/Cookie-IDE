@@ -1,8 +1,8 @@
 package guiObjects;
 
-import java.util.Stack;
+import java.util.LinkedList;
 
-import App.Main;
+import App.WorkspacePane;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -47,10 +47,9 @@ public class controlButton extends Button
      */
     public controlButton(
         String text,
-        Main main,
         Pane workspace,
         Class<?> c,
-        Stack<Node> s,
+        LinkedList<Node> s,
         Stage stage )
     {
         super( text );
@@ -59,11 +58,11 @@ public class controlButton extends Button
             {
                 Control node = (Control)c.getConstructor( String.class )
                     .newInstance( text + count );
-                workspace.getChildren().add( node );
-                count++;
-                s.push( node );
                 // editWindow( stage, workspace );
+                workspace.getChildren().add( node );
                 ( (WorkspacePane)workspace ).addSelection( (guiObject)node );
+                s.add( node );
+                count++;
             }
             catch ( Exception ex )
             {

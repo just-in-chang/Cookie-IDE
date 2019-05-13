@@ -1,7 +1,6 @@
 package guiObjects;
 
-import javafx.scene.Cursor;
-import javafx.scene.control.Control;
+import Miscellaneous.Manipulate;
 import javafx.scene.control.Label;
 
 
@@ -17,15 +16,9 @@ import javafx.scene.control.Label;
  */
 public class guiLabel extends Label implements guiObject
 {
-    private double x = 0;
-
-    private double y = 0;
+    private String name;
     
-    private boolean activeDrag = false;
-
-    private String name = "";
-    
-    private boolean select = false;
+    private boolean select;
 
 
     public guiLabel()
@@ -38,31 +31,9 @@ public class guiLabel extends Label implements guiObject
     {
         super( label );
         name = label;
-        this.setOnMouseExited( e -> {
-            if ( activeDrag == false )
-            {
-                this.getScene().setCursor( Cursor.DEFAULT );
-            }
-        } );
-        this.setOnMousePressed( e -> {
-            x = e.getX();
-            y = e.getY();
-            this.getScene().setCursor( Cursor.MOVE );
-            activeDrag = true;
-        } );
-        this.setOnMouseDragged( e -> {
-            Control src = ( (Control)e.getSource() );
-            src.setDisable( true );
-            double moveX = src.getTranslateX() + e.getX() - x;
-            double moveY = src.getTranslateY() + e.getY() - y;
-            src.setTranslateX( Math.max( 0, moveX ) );
-            src.setTranslateY( Math.max( 0, moveY ) );
-        } );
-        this.setOnMouseReleased( e -> {
-            this.getScene().setCursor( Cursor.DEFAULT );
-            activeDrag = false;
-            this.setDisable( false );
-        } );
+        select = false;
+        Manipulate m = new Manipulate();
+        m.setManipulate( this, false );
     }
 
 
@@ -88,7 +59,7 @@ public class guiLabel extends Label implements guiObject
     public void setSelected( boolean b )
     {
         select = b;
-        
+
     }
 
 }

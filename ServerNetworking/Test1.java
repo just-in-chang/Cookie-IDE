@@ -1,36 +1,65 @@
 package ServerNetworking;
 
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
+
+import javafx.geometry.Bounds;
+import javafx.scene.Node;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.TextInputControl;
 
 public class Test1 {
 	public static void main(String[] args) {
 
 		try {
-			String x = "";
+
 			Scanner sc = new Scanner(System.in);
 			byte[] bytes = new byte[8192];
-			int count;
-			int s = 0;
+			
 			ServerSocket a = new ServerSocket(6666);
 			Socket ab = a.accept();
-			System.out.println(ab.getInetAddress().getHostAddress());
-			ObjectOutputStream OOS = new ObjectOutputStream(ab.getOutputStream());
 			ObjectInputStream OIS = new ObjectInputStream(ab.getInputStream());
-			OutputStream FOS = new FileOutputStream("xdxd.java");
-			x = OIS.readUTF();
-			OOS.writeUTF(x);
-			OOS.flush();
-			while ((count = OIS.read(bytes)) > 0) {
-				FOS.write(bytes, 0, count);
-			}
-			ab.close();
-			a.close();
+			ObjectOutputStream OOS = new ObjectOutputStream(ab.getOutputStream());
+			 PrintWriter out = new PrintWriter(
+		                new BufferedWriter( new FileWriter( "out.java" ) ) );
+
+			//InputStream FIS = new FileInputStream("out.java");
+			Thread Run = new Thread() {
+				public void run() {
+					try {
+						
+						String x = (String)OIS.readObject();
+                        while ( !x.equals( "quit" ) )
+                        {
+                        	System.out.println(x);
+                            out.println( x );
+                            out.flush();
+                            x = (String)OIS.readObject();
+                        }
+							// sends file through
+						
+						//while ((count = FIS.read(bytes)) > 0) {
+						//	 OOS.write(bytes, 0, count);
+						//	 }
+						ab.close();
+						a.close();
+
+					} catch (Exception e) {
+						System.out.println(e);
+					}
+				}
+			};
+			Run.start();
 
 		} catch (Exception e) {
 			System.out.print(e);
