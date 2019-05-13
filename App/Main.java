@@ -121,7 +121,9 @@ public class Main extends Application
         MenuBar menu = new MenuBar();
         Menu file = new Menu( "File" );
         MenuItem save = new MenuItem( "Save" );
+        MenuItem open = new MenuItem( "Open" );
         file.getItems().addAll( save );
+        file.getItems().addAll( open );
         menu.getMenus().addAll( file );
         menuBar.getChildren().addAll( menu );
 
@@ -131,7 +133,12 @@ public class Main extends Application
 
             Notification saveNoti = new Notification();
         } );
+        open.setOnAction( e -> {
+            Compiler compile = new Compiler();
+            compile.retrieve();
 
+            Notification saveNoti = new Notification();
+        } );
         return menuBar;
     }
 

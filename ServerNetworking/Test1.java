@@ -1,6 +1,7 @@
 package ServerNetworking;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -23,34 +24,40 @@ public class Test1 {
 
 		try {
 
-			Scanner sc = new Scanner(System.in);
 			byte[] bytes = new byte[8192];
-			
+
 			ServerSocket a = new ServerSocket(6666);
 			Socket ab = a.accept();
 			ObjectInputStream OIS = new ObjectInputStream(ab.getInputStream());
 			ObjectOutputStream OOS = new ObjectOutputStream(ab.getOutputStream());
-			 PrintWriter out = new PrintWriter(
-		                new BufferedWriter( new FileWriter( "out.java" ) ) );
-
-			//InputStream FIS = new FileInputStream("out.java");
+			
 			Thread Run = new Thread() {
 				public void run() {
 					try {
 						
-						String x = (String)OIS.readObject();
-                        while ( !x.equals( "quit" ) )
-                        {
-                        	System.out.println(x);
-                            out.println( x );
-                            out.flush();
-                            x = (String)OIS.readObject();
-                        }
-							// sends file through
+						String x = (String) OIS.readObject();
+						if (x.equals("send")) {
+							PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("out.java")));
+							x = (String) OIS.readObject();
+							while (!x.equals("quit")) {
+
+								System.out.println(x);
+								out.println(x);
+								out.flush();
+								x = (String) OIS.readObject();
+							}
 						
-						//while ((count = FIS.read(bytes)) > 0) {
-						//	 OOS.write(bytes, 0, count);
-						//	 }
+						}
+						if (x.equals("retrieve")) {
+							InputStream FIS = new FileInputStream("out.java");
+						    x = (String) OIS.readObject();
+							if (x.equals("retrieve")) {
+								int count;
+								while ((count = FIS.read(bytes)) > 0) {
+									OOS.write(bytes, 0, count);
+								}
+							}
+						}
 						ab.close();
 						a.close();
 
@@ -59,11 +66,12 @@ public class Test1 {
 					}
 				}
 			};
-			Run.start();
 
+			Run.start();
 		} catch (Exception e) {
 			System.out.print(e);
 		}
+
 	}
 
 }
