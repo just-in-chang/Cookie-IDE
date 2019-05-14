@@ -100,6 +100,9 @@ public class Compiler
                     }
                 }
             };
+            
+            putOut.setDaemon( true );
+            takeIn.setDaemon( true );
 
             putOut.setDaemon( true );
             takeIn.setDaemon( true );
