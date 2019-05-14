@@ -100,15 +100,12 @@ public class Compiler
                     }
                 }
             };
-            
-            putOut.setDaemon( true );
-            takeIn.setDaemon( true );
 
             putOut.setDaemon( true );
             takeIn.setDaemon( true );
 
-            putOut.start();
             takeIn.start();
+            putOut.start();
         }
         catch (
 
