@@ -56,6 +56,8 @@ public class Main extends Application
 
     LinkedList<Node> nodeList = new LinkedList<Node>();
 
+    Notification saveNoti = new Notification();
+
     Scene scene;
 
     VBox menu;
@@ -129,7 +131,7 @@ public class Main extends Application
             Compiler compile = new Compiler();
             compile.send( nodeList, workspace );
 
-            Notification saveNoti = new Notification();
+            saveNoti.sendNotification();
         } );
 
         return menuBar;

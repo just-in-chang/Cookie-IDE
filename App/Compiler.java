@@ -12,6 +12,8 @@ import java.util.LinkedList;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.Pane;
@@ -38,15 +40,19 @@ public class Compiler
                 {
                     try
                     {
-                        oos.writeObject( workspace.getWidth() + "\n"
-                            + workspace.getHeight() + "\n" );
+                        oos.writeObject( workspace.getWidth() + ", "
+                            + workspace.getHeight() );
                         for ( Node n : list )
                         {
                             Bounds boundsInScene = n
                                 .localToParent( n.getLayoutBounds() );
-                            if ( n instanceof Labeled )
+                            if ( n instanceof Label )
                             {
-                                sendLabeled( oos, boundsInScene, n );
+                                sendLabel( oos, boundsInScene, n );
+                            }
+                            else if ( n instanceof Button )
+                            {
+                                sendButton( oos, boundsInScene, n );
                             }
                             else if ( n instanceof TextInputControl )
                             {
@@ -57,7 +63,7 @@ public class Compiler
                     }
                     catch ( Exception ex )
                     {
-                        System.out.println( "heheo" + ex );
+                        System.out.println( "heheo " + ex );
                     }
                 }
             };
@@ -90,11 +96,13 @@ public class Compiler
                     }
                     catch ( Exception ex )
                     {
-                        System.out.println( "hehei" + ex );
-
+                        System.out.println( "hehei " + ex );
                     }
                 }
             };
+
+            putOut.setDaemon( true );
+            takeIn.setDaemon( true );
 
             putOut.start();
             takeIn.start();
@@ -108,7 +116,22 @@ public class Compiler
     }
 
 
-    private void sendLabeled(
+    private void sendButton(
+        ObjectOutputStream oos,
+        Bounds boundsInScene,
+        Node n )
+        throws Exception
+    {
+        oos.writeObject( "Labeled" );
+        oos.writeObject( ( (Labeled)n ).getText() );
+        oos.writeObject( Double.toString( boundsInScene.getMinX() ) );
+        oos.writeObject( Double.toString( boundsInScene.getMinY() ) );
+        oos.writeObject( Double.toString( boundsInScene.getWidth() ) );
+        oos.writeObject( Double.toString( boundsInScene.getHeight() ) );
+    }
+
+
+    private void sendLabel(
         ObjectOutputStream oos,
         Bounds boundsInScene,
         Node n )

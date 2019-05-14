@@ -10,23 +10,23 @@ import javax.swing.ImageIcon;
 public class Notification
 {
 
-    private final Image image = new ImageIcon( this.getClass().getResource( "resources/Save.png" ) )
-        .getImage();
+    private final Image image = new ImageIcon(
+        this.getClass().getResource( "resources/Save.png" ) ).getImage();
 
-    private SystemTray tray;
+    private SystemTray tray = SystemTray.getSystemTray();
 
-    private TrayIcon trayIcon;
+    private TrayIcon trayIcon = new TrayIcon( image, "Tray Demo" );
 
 
-    public Notification()
+    public void sendNotification()
     {
 
         try
         {
-            tray = SystemTray.getSystemTray();
-            trayIcon = new TrayIcon( image, "Tray Demo" );
             tray.add( trayIcon );
-            trayIcon.displayMessage( "Save", "Save completed. ", TrayIcon.MessageType.NONE );
+            trayIcon.displayMessage( "Save",
+                "Save completed. ",
+                TrayIcon.MessageType.NONE );
         }
         catch ( Exception ex )
         {
