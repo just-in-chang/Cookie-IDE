@@ -41,7 +41,7 @@ public class Compiler
                 noti.saveCancel();
             }
 
-            else if ( !file.getName()
+            else if ( file.getName().length() < 5 || !file.getName()
                 .substring( file.getName().length() - 5 )
                 .equals( ".java" ) )
             {
