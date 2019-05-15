@@ -2,7 +2,6 @@ package App;
 
 import java.util.LinkedList;
 
-import Miscellaneous.Notification;
 import Miscellaneous.SelectableGroup;
 import guiObjects.controlButton;
 import guiObjects.guiButton;
@@ -55,8 +54,6 @@ public class Main extends Application
     BorderPane window;
 
     LinkedList<Node> nodeList = new LinkedList<Node>();
-
-    Notification saveNoti = new Notification();
 
     Scene scene;
 
@@ -129,9 +126,7 @@ public class Main extends Application
 
         save.setOnAction( e -> {
             Compiler compile = new Compiler();
-            compile.send( nodeList, workspace );
-
-            saveNoti.sendNotification();
+            compile.send( nodeList, workspace, stage );
         } );
 
         return menuBar;
