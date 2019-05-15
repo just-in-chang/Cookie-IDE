@@ -12,66 +12,79 @@ public class Server // extends Application
 
     private static HashMap<String, String> map = new HashMap<String, String>();
 
+    private static byte iterationNo = 1;
+
 
     public static void main( String[] args )
     {
         try
         {
-            System.out.println( "Sever online.\nPort 6666" );
 
-            // Server initialization
-            ServerSocket ss = new ServerSocket( 6666 );
-            Socket socket = ss.accept();
+            System.out.println( "Sever online. \nPort 6666. \n" );
 
-            ObjectInputStream ois = new ObjectInputStream(
-                socket.getInputStream() );
-            ObjectOutputStream oos = new ObjectOutputStream(
-                socket.getOutputStream() );
-
-            Thread putOut = new Thread()
+            while ( true )
             {
-                @Override
-                public void run()
-                {
-                    try
-                    {
-                        docHeading( oos );
-                        docBody( oos );
-                        docEnding( oos );
-                        oos.close();
-                    }
-                    catch ( Exception ex )
-                    {
-                        System.out.println( "oof" + ex );
-                    }
-                }
-            };
+                System.out.println( "Iteration Number " + iterationNo );
+                iterationNo++;
+                // Server initialization
+                ServerSocket ss = new ServerSocket( 6666 );
+                Socket socket = ss.accept();
 
-            Thread takeIn = new Thread()
-            {
-                @Override
-                public void run()
+                ObjectInputStream ois = new ObjectInputStream(
+                    socket.getInputStream() );
+                ObjectOutputStream oos = new ObjectOutputStream(
+                    socket.getOutputStream() );
+
+                Thread putOut = new Thread()
                 {
-                    try
+                    @Override
+                    public void run()
                     {
-                        map.put( "docInfo", (String)ois.readObject() );
-                        while ( true )
+                        try
                         {
-                            String str = (String)ois.readObject();
-                            if ( str.equals( "quit" ) )
-                                break;
-                            System.out.println( str );
+                            docHeading( oos );
+                            docBody( oos );
+                            docEnding( oos );
+                            oos.close();
                         }
-                        putOut.run();
+                        catch ( Exception ex )
+                        {
+                            System.out.println( "oof" + ex );
+                        }
                     }
-                    catch ( Exception ex )
-                    {
-                        System.out.println( "oof" + ex );
-                    }
-                }
-            };
+                };
 
-            takeIn.run();
+                Thread takeIn = new Thread()
+                {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            map.put( "docInfo", (String)ois.readObject() );
+                            while ( true )
+                            {
+                                String str = (String)ois.readObject();
+                                if ( str.equals( "quit" ) )
+                                    break;
+                                System.out.println( str );
+                            }
+                            putOut.run();
+                        }
+                        catch ( Exception ex )
+                        {
+                            System.out.println( "oof" + ex );
+                        }
+                    }
+                };
+
+                putOut.setDaemon( true );
+                takeIn.setDaemon( true );
+
+                takeIn.run();
+                ss.close();
+                System.out.println( "Save Success. \n" );
+            }
         }
         catch ( Exception ex )
         {

@@ -51,29 +51,27 @@ public class Main extends Application
         launch( args );
     }
 
-    BorderPane window;
+    private BorderPane window;
 
-    LinkedList<Node> nodeList = new LinkedList<Node>();
+    private LinkedList<Node> nodeList = new LinkedList<Node>();
 
-    Scene scene;
+    private Scene scene;
 
-    VBox menu;
+    private VBox menu;
 
-    WorkspacePane workspace;
+    private WorkspacePane workspace;
 
-    HBox status;
+    private HBox status;
 
-    HBox controlPanel;
+    private HBox controlPanel;
 
-    HBox editPanel;
+    private HBox editPanel;
 
-    VBox editPanelInside;
+    private Label editPanelLabel;
 
-    Label editPanelLabel;
+    private CoordinatePane coordPane;
 
-    CoordinatePane coordPane;
-
-    guiObject selectedNode = null;
+    private guiObject selectedNode = null;
 
 
     @Override
@@ -259,8 +257,6 @@ public class Main extends Application
         ePane.setPadding( new Insets( 25, 25, 25, 25 ) );
         ePane.setAlignment( Pos.TOP_LEFT );
         ePane.setSpacing( 10 );
-        editPanelInside = ePane;
-
         Label label = new Label( "<No Selection>" );
         label.setStyle( "-fx-font-weight: bold" );
         editPanelLabel = label;
