@@ -2,124 +2,169 @@ package App;
 
 import java.io.BufferedWriter;
 import java.io.EOFException;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.LinkedList;
 
+import Miscellaneous.Notification;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 
 public class Compiler
 {
-    public void send( LinkedList<Node> list, Pane workspace )
+    private Notification noti = new Notification();
+
+
+    public void send( LinkedList<Node> list, Pane workspace, final Stage stage )
     {
         try
         {
-            Socket socket = new Socket( "localhost", 6666 );
-            ObjectOutputStream oos = new ObjectOutputStream(
-                socket.getOutputStream() );
-            ObjectInputStream ois = new ObjectInputStream(
-                socket.getInputStream() );
-            
-            
+            FileChooser fileChoose = new FileChooser();
+            File file = fileChoose.showSaveDialog( stage );
 
-            Thread putOut = new Thread()
+            if ( file == null )
             {
-                @Override
-                public void run()
+                noti.saveCancel();
+            }
+
+            else if ( file.getName().length() < 5 || !file.getName()
+                .substring( file.getName().length() - 5 )
+                .equals( ".java" ) )
+            {
+                noti.saveFail();
+            }
+            else
+            {
+                Socket socket = new Socket( "localhost", 6666 );
+                ObjectOutputStream oos = new ObjectOutputStream(
+                    socket.getOutputStream() );
+                ObjectInputStream ois = new ObjectInputStream(
+                    socket.getInputStream() );
+
+                PrintWriter out = new PrintWriter(
+                    new BufferedWriter( new FileWriter( file ) ) );
+
+                Thread putOut = new Thread()
                 {
-                    try
+                    @Override
+                    public void run()
                     {
-                    	oos.writeObject("send");
-                        oos.writeObject( workspace.getWidth() + "\n"
-                            + workspace.getHeight() + "\n" );
-                        for ( Node n : list )
+                        try
                         {
-                            Bounds boundsInScene = n
-                                .localToParent( n.getLayoutBounds() );
-                            if ( n instanceof Labeled )
+                            oos.writeObject( workspace.getWidth() + ", "
+                                + workspace.getHeight() );
+                            for ( Node n : list )
                             {
-                                sendLabeled( oos, boundsInScene, n );
+                                if ( n.isVisible() )
+                                {
+                                    Bounds boundsInScene = n
+                                        .localToParent( n.getLayoutBounds() );
+                                    if ( n instanceof Label )
+                                    {
+                                        sendLabel( oos, boundsInScene, n );
+                                    }
+                                    else if ( n instanceof Button )
+                                    {
+                                        sendButton( oos, boundsInScene, n );
+                                    }
+                                    else if ( n instanceof TextInputControl )
+                                    {
+                                        sendTextField( oos, boundsInScene, n );
+                                    }
+                                }
                             }
-                            else if ( n instanceof TextInputControl )
+                            oos.writeObject( "quit" );
+                        }
+                        catch ( Exception ex )
+                        {
+                            System.out.println( "heheo " + ex );
+                        }
+                    }
+                };
+
+                Thread takeIn = new Thread()
+                {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            String meme = (String)ois.readObject();
+                            while ( !meme.equals( "quit" ) )
                             {
-                                sendTextField( oos, boundsInScene, n );
+                                out.println( meme );
+                                meme = (String)ois.readObject();
                             }
                         }
-                        
+                        catch ( EOFException ex )
+                        {
+                            out.close();
+                            try
+                            {
+                                socket.close();
+                            }
+                            catch ( IOException e )
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                        catch ( Exception ex )
+                        {
+                            System.out.println( "hehei " + ex );
+                        }
                     }
-                    catch ( Exception ex )
-                    {
-                        System.out.println( "heheo" + ex );
-                    }
-                }
-            };
+                };
 
-            putOut.start();
+                putOut.setDaemon( true );
+                takeIn.setDaemon( true );
+
+                takeIn.start();
+                putOut.start();
+
+                noti.saveSuccess();
+            }
         }
-        catch (
-
-        Exception ex )
+        catch ( ConnectException ex )
+        {
+            noti.connectionFail();
+        }
+        catch ( Exception ex )
         {
             System.out.println( ex );
         }
     }
-    
-    public void retrieve( )
+
+
+    private void sendButton(
+        ObjectOutputStream oos,
+        Bounds boundsInScene,
+        Node n )
+        throws Exception
     {
-        try
-        {
-            Socket socket = new Socket( "localhost", 6666 );
-            byte[] bytes = new byte[8192];
-            ObjectOutputStream oos = new ObjectOutputStream(
-                socket.getOutputStream() );
-            ObjectInputStream ois = new ObjectInputStream(
-                socket.getInputStream() );
-            OutputStream FOS = new FileOutputStream("copy.java");
-            Thread withdraw = new Thread()
-            {
-                @Override
-                public void run()
-                {
-                    try
-                    {
-                        oos.writeObject("retrieve");
-                        int count;
-						 while ((count = ois.read(bytes)) > 0)
-						 {
-						 FOS.write(bytes, 0, count);
-						 
-						 }
-                    }
-                    catch ( Exception ex )
-                    {
-                        System.out.println( "heheo" + ex );
-                    }
-                }
-            };
-
-  
-            withdraw.start();
-        }
-        catch (
-
-        Exception ex )
-        {
-            System.out.println( ex );
-        }
+        oos.writeObject( "Labeled" );
+        oos.writeObject( ( (Labeled)n ).getText() );
+        oos.writeObject( Double.toString( boundsInScene.getMinX() ) );
+        oos.writeObject( Double.toString( boundsInScene.getMinY() ) );
+        oos.writeObject( Double.toString( boundsInScene.getWidth() ) );
+        oos.writeObject( Double.toString( boundsInScene.getHeight() ) );
     }
 
-    private void sendLabeled(
+
+    private void sendLabel(
         ObjectOutputStream oos,
         Bounds boundsInScene,
         Node n )
