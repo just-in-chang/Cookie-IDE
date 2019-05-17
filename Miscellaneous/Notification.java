@@ -10,12 +10,20 @@ import javax.swing.ImageIcon;
 public class Notification
 {
 
+    private boolean rItWorkBro;
+
     private final Image image = new ImageIcon(
         this.getClass().getResource( "resources/Save.png" ) ).getImage();
 
     private SystemTray tray = SystemTray.getSystemTray();
 
     private TrayIcon trayIcon = new TrayIcon( image, "Tray Demo" );
+
+
+    public Notification()
+    {
+        rItWorkBro = System.getProperty( "os.name" ).contains( "Windows" );
+    }
 
 
     public void saveSuccess()
@@ -47,19 +55,16 @@ public class Notification
 
     private void notificationSend( String str, TrayIcon.MessageType type )
     {
-        try
-        {
-            if ( !System.getProperty("os.name").contains( "Mac" ))
+        if ( rItWorkBro )
+            try
             {
                 tray.add( trayIcon );
                 trayIcon.displayMessage( "Save", str, type );
             }
-
-        }
-        catch ( Exception ex )
-        {
-            System.out.println( ex );
-        }
+            catch ( Exception ex )
+            {
+                System.out.println( ex );
+            }
     }
 
 }
