@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Control;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.Pane;
 
 
 public class Manipulate
@@ -121,7 +122,7 @@ public class Manipulate
         cMenu.getItems().add( delete );
 
         delete.setOnAction( e -> {
-            node.setVisible( false );
+            ((Pane)node.getParent()).getChildren().remove( node );
         } );
 
         node.setOnContextMenuRequested( e -> {

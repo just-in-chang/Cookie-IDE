@@ -55,9 +55,6 @@ public class Compiler
                 ObjectInputStream ois = new ObjectInputStream(
                     socket.getInputStream() );
 
-                PrintWriter out = new PrintWriter(
-                    new BufferedWriter( new FileWriter( file ) ) );
-
                 Thread putOut = new Thread()
                 {
                     @Override
@@ -69,22 +66,19 @@ public class Compiler
                                 + workspace.getHeight() );
                             for ( Node n : list )
                             {
-                                if ( n.isVisible() )
+                                Bounds boundsInScene = n
+                                    .localToParent( n.getLayoutBounds() );
+                                if ( n instanceof Label )
                                 {
-                                    Bounds boundsInScene = n
-                                        .localToParent( n.getLayoutBounds() );
-                                    if ( n instanceof Label )
-                                    {
-                                        sendLabel( oos, boundsInScene, n );
-                                    }
-                                    else if ( n instanceof Button )
-                                    {
-                                        sendButton( oos, boundsInScene, n );
-                                    }
-                                    else if ( n instanceof TextInputControl )
-                                    {
-                                        sendTextField( oos, boundsInScene, n );
-                                    }
+                                    sendLabel( oos, boundsInScene, n );
+                                }
+                                else if ( n instanceof Button )
+                                {
+                                    sendButton( oos, boundsInScene, n );
+                                }
+                                else if ( n instanceof TextInputControl )
+                                {
+                                    sendTextField( oos, boundsInScene, n );
                                 }
                             }
                             oos.writeObject( "quit" );

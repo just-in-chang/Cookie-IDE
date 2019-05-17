@@ -1,6 +1,7 @@
 package guiObjects;
 
 import Miscellaneous.Manipulate;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextField;
 
 

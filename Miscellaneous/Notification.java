@@ -49,8 +49,12 @@ public class Notification
     {
         try
         {
-            tray.add( trayIcon );
-            trayIcon.displayMessage( "Save", str, type );
+            if ( !System.getProperty("os.name").contains( "Mac" ))
+            {
+                tray.add( trayIcon );
+                trayIcon.displayMessage( "Save", str, type );
+            }
+
         }
         catch ( Exception ex )
         {
