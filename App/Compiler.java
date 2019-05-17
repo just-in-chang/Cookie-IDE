@@ -55,6 +55,9 @@ public class Compiler
                 ObjectInputStream ois = new ObjectInputStream(
                     socket.getInputStream() );
 
+                PrintWriter out = new PrintWriter(
+                    new BufferedWriter( new FileWriter( file ) ) );
+
                 Thread putOut = new Thread()
                 {
                     @Override
