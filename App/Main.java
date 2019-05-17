@@ -123,7 +123,7 @@ public class Main extends Application
         menuBar.getChildren().addAll( menu );
 
         save.setOnAction( e -> {
-            Compiler compile = new Compiler();
+            compiler compile = new compiler();
             compile.send( nodeList, workspace, stage );
         } );
 

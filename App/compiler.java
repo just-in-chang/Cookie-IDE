@@ -24,7 +24,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 
-public class Compiler
+public class compiler
 {
     private Notification noti = new Notification();
 
