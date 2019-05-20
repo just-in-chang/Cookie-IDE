@@ -64,7 +64,7 @@ public class Server // extends Application
                             map.put( "docInfo", (String)ois.readObject() );
                             while ( true )
                             {
-                                String str = (String)ois.readObject();
+                                String str = (String)ois.readObject(); // weir
                                 if ( str.equals( "quit" ) )
                                     break;
                                 System.out.println( str );
