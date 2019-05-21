@@ -95,7 +95,6 @@ public class Server // extends Application
 
     private static void docHeading( ObjectOutputStream oos ) throws Exception
     {
-    	System.out.println("hi");
         oos.writeObject( "import javafx.application.Application;\r\n"
             + "import javafx.scene.Scene;\r\n"
             + "import javafx.scene.layout.Pane;\r\n"
