@@ -21,7 +21,9 @@ import javafx.scene.control.Labeled;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -81,6 +83,7 @@ public class Main extends Application
         window = new BorderPane();
         scene = new Scene( window, 1280, 720 );
         stage.setScene( scene );
+        stage.setResizable( false );
 
         workspace = new WorkspacePane();
         workspace.setStyle( "-fx-background-color: #ffffff" );
@@ -99,8 +102,21 @@ public class Main extends Application
         coordPane = new CoordinatePane();
         editPanel = editPanel( workspace );
 
+        ScrollPane scroll = new ScrollPane();
+        AnchorPane anchor = new AnchorPane();
+        anchor.setMinSize(window.getCenter().) // window width/height ree
+        anchor.setBottomAnchor( scroll, 0.0 );
+        anchor.setTopAnchor( scroll, 0.0 );
+        anchor.setLeftAnchor( scroll, 0.0 );
+        anchor.setRightAnchor( scroll, 0.0 );
+        anchor.getChildren().add( scroll );
+        HBox hbox = new HBox();
+        hbox.setAlignment( Pos.CENTER );
+        hbox.getChildren().add( workspace );
+        scroll.setContent( hbox );
+
         window.setTop( menu );
-        window.setCenter( workspace );
+        window.setCenter( anchor );
         window.setBottom( status );
         window.setLeft( controlPanel );
         window.setRight( editPanel );
