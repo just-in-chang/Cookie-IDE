@@ -23,7 +23,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -103,20 +102,13 @@ public class Main extends Application
         editPanel = editPanel( workspace );
 
         ScrollPane scroll = new ScrollPane();
-        AnchorPane anchor = new AnchorPane();
-        anchor.setMinSize(window.getCenter().) // window width/height ree
-        anchor.setBottomAnchor( scroll, 0.0 );
-        anchor.setTopAnchor( scroll, 0.0 );
-        anchor.setLeftAnchor( scroll, 0.0 );
-        anchor.setRightAnchor( scroll, 0.0 );
-        anchor.getChildren().add( scroll );
         HBox hbox = new HBox();
         hbox.setAlignment( Pos.CENTER );
         hbox.getChildren().add( workspace );
         scroll.setContent( hbox );
 
         window.setTop( menu );
-        window.setCenter( anchor );
+        window.setCenter( scroll );
         window.setBottom( status );
         window.setLeft( controlPanel );
         window.setRight( editPanel );
@@ -125,6 +117,11 @@ public class Main extends Application
         stage.setScene( scene );
         stage.show();
 
+        scroll.setMinWidth( scroll.getBoundsInParent().getWidth() );
+        scroll.setMinHeight( scroll.getBoundsInParent().getHeight() );
+
+        hbox.minWidthProperty().bind( scroll.minWidthProperty() );
+        hbox.minHeightProperty().bind( scroll.minHeightProperty() );
     }
 
 
