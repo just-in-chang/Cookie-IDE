@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Control;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 
@@ -129,5 +130,77 @@ public class Manipulate
             cMenu.show( node, Side.BOTTOM, 0, 0 );
         } );
 
+    }
+    
+    public void imageManipulate( ImageView node )
+    {
+        node.setOnMouseMoved( e -> {
+            Node src = ( (Node)e.getSource() );
+
+            ( (WorkspacePane)src.getParent() )
+                .setX( src.getTranslateX() + e.getX() );
+            ( (WorkspacePane)src.getParent() )
+                .setY( src.getTranslateY() + e.getY() );
+        } );
+        node.setOnMouseExited( e -> {
+            if ( activeDrag == false )
+            {
+                node.getScene().setCursor( Cursor.DEFAULT );
+            }
+        } );
+        node.setOnMousePressed( e -> {
+
+            x = e.getX();
+            y = e.getY();
+            if ( resize == false )
+            {
+                node.getScene().setCursor( Cursor.MOVE );
+            }
+            activeDrag = true;
+            ( (WorkspacePane)( (Node)e.getSource() ).getParent() )
+                .getToggleGroup()
+                .setSelected( (guiObject)node );
+        } );
+        node.setOnMouseDragged( e -> {
+            ImageView src = ((ImageView)e.getSource() );
+            WorkspacePane parent = ( (WorkspacePane)src.getParent() );
+            src.setDisable( true );
+                double moveX = src.getTranslateX() + e.getX() - x;
+                double moveY = src.getTranslateY() + e.getY() - y;
+
+                if ( ( (guiObject)node ).getName().equals( "Mexican" ) )
+                {
+                    src.setTranslateX( moveX );
+                    src.setTranslateY( moveY );
+                }
+                else
+                {
+                    src.setTranslateX( Math.min( Math.max( 0, moveX ),
+                        parent.getMaxWidth() - src.getImage().getWidth() ) );
+                    src.setTranslateY( Math.min( Math.max( 0, moveY ),
+                        parent.getMaxHeight() - src.getImage().getHeight() ) );
+                }
+                ( (WorkspacePane)src.getParent() )
+                    .setX( src.getTranslateX() + x );
+                ( (WorkspacePane)src.getParent() )
+                    .setY( src.getTranslateY() + y );
+        } );
+        node.setOnMouseReleased( e -> {
+            node.getScene().setCursor( Cursor.DEFAULT );
+            activeDrag = false;
+            node.setDisable( false );
+        } );
+
+        ContextMenu cMenu = new ContextMenu();
+        MenuItem delete = new MenuItem( "Delete" );
+        cMenu.getItems().add( delete );
+
+        delete.setOnAction( e -> {
+            ((Pane)node.getParent()).getChildren().remove( node );
+        } );
+
+        node.setOnContextMenuRequested( e -> {
+            cMenu.show( node, e.getScreenX(), e.getScreenY() );
+        } );
     }
 }
