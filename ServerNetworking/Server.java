@@ -64,7 +64,7 @@ public class Server // extends Application
                             map.put( "docInfo", (String)ois.readObject() );
                             while ( true )
                             {
-                                String str = (String)ois.readObject();
+                                String str = (String)ois.readObject(); // weir
                                 if ( str.equals( "quit" ) )
                                     break;
                                 System.out.println( str );
@@ -95,6 +95,7 @@ public class Server // extends Application
 
     private static void docHeading( ObjectOutputStream oos ) throws Exception
     {
+    	System.out.println("hi");
         oos.writeObject( "import javafx.application.Application;\r\n"
             + "import javafx.scene.Scene;\r\n"
             + "import javafx.scene.layout.Pane;\r\n"
