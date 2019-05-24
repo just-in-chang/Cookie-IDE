@@ -13,7 +13,7 @@ public class guiImageView extends ImageView implements guiObject
         
     public guiImageView( String label )
     {
-        super(new Image("https://cdn.discordapp.com/emojis/535294218348789760.png"));
+        super(new Image("https://i.redd.it/i2q0r20gyeo21.png"));
         Manipulate m = new Manipulate();
         m.imageManipulate( this );
         name = label;

@@ -6,6 +6,7 @@ import Miscellaneous.Notification;
 import Miscellaneous.SelectableGroup;
 import guiObjects.controlButton;
 import guiObjects.guiButton;
+import guiObjects.guiImageView;
 import guiObjects.guiLabel;
 import guiObjects.guiObject;
 import guiObjects.guiTextField;
@@ -117,6 +118,11 @@ public class Main extends Application
         stage.setScene( scene );
         stage.show();
 
+        workspace.setMinWidth( 500 );
+        workspace.setMaxWidth( 500 );
+        workspace.setMinHeight( 500 );
+        workspace.setMaxHeight( 500 );
+
         setSize( stage, workspace );
 
         scroll.setMinWidth( scroll.getBoundsInParent().getWidth() );
@@ -207,11 +213,11 @@ public class Main extends Application
                                         .toString( boundsInScene.getMinY() ) );
                                 coordPane.getWidthLabel()
                                     .setText( Double.toString(
-                                        ( (Region)tGroup.getSelected() )
+                                        ( (guiObject)tGroup.getSelected() )
                                             .getWidth() ) );
                                 coordPane.getHeightLabel()
                                     .setText( Double.toString(
-                                        ( (Region)tGroup.getSelected() )
+                                        ( (guiObject)tGroup.getSelected() )
                                             .getHeight() ) );
                             }
                         }
@@ -248,6 +254,11 @@ public class Main extends Application
             guiTextField.class,
             nodeList,
             stage ), 0, 2 );
+        controlPanel.add( new controlButton( "ImageView",
+            workspace,
+            guiImageView.class,
+            nodeList,
+            stage ), 0, 4 );
 
         controlPanel.add( new Separator( Orientation.HORIZONTAL ), 0, 3 );
 
