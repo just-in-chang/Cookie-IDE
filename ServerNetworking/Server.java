@@ -45,10 +45,12 @@ public class Server // extends Application
                 ObjectOutputStream oos = new ObjectOutputStream(
                     socket.getOutputStream() );
 
-                File file = new File(
-                    backupFileDirectory + "\\data" + iterationNo + ".java" );
+                File file = new File( backupFileDirectory + "\\data"
+                    + ( iterationNo - 1 ) + ".java" );
+                // file.createNewFile();
                 PrintWriter write = new PrintWriter(
                     new BufferedWriter( new FileWriter( file ) ) );
+                System.out.println( "hi" );
                 Thread putOut = new Thread()
                 {
                     @Override
@@ -144,7 +146,7 @@ public class Server // extends Application
 
     private static void loadHashMap()
     {
-        File directory = new File( "Backup" );
+        File directory = new File( "ServerNetworking\\Backup" );
         backupFileDirectory = directory.getAbsolutePath();
         System.out
             .println( "Loading backup files from " + backupFileDirectory );
@@ -154,12 +156,17 @@ public class Server // extends Application
         {
             for ( File file : filesInDirectory )
             {
-                fileMap.put(
-                    file.getName()
-                        .substring( 0, file.getName().indexOf( ".java" ) ),
-                    file );
-                iterationNo++;
-                System.out.println( "Loaded " + file.getName() );
+                if ( file.getName()
+                    .substring( file.getName().length() - 5 )
+                    .equals( ".java" ) )
+                {
+                    fileMap.put(
+                        file.getName()
+                            .substring( 0, file.getName().indexOf( ".java" ) ),
+                        file );
+                    iterationNo++;
+                    System.out.println( "Loaded " + file.getName() );
+                }
             }
         }
         else

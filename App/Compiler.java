@@ -28,6 +28,14 @@ public class Compiler
 {
     private Notification noti = new Notification();
 
+    private static String IP;
+
+
+    public Compiler( String ip )
+    {
+        IP = ip;
+    }
+
 
     public void send( LinkedList<Node> list, Pane workspace, final Stage stage )
     {
@@ -49,7 +57,7 @@ public class Compiler
             }
             else
             {
-                Socket socket = new Socket( "localhost", 6666 );
+                Socket socket = new Socket( IP, 6666 );
                 ObjectOutputStream oos = new ObjectOutputStream(
                     socket.getOutputStream() );
                 ObjectInputStream ois = new ObjectInputStream(

@@ -1,5 +1,7 @@
 package App;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 
 import Miscellaneous.Notification;
@@ -36,7 +38,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -78,6 +79,8 @@ public class Main extends Application
     private CoordinatePane coordPane;
 
     private guiObject selectedNode = null;
+
+    private String serverIP;
 
 
     @Override
@@ -144,7 +147,7 @@ public class Main extends Application
         menuBar.getChildren().addAll( menu );
 
         save.setOnAction( e -> {
-            Compiler compile = new Compiler();
+            Compiler compile = new Compiler( serverIP );
             compile.send( nodeList, workspace, stage );
         } );
 
@@ -213,12 +216,10 @@ public class Main extends Application
                                         .toString( boundsInScene.getMinY() ) );
                                 coordPane.getWidthLabel()
                                     .setText( Double.toString(
-                                        ( (guiObject)tGroup.getSelected() )
-                                            .getWidth() ) );
+                                        tGroup.getSelected().getWidth() ) );
                                 coordPane.getHeightLabel()
                                     .setText( Double.toString(
-                                        ( (guiObject)tGroup.getSelected() )
-                                            .getHeight() ) );
+                                        tGroup.getSelected().getHeight() ) );
                             }
                         }
                     } );
@@ -314,18 +315,32 @@ public class Main extends Application
         popup.initModality( Modality.APPLICATION_MODAL );
         popup.initOwner( stage );
         VBox vbix = new VBox();
-        vbix.setSpacing( 50 );
+        vbix.setSpacing( 10 );
         vbix.setPadding( new Insets( 10, 10, 10, 10 ) );
         GridPane griddy = new GridPane();
         griddy.setVgap( 10 );
         griddy.setHgap( 10 );
         griddy.add( new Label( "Width: " ), 0, 0 );
         griddy.add( new Label( "Height: " ), 0, 1 );
-        TextField widthField = new TextField();
-        TextField heightField = new TextField();
+        griddy.add( new Label( "IP of Server: " ), 0, 2 );
+        TextField widthField = new TextField( "500" );
+        TextField heightField = new TextField( "500" );
+
         griddy.add( widthField, 1, 0 );
         griddy.add( heightField, 1, 1 );
+        try
+        {
+            InetAddress IP = InetAddress.getLocalHost();
+            serverIP = IP.getHostAddress();
+        }
+        catch ( UnknownHostException e1 )
+        {
+            e1.printStackTrace();
+        }
+        TextField ipField = new TextField( serverIP );
+        griddy.add( ipField, 1, 2 );
         Button butt = new Button( "Submit" );
+        butt.setMinWidth( griddy.getBoundsInParent().getWidth() );
         butt.setOnAction( e -> {
             if ( ( widthField.getText().matches( "[0-9]+" )
                 && widthField.getText().length() > 0 )
@@ -345,6 +360,11 @@ public class Main extends Application
                     ( Double.valueOf( heightField.getText() ).doubleValue() ),
                     150 ) );
 
+                if ( ipValidation( ipField.getText() ) )
+                {
+                    serverIP = ipField.getText();
+                }
+
                 popup.close();
             }
             else
@@ -358,6 +378,43 @@ public class Main extends Application
         Scene popupScene = new Scene( vbix );
         popup.setScene( popupScene );
         popup.show();
+    }
+
+
+    private static boolean ipValidation( String ip )
+    {
+        try
+        {
+            if ( ip == null || ip.isEmpty() )
+            {
+                return false;
+            }
+
+            String[] str = ip.split( "\\." );
+            if ( str.length != 4 )
+            {
+                return false;
+            }
+
+            for ( String s : str )
+            {
+                int i = Integer.parseInt( s );
+                if ( ( i < 0 ) || ( i > 255 ) )
+                {
+                    return false;
+                }
+            }
+            if ( ip.endsWith( "." ) )
+            {
+                return false;
+            }
+
+            return true;
+        }
+        catch ( Exception ex )
+        {
+            return false;
+        }
     }
 
 
