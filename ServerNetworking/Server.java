@@ -21,6 +21,8 @@ public class Server // extends Application
 
     private static byte iterationNo = 1;
 
+    private static String backupFileDirectory = "";
+
 
     @SuppressWarnings("resource")
     public static void main( String[] args )
@@ -35,7 +37,7 @@ public class Server // extends Application
             {
                 System.out.println( "Iteration Number " + iterationNo );
                 iterationNo++;
-                // Server initialization
+
                 ServerSocket ss = new ServerSocket( 6666 );
                 Socket socket = ss.accept();
                 ObjectInputStream ois = new ObjectInputStream(
@@ -43,7 +45,8 @@ public class Server // extends Application
                 ObjectOutputStream oos = new ObjectOutputStream(
                     socket.getOutputStream() );
 
-                File file = new File( "Backup/data" + iterationNo + ".java" );
+                File file = new File(
+                    backupFileDirectory + "\\data" + iterationNo + ".java" );
                 PrintWriter write = new PrintWriter(
                     new BufferedWriter( new FileWriter( file ) ) );
                 Thread putOut = new Thread()
@@ -141,8 +144,11 @@ public class Server // extends Application
 
     private static void loadHashMap()
     {
-        System.out.println( "Loading backup files... " );
         File directory = new File( "Backup" );
+        backupFileDirectory = directory.getAbsolutePath();
+        System.out
+            .println( "Loading backup files from " + backupFileDirectory );
+
         File[] filesInDirectory = directory.listFiles();
         if ( filesInDirectory != null )
         {
