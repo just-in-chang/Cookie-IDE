@@ -45,69 +45,85 @@ public class Server // extends Application
                 ObjectOutputStream oos = new ObjectOutputStream(
                     socket.getOutputStream() );
 
-                File file = new File( backupFileDirectory + "\\data"
-                    + ( iterationNo - 1 ) + ".java" );
-                // file.createNewFile();
-                PrintWriter write = new PrintWriter(
-                    new BufferedWriter( new FileWriter( file ) ) );
-                System.out.println( "hi" );
-                Thread putOut = new Thread()
+                byte type = ois.readByte();
+                switch ( type )
                 {
-                    @Override
-                    public void run()
-                    {
-                        try
+                    case 0:
+                        System.out.println( "Case: Save" );
+                        File file = new File( backupFileDirectory + "\\data"
+                            + ( iterationNo - 1 ) + ".java" );
+                        PrintWriter write = new PrintWriter(
+                            new BufferedWriter( new FileWriter( file ) ) );
+                        Thread putOut = new Thread()
                         {
-                            oos.writeObject( docHeading() );
-                            oos.writeObject( docBody() );
-                            oos.writeObject( docEnding() );
-                            System.out
-                                .println( file.getName() + " sent to client" );
-                            write.println( docHeading() );
-                            write.println( docBody() );
-                            write.print( docEnding() );
-                            System.out.println( file.getName() + " backed up" );
-                            write.close();
-                            fileMap.put( "data" + iterationNo, file );
-                            oos.close();
-                        }
-                        catch ( Exception ex )
-                        {
-                            System.out.println( "oof" + ex );
-                        }
-                    }
-                };
-
-                Thread takeIn = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        try
-                        {
-                            map.put( "docInfo", (String)ois.readObject() );
-                            while ( true )
+                            @Override
+                            public void run()
                             {
-                                String str = (String)ois.readObject(); // weir
-                                if ( str.equals( "quit" ) )
-                                    break;
-                                System.out.println( str );
+                                try
+                                {
+                                    oos.writeObject( docHeading() );
+                                    oos.writeObject( docBody() );
+                                    oos.writeObject( docEnding() );
+                                    System.out.println(
+                                        file.getName() + " sent to client" );
+                                    write.println( docHeading() );
+                                    write.println( docBody() );
+                                    write.print( docEnding() );
+                                    System.out.println(
+                                        file.getName() + " backed up" );
+                                    write.close();
+                                    fileMap.put( "data" + iterationNo, file );
+                                    oos.close();
+                                }
+                                catch ( Exception ex )
+                                {
+                                    System.out.println( "oof" + ex );
+                                }
                             }
-                            putOut.run();
-                        }
-                        catch ( Exception ex )
+                        };
+
+                        Thread takeIn = new Thread()
                         {
-                            System.out.println( "oof" + ex );
+                            @Override
+                            public void run()
+                            {
+                                try
+                                {
+                                    map.put( "docInfo",
+                                        (String)ois.readObject() );
+                                    while ( true )
+                                    {
+                                        String str = (String)ois.readObject();
+                                        if ( str.equals( "quit" ) )
+                                            break;
+                                        System.out.println( str );
+                                    }
+                                    putOut.run();
+                                }
+                                catch ( Exception ex )
+                                {
+                                    System.out.println( "oof" + ex );
+                                }
+                            }
+                        };
+
+                        putOut.setDaemon( true );
+                        takeIn.setDaemon( true );
+
+                        takeIn.run();
+                        ss.close();
+                        System.out.println( "Save Success. \n" );
+                        break;
+                    case 1:
+                        System.out.println( "Case Open" );
+                        String meme = "";
+                        for ( String key : fileMap.keySet() )
+                        {
+                            meme += key + "\n";
                         }
-                    }
-                };
-
-                putOut.setDaemon( true );
-                takeIn.setDaemon( true );
-
-                takeIn.run();
-                ss.close();
-                System.out.println( "Save Success. \n" );
+                        oos.writeObject( meme );
+                        break;
+                }
             }
         }
         catch ( Exception ex )

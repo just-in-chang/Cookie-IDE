@@ -15,12 +15,16 @@ import java.util.LinkedList;
 import Miscellaneous.Notification;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
@@ -37,7 +41,21 @@ public class Compiler
     }
 
 
-    public void send( LinkedList<Node> list, Pane workspace, final Stage stage )
+    /**
+     * 
+     * TODO Write your method description here.
+     * 
+     * @param list
+     * @param workspace
+     * @param stage
+     * @param byt
+     *            0 = save; 1 = open
+     */
+    public void send(
+        LinkedList<Node> list,
+        Pane workspace,
+        final Stage stage,
+        byte byt )
     {
         try
         {
@@ -67,81 +85,93 @@ public class Compiler
                 PrintWriter out = new PrintWriter(
                     new BufferedWriter( new FileWriter( file ) ) );
 
-                Thread putOut = new Thread()
+                switch ( byt )
                 {
-                    @Override
-                    public void run()
-                    {
-                        try
+                    case 0:
+                        Thread putOut = new Thread()
                         {
-                            oos.writeObject( workspace.getWidth() + ", "
-                                + workspace.getHeight() );
-                            for ( Node n : list )
+                            @Override
+                            public void run()
                             {
-                                Bounds boundsInScene = n
-                                    .localToParent( n.getLayoutBounds() );
-                                if ( n instanceof Label )
+                                try
                                 {
-                                    sendLabel( oos, boundsInScene, n );
+                                    oos.writeByte( byt );
+                                    oos.writeObject( workspace.getWidth() + ", "
+                                        + workspace.getHeight() );
+                                    for ( Node n : list )
+                                    {
+                                        Bounds boundsInScene = n.localToParent(
+                                            n.getLayoutBounds() );
+                                        if ( n instanceof Label )
+                                        {
+                                            sendLabel( oos, boundsInScene, n );
+                                        }
+                                        else if ( n instanceof Button )
+                                        {
+                                            sendButton( oos, boundsInScene, n );
+                                        }
+                                        else if ( n instanceof TextInputControl )
+                                        {
+                                            sendTextField( oos,
+                                                boundsInScene,
+                                                n );
+                                        }
+                                    }
+                                    oos.writeObject( "quit" );
                                 }
-                                else if ( n instanceof Button )
+                                catch ( Exception ex )
                                 {
-                                    sendButton( oos, boundsInScene, n );
+                                    System.out.println( "heheo " + ex );
                                 }
-                                else if ( n instanceof TextInputControl )
+                            }
+                        };
+
+                        Thread takeIn = new Thread()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                try
                                 {
-                                    sendTextField( oos, boundsInScene, n );
+                                    String meme = (String)ois.readObject();
+                                    while ( !meme.equals( "quit" ) )
+                                    {
+                                        out.println( meme );
+                                        meme = (String)ois.readObject();
+                                    }
+                                }
+                                catch ( EOFException ex )
+                                {
+                                    out.close();
+                                    try
+                                    {
+                                        socket.close();
+                                    }
+                                    catch ( IOException e )
+                                    {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                catch ( Exception ex )
+                                {
+                                    System.out.println( "hehei " + ex );
                                 }
                             }
-                            oos.writeObject( "quit" );
-                        }
-                        catch ( Exception ex )
-                        {
-                            System.out.println( "heheo " + ex );
-                        }
-                    }
-                };
+                        };
 
-                Thread takeIn = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        try
-                        {
-                            String meme = (String)ois.readObject();
-                            while ( !meme.equals( "quit" ) )
-                            {
-                                out.println( meme );
-                                meme = (String)ois.readObject();
-                            }
-                        }
-                        catch ( EOFException ex )
-                        {
-                            out.close();
-                            try
-                            {
-                                socket.close();
-                            }
-                            catch ( IOException e )
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-                        catch ( Exception ex )
-                        {
-                            System.out.println( "hehei " + ex );
-                        }
-                    }
-                };
+                        putOut.setDaemon( true );
+                        takeIn.setDaemon( true );
 
-                putOut.setDaemon( true );
-                takeIn.setDaemon( true );
+                        takeIn.start();
+                        putOut.start();
 
-                takeIn.start();
-                putOut.start();
-
-                noti.saveSuccess();
+                        noti.saveSuccess();
+                        break;
+                    case 1:
+                        oos.writeByte( byt );
+                        String files = (String)ois.readObject();
+                        break;
+                }
             }
         }
         catch ( ConnectException ex )
@@ -199,4 +229,22 @@ public class Compiler
         oos.writeObject( Double.toString( boundsInScene.getHeight() ) );
     }
 
+
+    private void openPane( Stage stage, String str )
+    {
+        final Stage popup = new Stage();
+        popup.setResizable( false );
+        popup.initModality( Modality.APPLICATION_MODAL );
+        popup.initOwner( stage );
+        HBox hbox = new HBox();
+        ToggleGroup toggleGroup = new ToggleGroup();
+
+        for()
+        
+        hbox.getChildren().addAll();
+
+        Scene scene = new Scene( hbox );
+        popup.setScene( scene );
+        popup.show();
+    }
 }
