@@ -12,4 +12,8 @@ public interface guiObject
 
 
     public void setSelected( boolean b );
+    
+    public double getWidth();
+    
+    public double getHeight();
 }

@@ -22,6 +22,7 @@ public class WorkspacePane extends Pane
             x = e.getX();
             y = e.getY();
         } );
+        
     }
 
 

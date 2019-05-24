@@ -6,7 +6,6 @@ import App.WorkspacePane;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -56,9 +55,8 @@ public class controlButton extends Button
         this.setOnMouseClicked( e -> {
             try
             {
-                Control node = (Control)c.getConstructor( String.class )
+                Node node = (Node)c.getConstructor( String.class )
                     .newInstance( text + count );
-                // editWindow( stage, workspace );
                 workspace.getChildren().add( node );
                 ( (WorkspacePane)workspace ).addSelection( (guiObject)node );
                 s.add( node );

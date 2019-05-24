@@ -2,7 +2,9 @@ package guiObjects;
 
 import Miscellaneous.Manipulate;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 
 
 public class guiTextField extends TextField implements guiObject
@@ -24,7 +26,7 @@ public class guiTextField extends TextField implements guiObject
         name = text;
         select = false;
         Manipulate m = new Manipulate();
-        m.setManipulate( this, false );
+        m.textFieldManipulate( this );
     }
 
 
