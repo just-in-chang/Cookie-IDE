@@ -2,6 +2,7 @@ package App;
 
 import java.util.LinkedList;
 
+import Miscellaneous.Notification;
 import Miscellaneous.SelectableGroup;
 import guiObjects.controlButton;
 import guiObjects.guiButton;
@@ -16,12 +17,15 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -34,6 +38,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
@@ -81,6 +86,7 @@ public class Main extends Application
         window = new BorderPane();
         scene = new Scene( window, 1280, 720 );
         stage.setScene( scene );
+        stage.setResizable( false );
 
         workspace = new WorkspacePane();
         workspace.setStyle( "-fx-background-color: #ffffff" );
@@ -88,10 +94,6 @@ public class Main extends Application
             BorderStrokeStyle.SOLID,
             CornerRadii.EMPTY,
             BorderWidths.DEFAULT ) ) );
-        workspace.setMinWidth( 500 );
-        workspace.setMaxWidth( 500 );
-        workspace.setMinHeight( 500 );
-        workspace.setMaxHeight( 500 );
 
         menu = menu( stage, workspace );
         status = status( workspace );
@@ -99,8 +101,14 @@ public class Main extends Application
         coordPane = new CoordinatePane();
         editPanel = editPanel( workspace );
 
+        ScrollPane scroll = new ScrollPane();
+        HBox hbox = new HBox();
+        hbox.setAlignment( Pos.CENTER );
+        hbox.getChildren().add( workspace );
+        scroll.setContent( hbox );
+
         window.setTop( menu );
-        window.setCenter( workspace );
+        window.setCenter( scroll );
         window.setBottom( status );
         window.setLeft( controlPanel );
         window.setRight( editPanel );
@@ -109,6 +117,13 @@ public class Main extends Application
         stage.setScene( scene );
         stage.show();
 
+        setSize( stage, workspace );
+
+        scroll.setMinWidth( scroll.getBoundsInParent().getWidth() );
+        scroll.setMinHeight( scroll.getBoundsInParent().getHeight() );
+
+        hbox.minWidthProperty().bind( scroll.minWidthProperty() );
+        hbox.minHeightProperty().bind( scroll.minHeightProperty() );
     }
 
 
@@ -278,6 +293,60 @@ public class Main extends Application
         }
 
         return rePane;
+    }
+
+
+    private void setSize( Stage stage, WorkspacePane workspace )
+    {
+        final Stage popup = new Stage();
+        popup.setResizable( false );
+        popup.initModality( Modality.APPLICATION_MODAL );
+        popup.initOwner( stage );
+        VBox vbix = new VBox();
+        vbix.setSpacing( 50 );
+        vbix.setPadding( new Insets( 10, 10, 10, 10 ) );
+        GridPane griddy = new GridPane();
+        griddy.setVgap( 10 );
+        griddy.setHgap( 10 );
+        griddy.add( new Label( "Width: " ), 0, 0 );
+        griddy.add( new Label( "Height: " ), 0, 1 );
+        TextField widthField = new TextField();
+        TextField heightField = new TextField();
+        griddy.add( widthField, 1, 0 );
+        griddy.add( heightField, 1, 1 );
+        Button butt = new Button( "Submit" );
+        butt.setOnAction( e -> {
+            if ( ( widthField.getText().matches( "[0-9]+" )
+                && widthField.getText().length() > 0 )
+                || ( heightField.getText().matches( "[0-9]+" )
+                    && heightField.getText().length() > 0 ) )
+            {
+                workspace.setMinWidth( Math.max(
+                    ( Double.valueOf( widthField.getText() ).doubleValue() ),
+                    150.0 ) );
+                workspace.setMaxWidth( Math.max(
+                    ( Double.valueOf( widthField.getText() ).doubleValue() ),
+                    150 ) );
+                workspace.setMinHeight( Math.max(
+                    ( Double.valueOf( heightField.getText() ).doubleValue() ),
+                    150 ) );
+                workspace.setMaxHeight( Math.max(
+                    ( Double.valueOf( heightField.getText() ).doubleValue() ),
+                    150 ) );
+
+                popup.close();
+            }
+            else
+            {
+                Notification meme = new Notification();
+                meme.initializationFail();
+            }
+
+        } );
+        vbix.getChildren().addAll( griddy, butt );
+        Scene popupScene = new Scene( vbix );
+        popup.setScene( popupScene );
+        popup.show();
     }
 
 

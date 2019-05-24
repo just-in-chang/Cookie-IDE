@@ -53,6 +53,13 @@ public class Notification
     }
 
 
+    public void initializationFail()
+    {
+        notificationSend( "Failed to initialize. Please check parameters. ",
+            TrayIcon.MessageType.ERROR );
+    }
+
+
     private void notificationSend( String str, TrayIcon.MessageType type )
     {
         if ( rItWorkBro )
