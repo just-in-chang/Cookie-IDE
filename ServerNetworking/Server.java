@@ -1,11 +1,17 @@
 package ServerNetworking;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Writer;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -15,7 +21,11 @@ public class Server // extends Application
 {
 
     private static HashMap<String, String> map = new HashMap<String, String>();
+
     private static HashMap<String, File> Fmap = new HashMap<String, File>();
+
+    private static HashMap<String,File> fMap = new HashMap<String,File>();
+
     private static byte iterationNo = 1;
 
 
@@ -33,11 +43,11 @@ public class Server // extends Application
                 // Server initialization
                 ServerSocket ss = new ServerSocket( 6666 );
                 Socket socket = ss.accept();
-
                 ObjectInputStream ois = new ObjectInputStream(
                     socket.getInputStream() );
                 ObjectOutputStream oos = new ObjectOutputStream(
                     socket.getOutputStream() );
+
                 File file = new File("data" + iterationNo + ".java");
                 PrintWriter write = new PrintWriter(new BufferedWriter(new FileWriter(file)));
                 Thread putOut = new Thread()
@@ -50,10 +60,11 @@ public class Server // extends Application
                             docHeading( oos );
                             docBody( oos );
                             docEnding( oos );
-                            FHeading(write);
-                            FEnding(write);
+                            fileHeading(write);
+                            fileEnding(write);
                             write.close();
-                            Fmap.put("data"+iterationNo+".java", file);
+                            fMap.put("data" + iterationNo, file);
+
                             oos.close();
                         }
                         catch ( Exception ex )
@@ -132,9 +143,11 @@ public class Server // extends Application
     {
         oos.writeObject( "        stage.show();\r\n" + "    }\r\n" + "}\r\n" );
     }
-    private static void FHeading( PrintWriter F ) throws Exception
+
+    private static void fileHeading( PrintWriter out ) throws Exception
     {
-        F.write( "import javafx.application.Application;\r\n"
+        out.println( "import javafx.application.Application;\r\n"
+
             + "import javafx.scene.Scene;\r\n"
             + "import javafx.scene.layout.Pane;\r\n"
             + "import javafx.stage.Stage;\r\n" + "\r\n" + "\r\n"
@@ -152,15 +165,18 @@ public class Server // extends Application
     }
 
 
-    private static void FBody( ObjectOutputStream oos ) throws Exception
+
+    private static void fileBody( ObjectOutputStream oos ) throws Exception
+
     {
 
     }
 
 
-    private static void FEnding( PrintWriter F ) throws Exception
-    {
-        F.write( "        stage.show();\r\n" + "    }\r\n" + "}\r\n" );
-    }
 
+    private static void fileEnding( PrintWriter out ) throws Exception
+    {
+        out.write( "        stage.show();\r\n" + "    }\r\n" + "}\r\n" );
+
+    }
 }
