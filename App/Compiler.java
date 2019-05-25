@@ -67,7 +67,6 @@ public class Compiler
             {
                 noti.saveCancel();
             }
-
             else if ( file.getName().length() < 5 || !file.getName()
                 .substring( file.getName().length() - 5 )
                 .equals( ".java" ) )
@@ -170,10 +169,10 @@ public class Compiler
                         break;
                     case 1:
                         oos.writeByte( byt );
-                        String files = (String)ois.readObject();
                         openPane( stage, ois );
                         break;
                 }
+
             }
         }
         catch ( ConnectException ex )
@@ -240,6 +239,16 @@ public class Compiler
         popup.initOwner( stage );
         VBox vbox = new VBox();
         ToggleGroup toggleGroup = new ToggleGroup();
+        try
+        {
+            int fileMapSize = ois.readInt();
+            System.out.println( "File Map Size " + fileMapSize );
+
+        }
+        catch ( IOException e1 )
+        {
+            e1.printStackTrace();
+        }
         while ( true )
         {
             try
@@ -248,6 +257,7 @@ public class Compiler
                 RadioButton meme = new RadioButton( str );
                 meme.setToggleGroup( toggleGroup );
                 vbox.getChildren().add( meme );
+                System.out.println( str );
             }
             catch ( EOFException ex )
             {
@@ -257,7 +267,6 @@ public class Compiler
             {
                 e.printStackTrace();
             }
-
         }
 
         Scene scene = new Scene( vbox );

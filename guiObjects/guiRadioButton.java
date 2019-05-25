@@ -1,23 +1,27 @@
 package guiObjects;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.RadioButton;
 
 
-public class guiImageView extends ImageView implements guiObject
+public class guiRadioButton extends RadioButton implements guiObject
 {
-
     private String name;
 
     private boolean select;
 
 
-    public guiImageView( String label )
+    public guiRadioButton()
     {
-        super( new Image( "https://i.redd.it/i2q0r20gyeo21.png" ) );
-        m.imageManipulate( this );
+        this( "" );
+    }
+
+
+    public guiRadioButton( String label )
+    {
+        super( label );
         name = label;
         select = false;
+        m.setManipulate( this, false );
     }
 
 
@@ -32,6 +36,7 @@ public class guiImageView extends ImageView implements guiObject
     public void setName( String n )
     {
         name = n;
+        
     }
 
 
@@ -46,17 +51,7 @@ public class guiImageView extends ImageView implements guiObject
     public void setSelection( boolean b )
     {
         select = b;
+        
     }
 
-
-    public double getWidth()
-    {
-        return this.getImage().getWidth();
-    }
-
-
-    public double getHeight()
-    {
-        return this.getImage().getHeight();
-    }
 }

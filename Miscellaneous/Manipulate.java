@@ -73,7 +73,7 @@ public class Manipulate
             }
             activeDrag = true;
             ( (WorkspacePane)( (Control)e.getSource() ).getParent() )
-                .getToggleGroup()
+                .getSelectableGroup()
                 .setSelected( (guiObject)node );
         } );
         node.setOnMouseDragged( e -> {
@@ -159,7 +159,7 @@ public class Manipulate
             }
             activeDrag = true;
             ( (WorkspacePane)( (Node)e.getSource() ).getParent() )
-                .getToggleGroup()
+                .getSelectableGroup()
                 .setSelected( (guiObject)node );
         } );
         node.setOnMouseDragged( e -> {
@@ -240,7 +240,7 @@ public class Manipulate
             }
             activeDrag = true;
             ( (WorkspacePane)( (Control)e.getSource() ).getParent() )
-                .getToggleGroup()
+                .getSelectableGroup()
                 .setSelected( (guiObject)node );
         } );
         node.setOnMouseDragged( e -> {

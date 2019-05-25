@@ -46,6 +46,7 @@ public class Server // extends Application
                     socket.getOutputStream() );
 
                 byte type = ois.readByte();
+                System.out.println( type );
                 switch ( type )
                 {
                     case 0:
@@ -116,6 +117,7 @@ public class Server // extends Application
                         break;
                     case 1:
                         System.out.println( "Case Open" );
+                        oos.writeInt( fileMap.keySet().size() );
                         for ( String key : fileMap.keySet() )
                         {
                             oos.writeObject( key );
