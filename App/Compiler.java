@@ -19,10 +19,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -170,6 +171,7 @@ public class Compiler
                     case 1:
                         oos.writeByte( byt );
                         String files = (String)ois.readObject();
+                        openPane( stage, ois );
                         break;
                 }
             }
@@ -230,20 +232,35 @@ public class Compiler
     }
 
 
-    private void openPane( Stage stage, String str )
+    private void openPane( Stage stage, ObjectInputStream ois )
     {
         final Stage popup = new Stage();
         popup.setResizable( false );
         popup.initModality( Modality.APPLICATION_MODAL );
         popup.initOwner( stage );
-        HBox hbox = new HBox();
+        VBox vbox = new VBox();
         ToggleGroup toggleGroup = new ToggleGroup();
+        while ( true )
+        {
+            try
+            {
+                String str = (String)ois.readObject();
+                RadioButton meme = new RadioButton( str );
+                meme.setToggleGroup( toggleGroup );
+                vbox.getChildren().add( meme );
+            }
+            catch ( EOFException ex )
+            {
+                break;
+            }
+            catch ( Exception e )
+            {
+                e.printStackTrace();
+            }
 
-        for()
-        
-        hbox.getChildren().addAll();
+        }
 
-        Scene scene = new Scene( hbox );
+        Scene scene = new Scene( vbox );
         popup.setScene( scene );
         popup.show();
     }

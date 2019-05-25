@@ -116,12 +116,10 @@ public class Server // extends Application
                         break;
                     case 1:
                         System.out.println( "Case Open" );
-                        String meme = "";
                         for ( String key : fileMap.keySet() )
                         {
-                            meme += key + "\n";
+                            oos.writeObject( key );
                         }
-                        oos.writeObject( meme );
                         break;
                 }
             }
