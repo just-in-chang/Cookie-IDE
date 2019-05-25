@@ -16,12 +16,12 @@ public class SelectableGroup
     }
 
 
-    public boolean add( guiObject toggle )
+    public boolean add( guiObject node )
     {
-        group.add( toggle );
+        group.add( node );
         if ( group.size() == 1 )
         {
-            toggle.setSelected( true );
+            node.setSelection( true );
         }
         return true;
     }
@@ -32,9 +32,9 @@ public class SelectableGroup
         for ( guiObject t : group )
         {
             if ( t.equals( toggle ) )
-                t.setSelected( true );
+                t.setSelection( true );
             else
-                t.setSelected( false );
+                t.setSelection( false );
         }
     }
 
@@ -44,7 +44,7 @@ public class SelectableGroup
         guiObject selected = null;
         for ( guiObject t : group )
         {
-            if ( t.isSelected() )
+            if ( t.isThisSelected() )
                 selected = t;
         }
         return selected;

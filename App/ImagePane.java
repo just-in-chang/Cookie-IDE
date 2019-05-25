@@ -7,14 +7,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 
-public class LabeledPane extends GridPane
+public class ImagePane extends GridPane
 {
     private TextField textField;
 
     private Button applyButton;
 
 
-    public LabeledPane( String labelName )
+    public ImagePane()
     {
         this.setVgap( 10 );
         this.setHgap( 10 );
@@ -22,7 +22,7 @@ public class LabeledPane extends GridPane
 
         textField = new TextField();
 
-        this.addRow( 0, new Label( labelName ), textField );
+        this.addRow( 0, new Label( "Text: " ), textField );
 
         applyButton = new Button( "Apply" );
         this.addRow( 1, applyButton );
