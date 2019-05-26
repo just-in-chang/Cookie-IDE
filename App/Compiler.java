@@ -204,8 +204,10 @@ public class Compiler
 
                 oos.writeByte( 1 );
                 oos.flush();
-                String fileName = openPane( stage, ois ) + ".java";
+                String fileName = openPane( stage, ois );
                 System.out.println( fileName );
+                socket.close();
+                retrieve( fileName, stage, file );
             }
 
             catch ( Exception ex )
@@ -213,6 +215,60 @@ public class Compiler
                 System.out.println( ex );
             }
         }
+    }
+
+
+    private void retrieve( String fileName, final Stage stage, File file )
+    {
+        try
+        {
+            Socket socket = new Socket( IP, 6666 );
+            ObjectOutputStream oos = new ObjectOutputStream(
+                socket.getOutputStream() );
+            ObjectInputStream ois = new ObjectInputStream(
+                socket.getInputStream() );
+
+            PrintWriter out = new PrintWriter(
+                new BufferedWriter( new FileWriter( file ) ) );
+
+            oos.writeByte( 2 );
+            oos.writeObject( fileName );
+            oos.flush();
+
+            try
+            {
+                String meme = (String)ois.readObject();
+                while ( !meme.equals( "quit" ) )
+                {
+                    out.println( meme );
+                    meme = (String)ois.readObject();
+                }
+            }
+            catch ( EOFException ex )
+            {
+                out.close();
+                try
+                {
+                    socket.close();
+                }
+                catch ( IOException e )
+                {
+                    e.printStackTrace();
+                }
+            }
+            catch ( Exception ex )
+            {
+                System.out.println( "hehei " + ex );
+            }
+
+            out.close();
+            socket.close();
+        }
+        catch ( Exception ex )
+        {
+            System.out.println( ex );
+        }
+
     }
 
 
@@ -264,6 +320,7 @@ public class Compiler
     private String openPane( Stage stage, ObjectInputStream ois )
     {
         final Stage popup = new Stage();
+        popup.setTitle( "Backups" );
         popup.setResizable( false );
         popup.initModality( Modality.APPLICATION_MODAL );
         popup.initOwner( stage );

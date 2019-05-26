@@ -1,7 +1,9 @@
 package ServerNetworking;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,6 +11,8 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 
@@ -52,8 +56,11 @@ public class Server // extends Application
                 {
                     case 0:
                         System.out.println( "Case: Save" );
-                        File file = new File( backupFileDirectory + "\\data"
-                            + ( iterationNo - 1 ) + ".java" );
+                        DateTimeFormatter dtf = DateTimeFormatter
+                            .ofPattern( "yyyy-MM-dd_HHmm" );
+                        LocalDateTime time = LocalDateTime.now();
+                        File file = new File( backupFileDirectory + "\\"
+                            + dtf.format( time ) + ".java" );
                         PrintWriter write = new PrintWriter(
                             new BufferedWriter( new FileWriter( file ) ) );
                         Thread putOut = new Thread()
@@ -74,7 +81,7 @@ public class Server // extends Application
                                     System.out.println(
                                         file.getName() + " backed up" );
                                     write.close();
-                                    fileMap.put( "data" + iterationNo, file );
+                                    fileMap.put( dtf.format( time ), file );
                                     oos.close();
                                 }
                                 catch ( Exception ex )
@@ -125,10 +132,32 @@ public class Server // extends Application
                         {
                             oos.writeObject( key );
                         }
-                        System.out.println( "Retrieve Success\n" );
+
+                        oos.flush();
+                        // System.out.println( (String)ois.readObject() );
+
+                        System.out.println( "Open Success\n" );
                         oos.close();
                         ss.close();
                         iterationNo--;
+                        break;
+                    case 2:
+                        System.out.println( "Case Retrieve" );
+                        String fileName = (String)ois.readObject();
+                        System.out
+                            .println( "Sending " + fileName + " to Client" );
+                        BufferedReader read = new BufferedReader(
+                            new FileReader( fileMap.get( fileName ) ) );
+                        String str = read.readLine();
+                        while ( str != null )
+                        {
+                            oos.writeObject( str );
+                            str = read.readLine();
+                        }
+                        oos.writeObject( "quit" );
+                        oos.close();
+                        ss.close();
+                        System.out.println( "Retrieve Success\n" );
                         break;
                 }
             }
