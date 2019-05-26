@@ -204,8 +204,7 @@ public class Compiler
 
                 oos.writeByte( 1 );
                 oos.flush();
-                openPane( stage, ois, oos );
-
+                System.out.println( openPane( stage, ois ) );
             }
 
             catch ( Exception ex )
@@ -261,10 +260,7 @@ public class Compiler
     }
 
 
-    private void openPane(
-        Stage stage,
-        ObjectInputStream ois,
-        ObjectOutputStream oos )
+    private String openPane( Stage stage, ObjectInputStream ois )
     {
         final Stage popup = new Stage();
         popup.setResizable( false );
@@ -318,13 +314,6 @@ public class Compiler
         popup.setScene( scene );
         popup.showAndWait();
         RadioButton out = (RadioButton)toggleGroup.getSelectedToggle();
-        try
-        {
-            oos.writeObject( out.getText() );
-        }
-        catch ( IOException e1 )
-        {
-            e1.printStackTrace();
-        }
+        return out.getText();
     }
 }

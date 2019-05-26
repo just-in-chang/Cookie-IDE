@@ -125,9 +125,6 @@ public class Server // extends Application
                         {
                             oos.writeObject( key );
                         }
-                        oos.flush();
-                        String fileName = (String)ois.readObject();
-                        System.out.println( fileName );
                         System.out.println( "Retrieve Success\n" );
                         oos.close();
                         ss.close();
