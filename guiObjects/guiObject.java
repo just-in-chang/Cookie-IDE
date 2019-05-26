@@ -1,5 +1,7 @@
 package guiObjects;
 
+import Miscellaneous.Manipulate;
+
 public interface guiObject
 {
     public String getName();
@@ -8,12 +10,14 @@ public interface guiObject
     public void setName( String name );
 
 
-    public boolean isSelected();
+    public boolean isThisSelected();
 
 
-    public void setSelected( boolean b );
+    public void setSelection( boolean b );
     
     public double getWidth();
     
     public double getHeight();
+    
+    public final Manipulate m = new Manipulate();
 }

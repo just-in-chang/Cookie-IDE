@@ -1,6 +1,5 @@
 package guiObjects;
 
-import Miscellaneous.Manipulate;
 import javafx.scene.control.Button;
 
 
@@ -33,7 +32,6 @@ public class guiButton extends Button implements guiObject
         super( label );
         name = label;
         select = false;
-        Manipulate m = new Manipulate();
         m.setManipulate( this, true );
     }
 
@@ -53,14 +51,14 @@ public class guiButton extends Button implements guiObject
 
 
     @Override
-    public boolean isSelected()
+    public boolean isThisSelected()
     {
         return select;
     }
 
 
     @Override
-    public void setSelected( boolean b )
+    public void setSelection( boolean b )
     {
         select = b;
     }

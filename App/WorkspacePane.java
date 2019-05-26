@@ -32,7 +32,7 @@ public class WorkspacePane extends Pane
     }
 
 
-    public SelectableGroup getToggleGroup()
+    public SelectableGroup getSelectableGroup()
     {
         return group;
     }

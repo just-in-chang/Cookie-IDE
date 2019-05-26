@@ -1,10 +1,6 @@
 package guiObjects;
 
-import Miscellaneous.Manipulate;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 
 
 public class guiTextField extends TextField implements guiObject
@@ -25,7 +21,6 @@ public class guiTextField extends TextField implements guiObject
         super( text );
         name = text;
         select = false;
-        Manipulate m = new Manipulate();
         m.textFieldManipulate( this );
     }
 
@@ -46,14 +41,14 @@ public class guiTextField extends TextField implements guiObject
 
 
     @Override
-    public boolean isSelected()
+    public boolean isThisSelected()
     {
         return select;
     }
 
 
     @Override
-    public void setSelected( boolean b )
+    public void setSelection( boolean b )
     {
         select = b;
     }

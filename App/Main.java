@@ -11,6 +11,7 @@ import guiObjects.guiButton;
 import guiObjects.guiImageView;
 import guiObjects.guiLabel;
 import guiObjects.guiObject;
+import guiObjects.guiRadioButton;
 import guiObjects.guiTextField;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -29,6 +30,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -142,13 +145,18 @@ public class Main extends Application
         MenuBar menu = new MenuBar();
         Menu file = new Menu( "File" );
         MenuItem save = new MenuItem( "Save" );
-        file.getItems().addAll( save );
+        MenuItem open = new MenuItem( "Open" );
+        file.getItems().addAll( save, open );
         menu.getMenus().addAll( file );
         menuBar.getChildren().addAll( menu );
+        Compiler compile = new Compiler( serverIP );
 
         save.setOnAction( e -> {
-            Compiler compile = new Compiler( serverIP );
             compile.send( nodeList, workspace, stage );
+        } );
+
+        open.setOnAction( e -> {
+            compile.open( stage );
         } );
 
         return menuBar;
@@ -187,7 +195,7 @@ public class Main extends Application
                             mouseY.setText(
                                 "Y: " + ( (WorkspacePane)workspace ).getY() );
                             SelectableGroup tGroup = ( (WorkspacePane)workspace )
-                                .getToggleGroup();
+                                .getSelectableGroup();
                             if ( workspace.getChildren().size() > 0 )
                             {
                                 selected.setText( "Selected:  '"
@@ -201,6 +209,7 @@ public class Main extends Application
                                 }
 
                                 selectedNode = tGroup.getSelected();
+                                System.out.println( selectedNode );
 
                                 Bounds boundsInScene = ( (Node)selectedNode )
                                     .localToParent( ( (Node)selectedNode )
@@ -260,6 +269,11 @@ public class Main extends Application
             guiImageView.class,
             nodeList,
             stage ), 0, 4 );
+        controlPanel.add( new controlButton( "RadioButton",
+            workspace,
+            guiRadioButton.class,
+            nodeList,
+            stage ), 0, 5 );
 
         controlPanel.add( new Separator( Orientation.HORIZONTAL ), 0, 3 );
 
@@ -292,15 +306,26 @@ public class Main extends Application
         rePane.getChildren().addAll( ePane );
         ePane.getChildren().addAll( label, coordPane );
 
-        if ( ( (WorkspacePane)workspace ).getToggleGroup()
+        if ( ( (WorkspacePane)workspace ).getSelectableGroup()
             .getSelected() instanceof Labeled )
         {
-            LabeledPane labelPane = new LabeledPane();
+            LabeledPane labelPane = new LabeledPane( "Text: " );
             ePane.getChildren().addAll( labelPane );
 
             labelPane.getApplyButton().setOnAction( e -> {
                 ( (Labeled)selectedNode )
                     .setText( labelPane.getTextField().getText() );
+            } );
+        }
+        else if ( ( (WorkspacePane)workspace ).getSelectableGroup()
+            .getSelected() instanceof ImageView )
+        {
+            LabeledPane labelPane = new LabeledPane( "URL: " );
+            ePane.getChildren().addAll( labelPane );
+
+            labelPane.getApplyButton().setOnAction( e -> {
+                Image i = new Image( labelPane.getTextField().getText() );
+                ( (ImageView)selectedNode ).setImage( i );
             } );
         }
 

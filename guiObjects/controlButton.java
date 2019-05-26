@@ -4,13 +4,8 @@ import java.util.LinkedList;
 
 import App.WorkspacePane;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
@@ -67,35 +62,5 @@ public class controlButton extends Button
                 System.out.println( ex );
             }
         } );
-    }
-
-
-    public void editWindow( Stage stage, Pane workspace )
-    {
-        final Stage popup = new Stage();
-
-        popup.initModality( Modality.APPLICATION_MODAL );
-        popup.initOwner( stage );
-
-        VBox vb = new VBox();
-        TextField name = new TextField( ( (Labeled)workspace.getChildren()
-            .get( workspace.getChildren().size() - 1 ) ).getText() );
-        Button ass = new Button( "Submit" );
-
-        ass.setOnAction( e -> {
-            if ( e.getSource() instanceof Labeled )
-            {
-                Labeled poop = (Labeled)workspace.getChildren()
-                    .get( workspace.getChildren().size() - 1 );
-                poop.setText( name.getText() );
-                ( (guiObject)poop ).setName( name.getText() );
-                popup.close();
-            }
-        } );
-        vb.getChildren().addAll( name, ass );
-
-        Scene dialogScene = new Scene( vb, 300, 200 );
-        popup.setScene( dialogScene );
-        popup.show();
     }
 }
