@@ -127,7 +127,6 @@ public class Server // extends Application
                         System.out.println( "Case Open" );
                         int mapSize = fileMap.keySet().size();
                         System.out.println( mapSize + " Backup Files" );
-                        oos.writeInt( mapSize );
                         for ( String key : fileMap.keySet() )
                         {
                             oos.writeObject( key );

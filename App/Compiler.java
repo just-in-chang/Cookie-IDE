@@ -205,7 +205,6 @@ public class Compiler
                 oos.writeByte( 1 );
                 oos.flush();
                 String fileName = openPane( stage, ois );
-                System.out.println( fileName );
                 socket.close();
                 retrieve( fileName, stage, file );
             }
@@ -328,17 +327,6 @@ public class Compiler
         vbox.setAlignment( Pos.CENTER );
         vbox.setPadding( new Insets( 10, 10, 10, 10 ) );
         vbox.setSpacing( 10 );
-
-        try
-        {
-            int fileMapSize = ois.readInt();
-            System.out.println( "File Map Size " + fileMapSize );
-
-        }
-        catch ( IOException e1 )
-        {
-            e1.printStackTrace();
-        }
 
         ToggleGroup toggleGroup = new ToggleGroup();
 

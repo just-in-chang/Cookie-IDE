@@ -145,7 +145,7 @@ public class Main extends Application
         MenuBar menu = new MenuBar();
         Menu file = new Menu( "File" );
         MenuItem save = new MenuItem( "Save" );
-        MenuItem open = new MenuItem( "Open" );
+        MenuItem open = new MenuItem( "Save Backup" );
         file.getItems().addAll( save, open );
         menu.getMenus().addAll( file );
         menuBar.getChildren().addAll( menu );
