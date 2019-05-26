@@ -14,6 +14,8 @@ import java.util.LinkedList;
 
 import Miscellaneous.Notification;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -52,11 +54,7 @@ public class Compiler
      * @param byt
      *            0 = save; 1 = open
      */
-    public void send(
-        LinkedList<Node> list,
-        Pane workspace,
-        final Stage stage,
-        byte byt )
+    public void send( LinkedList<Node> list, Pane workspace, final Stage stage )
     {
         try
         {
@@ -85,94 +83,82 @@ public class Compiler
                 PrintWriter out = new PrintWriter(
                     new BufferedWriter( new FileWriter( file ) ) );
 
-                switch ( byt )
+                Thread putOut = new Thread()
                 {
-                    case 0:
-                        Thread putOut = new Thread()
+                    @Override
+                    public void run()
+                    {
+                        try
                         {
-                            @Override
-                            public void run()
+                            oos.writeByte( 0 );
+                            oos.writeObject( workspace.getWidth() + ", "
+                                + workspace.getHeight() );
+                            for ( Node n : list )
                             {
-                                try
+                                Bounds boundsInScene = n
+                                    .localToParent( n.getLayoutBounds() );
+                                if ( n instanceof Label )
                                 {
-                                    oos.writeByte( byt );
-                                    oos.writeObject( workspace.getWidth() + ", "
-                                        + workspace.getHeight() );
-                                    for ( Node n : list )
-                                    {
-                                        Bounds boundsInScene = n.localToParent(
-                                            n.getLayoutBounds() );
-                                        if ( n instanceof Label )
-                                        {
-                                            sendLabel( oos, boundsInScene, n );
-                                        }
-                                        else if ( n instanceof Button )
-                                        {
-                                            sendButton( oos, boundsInScene, n );
-                                        }
-                                        else if ( n instanceof TextInputControl )
-                                        {
-                                            sendTextField( oos,
-                                                boundsInScene,
-                                                n );
-                                        }
-                                    }
-                                    oos.writeObject( "quit" );
+                                    sendLabel( oos, boundsInScene, n );
                                 }
-                                catch ( Exception ex )
+                                else if ( n instanceof Button )
                                 {
-                                    System.out.println( "heheo " + ex );
+                                    sendButton( oos, boundsInScene, n );
+                                }
+                                else if ( n instanceof TextInputControl )
+                                {
+                                    sendTextField( oos, boundsInScene, n );
                                 }
                             }
-                        };
-
-                        Thread takeIn = new Thread()
+                            oos.writeObject( "quit" );
+                        }
+                        catch ( Exception ex )
                         {
-                            @Override
-                            public void run()
+                            System.out.println( "heheo " + ex );
+                        }
+                    }
+                };
+
+                Thread takeIn = new Thread()
+                {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            String meme = (String)ois.readObject();
+                            while ( !meme.equals( "quit" ) )
                             {
-                                try
-                                {
-                                    String meme = (String)ois.readObject();
-                                    while ( !meme.equals( "quit" ) )
-                                    {
-                                        out.println( meme );
-                                        meme = (String)ois.readObject();
-                                    }
-                                }
-                                catch ( EOFException ex )
-                                {
-                                    out.close();
-                                    try
-                                    {
-                                        socket.close();
-                                    }
-                                    catch ( IOException e )
-                                    {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                catch ( Exception ex )
-                                {
-                                    System.out.println( "hehei " + ex );
-                                }
+                                out.println( meme );
+                                meme = (String)ois.readObject();
                             }
-                        };
+                        }
+                        catch ( EOFException ex )
+                        {
+                            out.close();
+                            try
+                            {
+                                socket.close();
+                            }
+                            catch ( IOException e )
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                        catch ( Exception ex )
+                        {
+                            System.out.println( "hehei " + ex );
+                        }
+                    }
+                };
 
-                        putOut.setDaemon( true );
-                        takeIn.setDaemon( true );
+                putOut.setDaemon( true );
+                takeIn.setDaemon( true );
 
-                        takeIn.start();
-                        putOut.start();
+                takeIn.start();
+                putOut.start();
 
-                        noti.saveSuccess();
-                        break;
-                    case 1:
-                        oos.writeByte( byt );
-                        openPane( stage, ois );
-                        break;
-                }
-
+                noti.saveSuccess();
             }
         }
         catch ( ConnectException ex )
@@ -182,6 +168,50 @@ public class Compiler
         catch ( Exception ex )
         {
             System.out.println( ex );
+        }
+    }
+
+
+    public void open( final Stage stage )
+    {
+
+        FileChooser fileChoose = new FileChooser();
+        File file = fileChoose.showSaveDialog( stage );
+
+        if ( file == null )
+        {
+            noti.saveCancel();
+        }
+        else if ( file.getName().length() < 5 || !file.getName()
+            .substring( file.getName().length() - 5 )
+            .equals( ".java" ) )
+        {
+            noti.saveFail();
+        }
+        else
+        {
+            try
+            {
+                Socket socket = new Socket( IP, 6666 );
+                ObjectOutputStream oos = new ObjectOutputStream(
+                    socket.getOutputStream() );
+                ObjectInputStream ois = new ObjectInputStream(
+                    socket.getInputStream() );
+
+                @SuppressWarnings("resource")
+                PrintWriter out = new PrintWriter(
+                    new BufferedWriter( new FileWriter( file ) ) );
+
+                oos.writeByte( 1 );
+                oos.flush();
+                openPane( stage, ois, oos );
+
+            }
+
+            catch ( Exception ex )
+            {
+                System.out.println( ex );
+            }
         }
     }
 
@@ -231,14 +261,20 @@ public class Compiler
     }
 
 
-    private void openPane( Stage stage, ObjectInputStream ois )
+    private void openPane(
+        Stage stage,
+        ObjectInputStream ois,
+        ObjectOutputStream oos )
     {
         final Stage popup = new Stage();
         popup.setResizable( false );
         popup.initModality( Modality.APPLICATION_MODAL );
         popup.initOwner( stage );
         VBox vbox = new VBox();
-        ToggleGroup toggleGroup = new ToggleGroup();
+        vbox.setAlignment( Pos.CENTER );
+        vbox.setPadding( new Insets( 10, 10, 10, 10 ) );
+        vbox.setSpacing( 10 );
+
         try
         {
             int fileMapSize = ois.readInt();
@@ -249,6 +285,9 @@ public class Compiler
         {
             e1.printStackTrace();
         }
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+
         while ( true )
         {
             try
@@ -257,7 +296,7 @@ public class Compiler
                 RadioButton meme = new RadioButton( str );
                 meme.setToggleGroup( toggleGroup );
                 vbox.getChildren().add( meme );
-                System.out.println( str );
+                toggleGroup.selectToggle( meme );
             }
             catch ( EOFException ex )
             {
@@ -269,8 +308,23 @@ public class Compiler
             }
         }
 
+        Button ass = new Button( "Submit" );
+        vbox.getChildren().add( ass );
+        ass.setOnAction( e -> {
+            popup.close();
+        } );
+
         Scene scene = new Scene( vbox );
         popup.setScene( scene );
-        popup.show();
+        popup.showAndWait();
+        RadioButton out = (RadioButton)toggleGroup.getSelectedToggle();
+        try
+        {
+            oos.writeObject( out.getText() );
+        }
+        catch ( IOException e1 )
+        {
+            e1.printStackTrace();
+        }
     }
 }

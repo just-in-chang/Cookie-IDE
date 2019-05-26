@@ -30,8 +30,8 @@ public class Server // extends Application
         try
         {
             InetAddress IP = InetAddress.getLocalHost();
-            System.out.println( "Sever online. \nIP: " + IP.getHostAddress()
-                + "\nPort 6666\n" );
+            System.out.println(
+                "Sever Online\nIP: " + IP.getHostAddress() + "\nPort 6666\n" );
             loadHashMap();
             while ( true )
             {
@@ -45,8 +45,9 @@ public class Server // extends Application
                 ObjectOutputStream oos = new ObjectOutputStream(
                     socket.getOutputStream() );
 
+                System.out.println();
                 byte type = ois.readByte();
-                System.out.println( type );
+
                 switch ( type )
                 {
                     case 0:
@@ -113,15 +114,24 @@ public class Server // extends Application
 
                         takeIn.run();
                         ss.close();
-                        System.out.println( "Save Success. \n" );
+                        System.out.println( "Save Success\n" );
                         break;
                     case 1:
                         System.out.println( "Case Open" );
-                        oos.writeInt( fileMap.keySet().size() );
+                        int mapSize = fileMap.keySet().size();
+                        System.out.println( mapSize + " Backup Files" );
+                        oos.writeInt( mapSize );
                         for ( String key : fileMap.keySet() )
                         {
                             oos.writeObject( key );
                         }
+                        oos.flush();
+                        String fileName = (String)ois.readObject();
+                        System.out.println( fileName );
+                        System.out.println( "Retrieve Success\n" );
+                        oos.close();
+                        ss.close();
+                        iterationNo--;
                         break;
                 }
             }

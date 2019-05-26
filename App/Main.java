@@ -149,15 +149,14 @@ public class Main extends Application
         file.getItems().addAll( save, open );
         menu.getMenus().addAll( file );
         menuBar.getChildren().addAll( menu );
+        Compiler compile = new Compiler( serverIP );
 
         save.setOnAction( e -> {
-            Compiler compile = new Compiler( serverIP );
-            compile.send( nodeList, workspace, stage, (byte)0 );
+            compile.send( nodeList, workspace, stage );
         } );
 
         open.setOnAction( e -> {
-            Compiler compile = new Compiler( serverIP );
-            compile.send( nodeList, workspace, stage, (byte)1 );
+            compile.open( stage );
         } );
 
         return menuBar;
