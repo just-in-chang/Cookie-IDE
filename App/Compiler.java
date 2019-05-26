@@ -204,7 +204,8 @@ public class Compiler
 
                 oos.writeByte( 1 );
                 oos.flush();
-                System.out.println( openPane( stage, ois ) );
+                String fileName = openPane( stage, ois ) + ".java";
+                System.out.println( fileName );
             }
 
             catch ( Exception ex )
