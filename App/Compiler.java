@@ -198,10 +198,6 @@ public class Compiler
                 ObjectInputStream ois = new ObjectInputStream(
                     socket.getInputStream() );
 
-                @SuppressWarnings("resource")
-                PrintWriter out = new PrintWriter(
-                    new BufferedWriter( new FileWriter( file ) ) );
-
                 oos.writeByte( 1 );
                 oos.flush();
                 String fileName = openPane( stage, ois );
