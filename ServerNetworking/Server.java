@@ -18,13 +18,13 @@ import java.util.HashMap;
 
 public class Server // extends Application
 {
-
+	//storing server data
     private static HashMap<String, String> map = new HashMap<String, String>();
-
+    //storing files inside hashMap
     private static HashMap<String, File> fileMap = new HashMap<String, File>();
-
+    
     private static byte iterationNo = 1;
-
+    
     private static String backupFileDirectory = "";
 
 
@@ -33,15 +33,17 @@ public class Server // extends Application
     {
         try
         {
+        	
             InetAddress IP = InetAddress.getLocalHost();
             System.out.println(
                 "Sever Online\nIP: " + IP.getHostAddress() + "\nPort 6666\n" );
+            //renew the hashmap for file so that it's updated for client to pull
             loadHashMap();
             while ( true )
             {
                 System.out.println( "Iteration Number " + iterationNo );
                 iterationNo++;
-
+                //initialization of the server socket and streams
                 ServerSocket ss = new ServerSocket( 6666 );
                 Socket socket = ss.accept();
                 ObjectInputStream ois = new ObjectInputStream(
@@ -50,10 +52,12 @@ public class Server // extends Application
                     socket.getOutputStream() );
 
                 System.out.println();
+                //receive byte
                 byte type = ois.readByte();
-
+                //chooses either to save the files, or open and retrieve it
                 switch ( type )
                 {
+                //saves the file and the date it was last modified
                     case 0:
                         System.out.println( "Case: Save" );
                         DateTimeFormatter dtf = DateTimeFormatter
@@ -70,11 +74,13 @@ public class Server // extends Application
                             {
                                 try
                                 {
+                                	//prints all of the data into code format then send all of it back
                                     oos.writeObject( docHeading() );
                                     oos.writeObject( docBody() );
                                     oos.writeObject( docEnding() );
                                     System.out.println(
                                         file.getName() + " sent to client" );
+                                    //saves a backup file inside the server for user to open
                                     write.println( docHeading() );
                                     write.println( docBody() );
                                     write.print( docEnding() );
@@ -98,6 +104,7 @@ public class Server // extends Application
                             {
                                 try
                                 {
+                                	//puts the information received from client into a hashmap to store
                                     map.put( "docInfo",
                                         (String)ois.readObject() );
                                     while ( true )
@@ -123,6 +130,7 @@ public class Server // extends Application
                         ss.close();
                         System.out.println( "Save Success\n" );
                         break;
+                     //Opens the all the java files available for the user to select
                     case 1:
                         System.out.println( "Case Open" );
                         int mapSize = fileMap.keySet().size();
@@ -140,6 +148,7 @@ public class Server // extends Application
                         ss.close();
                         iterationNo--;
                         break;
+                    //Retrieves the file so that the code is sent to the user
                     case 2:
                         System.out.println( "Case Retrieve" );
                         String fileName = (String)ois.readObject();
@@ -167,7 +176,10 @@ public class Server // extends Application
         }
     }
 
-
+    /**
+     * The code that's going to be placed inside a java file when the data is transferred over
+     * @return the start of the code
+     */
     private static String docHeading()
     {
         return ( "import javafx.application.Application;\r\n"
@@ -187,14 +199,20 @@ public class Server // extends Application
             + "        stage.setScene( scene );\r\n" );
     }
 
-
+    
+    /**
+     * the body of the code
+     */
     private static String docBody()
     {
         String out = "";
         return out;
     }
 
-
+    
+    /**
+     * loads all the files inside the backup folder to a hashmap so that it is accessible for the user
+     */
     private static void loadHashMap()
     {
         File directory = new File( "ServerNetworking\\Backup" );
@@ -228,6 +246,9 @@ public class Server // extends Application
     }
 
 
+    /**
+     * @return the ending of the code
+     */
     private static String docEnding()
     {
         return ( "        stage.show();\r\n" + "    }\r\n" + "}\r\n" );

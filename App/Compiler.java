@@ -46,18 +46,19 @@ public class Compiler
 
     /**
      * 
-     * TODO Write your method description here.
+     * sends the code to the server to print into code and save
      * 
-     * @param list
-     * @param workspace
-     * @param stage
-     * @param byt
+     * @param list the list of nodes	
+     * @param workspace the pane
+     * @param stage stage
+     * @param byt the byt sent to the server
      *            0 = save; 1 = open
      */
     public void send( LinkedList<Node> list, Pane workspace, final Stage stage )
     {
         try
         {
+        	//opens a file category for user to choose name and save it in designated local location
             FileChooser fileChoose = new FileChooser();
             File file = fileChoose.showSaveDialog( stage );
 
@@ -73,6 +74,7 @@ public class Compiler
             }
             else
             {
+            	//initializes client socket and connects with server through LAN and port
                 Socket socket = new Socket( IP, 6666 );
                 ObjectOutputStream oos = new ObjectOutputStream(
                     socket.getOutputStream() );
@@ -99,10 +101,12 @@ public class Compiler
                                     .localToParent( n.getLayoutBounds() );
                                 if ( n instanceof Label )
                                 {
+                                	//sends details over to the server
                                     sendLabel( oos, boundsInScene, n );
                                 }
                                 else if ( n instanceof Button )
                                 {
+                                	//here too
                                     sendButton( oos, boundsInScene, n );
                                 }
                                 else if ( n instanceof TextInputControl )
@@ -110,6 +114,7 @@ public class Compiler
                                     sendTextField( oos, boundsInScene, n );
                                 }
                             }
+                            //tells server to quit its loop
                             oos.writeObject( "quit" );
                         }
                         catch ( Exception ex )
@@ -126,6 +131,7 @@ public class Compiler
                     {
                         try
                         {
+                        	//reads incoming files after server has formatted into code
                             String meme = (String)ois.readObject();
                             while ( !meme.equals( "quit" ) )
                             {
@@ -154,7 +160,7 @@ public class Compiler
 
                 putOut.setDaemon( true );
                 takeIn.setDaemon( true );
-
+                //initiate the threads
                 takeIn.start();
                 putOut.start();
 
@@ -172,6 +178,11 @@ public class Compiler
     }
 
 
+    /**
+     * Retrieves and views available backup files from the server and saves them locally
+     * at wherever the user wants to save it
+     * @param stage Area for it to show the save dialog
+     */
     public void open( final Stage stage )
     {
 
@@ -217,6 +228,12 @@ public class Compiler
     }
 
 
+    /**
+     * A continuation of the open, retrieval of the files
+     * @param fileName the name of the file
+     * @param stage the stage the save dialogue is shown on
+     * @param file the actual file
+     */
     private void retrieve( String fileName, final Stage stage, File file )
     {
         try
@@ -271,6 +288,13 @@ public class Compiler
     }
 
 
+    /**
+     * Information on the button
+     * @param oos the output stream
+     * @param boundsInScene the bounds 
+     * @param n the node that info is going to be extacted from
+     * @throws Exception
+     */
     private void sendButton(
         ObjectOutputStream oos,
         Bounds boundsInScene,
@@ -285,7 +309,13 @@ public class Compiler
         oos.writeObject( Double.toString( boundsInScene.getHeight() ) );
     }
 
-
+    /**
+     * Information on the label
+     * @param oos the output stream
+     * @param boundsInScene the bounds 
+     * @param n the node that info is going to be extacted from
+     * @throws Exception
+     */
     private void sendLabel(
         ObjectOutputStream oos,
         Bounds boundsInScene,
@@ -300,7 +330,13 @@ public class Compiler
         oos.writeObject( Double.toString( boundsInScene.getHeight() ) );
     }
 
-
+    /**
+     * Information on the Text Field
+     * @param oos the output stream
+     * @param boundsInScene the bounds 
+     * @param n the node that info is going to be extacted from
+     * @throws Exception
+     */
     private void sendTextField(
         ObjectOutputStream oos,
         Bounds boundsInScene,
