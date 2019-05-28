@@ -46,7 +46,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-
 // git add .
 public class Main extends Application
 {
