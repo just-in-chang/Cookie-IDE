@@ -145,13 +145,18 @@ public class Main extends Application
         MenuBar menu = new MenuBar();
         Menu file = new Menu( "File" );
         MenuItem save = new MenuItem( "Save" );
-        file.getItems().addAll( save );
+        MenuItem open = new MenuItem( "Save Backup" );
+        file.getItems().addAll( save, open );
         menu.getMenus().addAll( file );
         menuBar.getChildren().addAll( menu );
+        Compiler compile = new Compiler( serverIP );
 
         save.setOnAction( e -> {
-            Compiler compile = new Compiler( serverIP );
             compile.send( nodeList, workspace, stage );
+        } );
+
+        open.setOnAction( e -> {
+            compile.open( stage );
         } );
 
         return menuBar;
@@ -209,8 +214,8 @@ public class Main extends Application
                                     .localToParent( ( (Node)selectedNode )
                                         .getLayoutBounds() );
 
-                                editPanelLabel.setText(
-                                    tGroup.getSelected().getName() );
+                                editPanelLabel
+                                    .setText( tGroup.getSelected().getName() );
                                 coordPane.getxLabel()
                                     .setText( Double
                                         .toString( boundsInScene.getMinX() ) );
@@ -303,7 +308,7 @@ public class Main extends Application
         if ( ( (WorkspacePane)workspace ).getSelectableGroup()
             .getSelected() instanceof Labeled )
         {
-            LabeledPane labelPane = new LabeledPane("Text: ");
+            LabeledPane labelPane = new LabeledPane( "Text: " );
             ePane.getChildren().addAll( labelPane );
 
             labelPane.getApplyButton().setOnAction( e -> {
@@ -312,15 +317,15 @@ public class Main extends Application
             } );
         }
         else if ( ( (WorkspacePane)workspace ).getSelectableGroup()
-                        .getSelected() instanceof ImageView )
+            .getSelected() instanceof ImageView )
         {
-            LabeledPane labelPane = new LabeledPane("URL: ");
+            LabeledPane labelPane = new LabeledPane( "URL: " );
             ePane.getChildren().addAll( labelPane );
-            
+
             labelPane.getApplyButton().setOnAction( e -> {
-                Image i = new Image(labelPane.getTextField().getText());
-                ((ImageView)selectedNode).setImage( i );
-            });
+                Image i = new Image( labelPane.getTextField().getText() );
+                ( (ImageView)selectedNode ).setImage( i );
+            } );
         }
 
         return rePane;

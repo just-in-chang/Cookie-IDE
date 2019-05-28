@@ -14,13 +14,20 @@ import java.util.LinkedList;
 
 import Miscellaneous.Notification;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
@@ -37,6 +44,16 @@ public class Compiler
     }
 
 
+    /**
+     * 
+     * TODO Write your method description here.
+     * 
+     * @param list
+     * @param workspace
+     * @param stage
+     * @param byt
+     *            0 = save; 1 = open
+     */
     public void send( LinkedList<Node> list, Pane workspace, final Stage stage )
     {
         try
@@ -48,7 +65,6 @@ public class Compiler
             {
                 noti.saveCancel();
             }
-
             else if ( file.getName().length() < 5 || !file.getName()
                 .substring( file.getName().length() - 5 )
                 .equals( ".java" ) )
@@ -74,6 +90,7 @@ public class Compiler
                     {
                         try
                         {
+                            oos.writeByte( 0 );
                             oos.writeObject( workspace.getWidth() + ", "
                                 + workspace.getHeight() );
                             for ( Node n : list )
@@ -155,6 +172,105 @@ public class Compiler
     }
 
 
+    public void open( final Stage stage )
+    {
+
+        FileChooser fileChoose = new FileChooser();
+        File file = fileChoose.showSaveDialog( stage );
+
+        if ( file == null )
+        {
+            noti.saveCancel();
+        }
+        else if ( file.getName().length() < 5 || !file.getName()
+            .substring( file.getName().length() - 5 )
+            .equals( ".java" ) )
+        {
+            noti.saveFail();
+        }
+        else
+        {
+            try
+            {
+                Socket socket = new Socket( IP, 6666 );
+                ObjectOutputStream oos = new ObjectOutputStream(
+                    socket.getOutputStream() );
+                ObjectInputStream ois = new ObjectInputStream(
+                    socket.getInputStream() );
+
+                @SuppressWarnings("resource")
+                PrintWriter out = new PrintWriter(
+                    new BufferedWriter( new FileWriter( file ) ) );
+
+                oos.writeByte( 1 );
+                oos.flush();
+                String fileName = openPane( stage, ois );
+                socket.close();
+                retrieve( fileName, stage, file );
+            }
+
+            catch ( Exception ex )
+            {
+                System.out.println( ex );
+            }
+        }
+    }
+
+
+    private void retrieve( String fileName, final Stage stage, File file )
+    {
+        try
+        {
+            Socket socket = new Socket( IP, 6666 );
+            ObjectOutputStream oos = new ObjectOutputStream(
+                socket.getOutputStream() );
+            ObjectInputStream ois = new ObjectInputStream(
+                socket.getInputStream() );
+
+            PrintWriter out = new PrintWriter(
+                new BufferedWriter( new FileWriter( file ) ) );
+
+            oos.writeByte( 2 );
+            oos.writeObject( fileName );
+            oos.flush();
+
+            try
+            {
+                String meme = (String)ois.readObject();
+                while ( !meme.equals( "quit" ) )
+                {
+                    out.println( meme );
+                    meme = (String)ois.readObject();
+                }
+            }
+            catch ( EOFException ex )
+            {
+                out.close();
+                try
+                {
+                    socket.close();
+                }
+                catch ( IOException e )
+                {
+                    e.printStackTrace();
+                }
+            }
+            catch ( Exception ex )
+            {
+                System.out.println( "hehei " + ex );
+            }
+
+            out.close();
+            socket.close();
+        }
+        catch ( Exception ex )
+        {
+            System.out.println( ex );
+        }
+
+    }
+
+
     private void sendButton(
         ObjectOutputStream oos,
         Bounds boundsInScene,
@@ -199,4 +315,51 @@ public class Compiler
         oos.writeObject( Double.toString( boundsInScene.getHeight() ) );
     }
 
+
+    private String openPane( Stage stage, ObjectInputStream ois )
+    {
+        final Stage popup = new Stage();
+        popup.setTitle( "Backups" );
+        popup.setResizable( false );
+        popup.initModality( Modality.APPLICATION_MODAL );
+        popup.initOwner( stage );
+        VBox vbox = new VBox();
+        vbox.setAlignment( Pos.CENTER );
+        vbox.setPadding( new Insets( 10, 10, 10, 10 ) );
+        vbox.setSpacing( 10 );
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+
+        while ( true )
+        {
+            try
+            {
+                String str = (String)ois.readObject();
+                RadioButton meme = new RadioButton( str );
+                meme.setToggleGroup( toggleGroup );
+                vbox.getChildren().add( meme );
+                toggleGroup.selectToggle( meme );
+            }
+            catch ( EOFException ex )
+            {
+                break;
+            }
+            catch ( Exception e )
+            {
+                e.printStackTrace();
+            }
+        }
+
+        Button ass = new Button( "Submit" );
+        vbox.getChildren().add( ass );
+        ass.setOnAction( e -> {
+            popup.close();
+        } );
+
+        Scene scene = new Scene( vbox );
+        popup.setScene( scene );
+        popup.showAndWait();
+        RadioButton out = (RadioButton)toggleGroup.getSelectedToggle();
+        return out.getText();
+    }
 }

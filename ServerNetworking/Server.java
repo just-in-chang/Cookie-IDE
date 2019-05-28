@@ -1,7 +1,9 @@
 package ServerNetworking;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,6 +11,8 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 
@@ -30,8 +34,8 @@ public class Server // extends Application
         try
         {
             InetAddress IP = InetAddress.getLocalHost();
-            System.out.println( "Sever online. \nIP: " + IP.getHostAddress()
-                + "\nPort 6666\n" );
+            System.out.println(
+                "Sever Online\nIP: " + IP.getHostAddress() + "\nPort 6666\n" );
             loadHashMap();
             while ( true )
             {
@@ -45,69 +49,116 @@ public class Server // extends Application
                 ObjectOutputStream oos = new ObjectOutputStream(
                     socket.getOutputStream() );
 
-                File file = new File( backupFileDirectory + "\\data"
-                    + ( iterationNo - 1 ) + ".java" );
-                // file.createNewFile();
-                PrintWriter write = new PrintWriter(
-                    new BufferedWriter( new FileWriter( file ) ) );
-                System.out.println( "hi" );
-                Thread putOut = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        try
-                        {
-                            oos.writeObject( docHeading() );
-                            oos.writeObject( docBody() );
-                            oos.writeObject( docEnding() );
-                            System.out
-                                .println( file.getName() + " sent to client" );
-                            write.println( docHeading() );
-                            write.println( docBody() );
-                            write.print( docEnding() );
-                            System.out.println( file.getName() + " backed up" );
-                            write.close();
-                            fileMap.put( "data" + iterationNo, file );
-                            oos.close();
-                        }
-                        catch ( Exception ex )
-                        {
-                            System.out.println( "oof" + ex );
-                        }
-                    }
-                };
+                System.out.println();
+                byte type = ois.readByte();
 
-                Thread takeIn = new Thread()
+                switch ( type )
                 {
-                    @Override
-                    public void run()
-                    {
-                        try
+                    case 0:
+                        System.out.println( "Case: Save" );
+                        DateTimeFormatter dtf = DateTimeFormatter
+                            .ofPattern( "yyyy-MM-dd_HHmm" );
+                        LocalDateTime time = LocalDateTime.now();
+                        File file = new File( backupFileDirectory + "\\"
+                            + dtf.format( time ) + ".java" );
+                        PrintWriter write = new PrintWriter(
+                            new BufferedWriter( new FileWriter( file ) ) );
+                        Thread putOut = new Thread()
                         {
-                            map.put( "docInfo", (String)ois.readObject() );
-                            while ( true )
+                            @Override
+                            public void run()
                             {
-                                String str = (String)ois.readObject(); // weir
-                                if ( str.equals( "quit" ) )
-                                    break;
-                                System.out.println( str );
+                                try
+                                {
+                                    oos.writeObject( docHeading() );
+                                    oos.writeObject( docBody() );
+                                    oos.writeObject( docEnding() );
+                                    System.out.println(
+                                        file.getName() + " sent to client" );
+                                    write.println( docHeading() );
+                                    write.println( docBody() );
+                                    write.print( docEnding() );
+                                    System.out.println(
+                                        file.getName() + " backed up" );
+                                    write.close();
+                                    fileMap.put( dtf.format( time ), file );
+                                    oos.close();
+                                }
+                                catch ( Exception ex )
+                                {
+                                    System.out.println( "oof" + ex );
+                                }
                             }
-                            putOut.run();
-                        }
-                        catch ( Exception ex )
+                        };
+
+                        Thread takeIn = new Thread()
                         {
-                            System.out.println( "oof" + ex );
+                            @Override
+                            public void run()
+                            {
+                                try
+                                {
+                                    map.put( "docInfo",
+                                        (String)ois.readObject() );
+                                    while ( true )
+                                    {
+                                        String str = (String)ois.readObject();
+                                        if ( str.equals( "quit" ) )
+                                            break;
+                                        System.out.println( str );
+                                    }
+                                    putOut.run();
+                                }
+                                catch ( Exception ex )
+                                {
+                                    System.out.println( "oof" + ex );
+                                }
+                            }
+                        };
+
+                        putOut.setDaemon( true );
+                        takeIn.setDaemon( true );
+
+                        takeIn.run();
+                        ss.close();
+                        System.out.println( "Save Success\n" );
+                        break;
+                    case 1:
+                        System.out.println( "Case Open" );
+                        int mapSize = fileMap.keySet().size();
+                        System.out.println( mapSize + " Backup Files" );
+                        for ( String key : fileMap.keySet() )
+                        {
+                            oos.writeObject( key );
                         }
-                    }
-                };
 
-                putOut.setDaemon( true );
-                takeIn.setDaemon( true );
+                        oos.flush();
+                        // System.out.println( (String)ois.readObject() );
 
-                takeIn.run();
-                ss.close();
-                System.out.println( "Save Success. \n" );
+                        System.out.println( "Open Success\n" );
+                        oos.close();
+                        ss.close();
+                        iterationNo--;
+                        break;
+                    case 2:
+                        System.out.println( "Case Retrieve" );
+                        String fileName = (String)ois.readObject();
+                        System.out
+                            .println( "Sending " + fileName + " to Client" );
+                        BufferedReader read = new BufferedReader(
+                            new FileReader( fileMap.get( fileName ) ) );
+                        String str = read.readLine();
+                        while ( str != null )
+                        {
+                            oos.writeObject( str );
+                            str = read.readLine();
+                        }
+                        oos.writeObject( "quit" );
+                        oos.close();
+                        ss.close();
+                        System.out.println( "Retrieve Success\n" );
+                        break;
+                }
             }
         }
         catch ( Exception ex )
