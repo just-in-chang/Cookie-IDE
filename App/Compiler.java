@@ -321,7 +321,7 @@ public class Compiler
         throws Exception
     {
         oos.writeObject( "ImageView" );
-
+        // Need to retrieve image source
     }
 
 

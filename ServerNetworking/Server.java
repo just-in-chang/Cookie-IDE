@@ -218,9 +218,9 @@ public class Server // extends Application
     private static String docBody()
     {
         String out = "";
-        for ( String str : map )
+        for ( String code : map )
         {
-            out += "        " + str + "\r\n";
+            out += "        " + code + "\r\n";
         }
         return out;
     }
