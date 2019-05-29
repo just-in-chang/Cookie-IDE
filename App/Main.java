@@ -311,9 +311,10 @@ public class Main extends Application
         rePane.getChildren().add( new Separator( Orientation.VERTICAL ) );
         rePane.getChildren().addAll( ePane );
         ePane.getChildren().addAll( label, coordPane );
+        
+        guiObject selected = ((WorkspacePane)workspace).getSelectableGroup().getSelected();
 
-        if ( ( (WorkspacePane)workspace ).getSelectableGroup()
-            .getSelected() instanceof Labeled )
+        if ( selected instanceof Labeled )
         {
             LabeledPane labelPane = new LabeledPane( "Text: " );
             ePane.getChildren().addAll( labelPane );
@@ -323,15 +324,15 @@ public class Main extends Application
                     .setText( labelPane.getTextField().getText() );
             } );
         }
-        else if ( ( (WorkspacePane)workspace ).getSelectableGroup()
-            .getSelected() instanceof ImageView )
+        else if ( selected instanceof ImageView )
         {
             LabeledPane labelPane = new LabeledPane( "URL: " );
             ePane.getChildren().addAll( labelPane );
+            
+            labelPane.getTextField().setText( ((guiImageView)selected).getURL() );
 
             labelPane.getApplyButton().setOnAction( e -> {
-                Image i = new Image( labelPane.getTextField().getText() );
-                ( (ImageView)selectedNode ).setImage( i );
+                ( (guiImageView)selectedNode ).setURL( labelPane.getTextField().getText() );
             } );
         }
 
