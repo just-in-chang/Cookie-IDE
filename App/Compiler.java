@@ -19,6 +19,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
@@ -100,32 +102,30 @@ public class Compiler
                                 Bounds boundsInScene = n
                                     .localToParent( n.getLayoutBounds() );
                                 if ( n instanceof Button )
-                                {
                                     sendLabeled( "Button",
                                         oos,
                                         boundsInScene,
                                         n );
-                                }
                                 else if ( n instanceof Label )
-                                {
                                     sendLabeled( "Label",
                                         oos,
                                         boundsInScene,
                                         n );
-                                }
                                 else if ( n instanceof TextField )
-                                {
                                     sendTextField( oos, boundsInScene, n );
-                                }
                                 else if ( n instanceof ImageView )
-                                {
                                     sendImageView( oos, boundsInScene );
-                                }
                                 else if ( n instanceof RadioButton )
-                                {
-                                    sendRadioButton( oos, boundsInScene, n );
-                                }
-
+                                    sendCheckableButton( "RadioButton",
+                                        oos,
+                                        boundsInScene,
+                                        n );
+                                else if ( n instanceof CheckBox )
+                                    sendCheckableButton( "CheckBox",
+                                        oos,
+                                        boundsInScene,
+                                        n );
+                                oos.writeObject( "endnodeweir" );
                             }
                             oos.writeObject( "quit" );
                         }
@@ -307,8 +307,7 @@ public class Compiler
     {
         oos.writeObject( "TextField" );
         oos.writeObject( ( (TextInputControl)n ).getText() );
-        oos.writeObject( Double.toString( boundsInScene.getMinX() ) );
-        oos.writeObject( Double.toString( boundsInScene.getMinY() ) );
+        boundsLocation( oos, boundsInScene );
         oos.writeObject( Double.toString( boundsInScene.getWidth() ) );
         oos.writeObject( Double.toString( boundsInScene.getHeight() ) );
     }
@@ -319,19 +318,26 @@ public class Compiler
     {
         oos.writeObject( "ImageView" );
         // Need to retrieve image source
-        oos.writeObject( Double.toString( boundsInScene.getMinX() ) );
-        oos.writeObject( Double.toString( boundsInScene.getMinY() ) );
+        boundsLocation( oos, boundsInScene );
     }
 
 
-    private void sendRadioButton(
+    private void sendCheckableButton(
+        String type,
         ObjectOutputStream oos,
         Bounds boundsInScene,
         Node n )
         throws Exception
     {
-        oos.writeObject( "RadioButton" );
-        oos.writeObject( ( (RadioButton)n ).getText() );
+        oos.writeObject( type );
+        oos.writeObject( ( (ButtonBase)n ).getText() );
+        boundsLocation( oos, boundsInScene );
+    }
+
+
+    private void boundsLocation( ObjectOutputStream oos, Bounds boundsInScene )
+        throws Exception
+    {
         oos.writeObject( Double.toString( boundsInScene.getMinX() ) );
         oos.writeObject( Double.toString( boundsInScene.getMinY() ) );
     }

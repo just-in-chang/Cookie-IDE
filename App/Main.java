@@ -47,6 +47,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+
 // git add .
 public class Main extends Application
 {
@@ -170,7 +171,7 @@ public class Main extends Application
         Label mouseY = new Label( "lmao" );
         Label selected = new Label( "Selected:  " );
         statusBar.getChildren().addAll( mouseX, mouseY, selected );
-        
+
         Thread statusUpdate = new Thread( new Runnable()
         {
             @Override
@@ -393,7 +394,6 @@ public class Main extends Application
                 if ( ipValidation( ipField.getText() ) )
                 {
                     serverIP = ipField.getText();
-                    System.out.println( serverIP );
                 }
 
                 popup.close();
