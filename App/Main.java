@@ -208,7 +208,6 @@ public class Main extends Application
                                 }
 
                                 selectedNode = tGroup.getSelected();
-                                System.out.println( selectedNode );
 
                                 Bounds boundsInScene = ( (Node)selectedNode )
                                     .localToParent( ( (Node)selectedNode )
