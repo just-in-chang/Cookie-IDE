@@ -101,14 +101,14 @@ public class Compiler
                                     .localToParent( n.getLayoutBounds() );
                                 if ( n instanceof Button )
                                 {
-                                    sendLabeled( "button",
+                                    sendLabeled( "Button",
                                         oos,
                                         boundsInScene,
                                         n );
                                 }
                                 else if ( n instanceof Label )
                                 {
-                                    sendLabeled( "label",
+                                    sendLabeled( "Label",
                                         oos,
                                         boundsInScene,
                                         n );
@@ -119,11 +119,11 @@ public class Compiler
                                 }
                                 else if ( n instanceof ImageView )
                                 {
-
+                                    sendImageView( oos, boundsInScene );
                                 }
                                 else if ( n instanceof RadioButton )
                                 {
-
+                                    sendRadioButton( oos, boundsInScene, n );
                                 }
 
                             }
@@ -319,6 +319,19 @@ public class Compiler
     {
         oos.writeObject( "ImageView" );
         // Need to retrieve image source
+        oos.writeObject( Double.toString( boundsInScene.getMinX() ) );
+        oos.writeObject( Double.toString( boundsInScene.getMinY() ) );
+    }
+
+
+    private void sendRadioButton(
+        ObjectOutputStream oos,
+        Bounds boundsInScene,
+        Node n )
+        throws Exception
+    {
+        oos.writeObject( "RadioButton" );
+        oos.writeObject( ( (RadioButton)n ).getText() );
         oos.writeObject( Double.toString( boundsInScene.getMinX() ) );
         oos.writeObject( Double.toString( boundsInScene.getMinY() ) );
     }
