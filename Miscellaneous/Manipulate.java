@@ -251,18 +251,10 @@ public class Manipulate
                 double moveX = node.getTranslateX() + e.getX() - x;
                 double moveY = node.getTranslateY() + e.getY() - y;
 
-                if ( ( (guiObject)node ).getName().equals( "Mexican" ) )
-                {
-                    node.setTranslateX( moveX );
-                    node.setTranslateY( moveY );
-                }
-                else
-                {
-                    node.setTranslateX( Math.min( Math.max( 0, moveX ),
-                        parent.getMaxWidth() - node.getWidth() ) );
-                    node.setTranslateY( Math.min( Math.max( 0, moveY ),
-                        parent.getMaxHeight() - node.getHeight() ) );
-                }
+                node.setTranslateX( Math.min( Math.max( 0, moveX ),
+                    parent.getMaxWidth() - node.getWidth() ) );
+                node.setTranslateY( Math.min( Math.max( 0, moveY ),
+                    parent.getMaxHeight() - node.getHeight() ) );
                 ( (WorkspacePane)node.getParent() )
                     .setX( node.getTranslateX() + x );
                 ( (WorkspacePane)node.getParent() )
@@ -288,12 +280,12 @@ public class Manipulate
 
         delete.setOnAction( e -> {
             ( (Pane)node.getParent() ).getChildren().remove( node );
+            
         } );
 
         node.setOnContextMenuRequested( e -> {
-//            node.getContextMenu().getItems().add( delete );
             cMenu.show( node, e.getScreenX(), e.getScreenY() );
-            
+
         } );
     }
 }
