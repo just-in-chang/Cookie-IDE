@@ -63,8 +63,6 @@ public class Main extends Application
 
     private BorderPane window;
 
-    private LinkedList<Node> nodeList = new LinkedList<Node>();
-
     private Scene scene;
 
     private VBox menu;
@@ -152,6 +150,13 @@ public class Main extends Application
         Compiler compile = new Compiler( serverIP );
 
         save.setOnAction( e -> {
+            LinkedList<Node> nodeList = new LinkedList<Node>();
+            System.out.println( this.workspace.getChildren().size() );
+            for ( Node n : this.workspace.getChildren() )
+            {
+                System.out.println( ((guiObject)n).getName() );
+                nodeList.add( n );
+            }
             compile.send( nodeList, workspace, stage );
         } );
 
@@ -191,19 +196,16 @@ public class Main extends Application
                         @Override
                         public void run()
                         {
-                            mouseX.setText(
-                                "X: " + ( (WorkspacePane)workspace ).getX() );
-                            mouseY.setText(
-                                "Y: " + ( (WorkspacePane)workspace ).getY() );
+                            mouseX.setText( "X: " + ( (WorkspacePane)workspace ).getX() );
+                            mouseY.setText( "Y: " + ( (WorkspacePane)workspace ).getY() );
                             SelectableGroup tGroup = ( (WorkspacePane)workspace )
                                 .getSelectableGroup();
                             if ( workspace.getChildren().size() > 0 )
                             {
-                                selected.setText( "Selected:  '"
-                                    + tGroup.getSelected().getName() + "'" );
+                                selected.setText(
+                                    "Selected:  '" + tGroup.getSelected().getName() + "'" );
 
-                                if ( !tGroup.getSelected()
-                                    .equals( selectedNode ) )
+                                if ( !tGroup.getSelected().equals( selectedNode ) )
                                 {
                                     window.setRight( editPanel( workspace ) );
 
@@ -212,23 +214,17 @@ public class Main extends Application
                                 selectedNode = tGroup.getSelected();
 
                                 Bounds boundsInScene = ( (Node)selectedNode )
-                                    .localToParent( ( (Node)selectedNode )
-                                        .getLayoutBounds() );
+                                    .localToParent( ( (Node)selectedNode ).getLayoutBounds() );
 
-                                editPanelLabel
-                                    .setText( tGroup.getSelected().getName() );
+                                editPanelLabel.setText( tGroup.getSelected().getName() );
                                 coordPane.getxLabel()
-                                    .setText( Double
-                                        .toString( boundsInScene.getMinX() ) );
+                                    .setText( Double.toString( boundsInScene.getMinX() ) );
                                 coordPane.getyLabel()
-                                    .setText( Double
-                                        .toString( boundsInScene.getMinY() ) );
+                                    .setText( Double.toString( boundsInScene.getMinY() ) );
                                 coordPane.getWidthLabel()
-                                    .setText( Double.toString(
-                                        tGroup.getSelected().getWidth() ) );
+                                    .setText( Double.toString( tGroup.getSelected().getWidth() ) );
                                 coordPane.getHeightLabel()
-                                    .setText( Double.toString(
-                                        tGroup.getSelected().getHeight() ) );
+                                    .setText( Double.toString( tGroup.getSelected().getHeight() ) );
                             }
                         }
                     } );
@@ -246,38 +242,37 @@ public class Main extends Application
     {
         HBox controlBox = new HBox();
         GridPane controlPanel = new GridPane();
-        controlBox.getChildren()
-            .addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
+        controlBox.getChildren().addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
         controlPanel.setVgap( 10 );
         controlPanel.add( new controlButton( "Button",
             workspace,
             guiButton.class,
-            nodeList,
+
             stage ), 0, 0 );
         controlPanel.add( new controlButton( "Label",
             workspace,
             guiLabel.class,
-            nodeList,
+
             stage ), 0, 1 );
         controlPanel.add( new controlButton( "TextField",
             workspace,
             guiTextField.class,
-            nodeList,
+
             stage ), 0, 2 );
         controlPanel.add( new controlButton( "ImageView",
             workspace,
             guiImageView.class,
-            nodeList,
+
             stage ), 0, 4 );
         controlPanel.add( new controlButton( "RadioButton",
             workspace,
             guiRadioButton.class,
-            nodeList,
+
             stage ), 0, 5 );
         controlPanel.add( new controlButton( "CheckBox",
             workspace,
             guiCheckBox.class,
-            nodeList,
+
             stage ), 0, 6 );
 
         controlPanel.add( new Separator( Orientation.HORIZONTAL ), 0, 3 );
@@ -311,8 +306,7 @@ public class Main extends Application
         rePane.getChildren().addAll( ePane );
         ePane.getChildren().addAll( label, coordPane );
 
-        guiObject selected = ( (WorkspacePane)workspace ).getSelectableGroup()
-            .getSelected();
+        guiObject selected = ( (WorkspacePane)workspace ).getSelectableGroup().getSelected();
 
         if ( selected instanceof Labeled )
         {
@@ -320,8 +314,7 @@ public class Main extends Application
             ePane.getChildren().addAll( labelPane );
 
             labelPane.getApplyButton().setOnAction( e -> {
-                ( (Labeled)selectedNode )
-                    .setText( labelPane.getTextField().getText() );
+                ( (Labeled)selectedNode ).setText( labelPane.getTextField().getText() );
             } );
         }
         else if ( selected instanceof ImageView )
@@ -329,12 +322,10 @@ public class Main extends Application
             LabeledPane labelPane = new LabeledPane( "URL: " );
             ePane.getChildren().addAll( labelPane );
 
-            labelPane.getTextField()
-                .setText( ( (guiImageView)selected ).getURL() );
+            labelPane.getTextField().setText( ( (guiImageView)selected ).getURL() );
 
             labelPane.getApplyButton().setOnAction( e -> {
-                ( (guiImageView)selectedNode )
-                    .setURL( labelPane.getTextField().getText() );
+                ( (guiImageView)selectedNode ).setURL( labelPane.getTextField().getText() );
             } );
         }
 
@@ -376,23 +367,18 @@ public class Main extends Application
         Button butt = new Button( "Submit" );
         butt.setMinWidth( griddy.getBoundsInParent().getWidth() );
         butt.setOnAction( e -> {
-            if ( ( widthField.getText().matches( "[0-9]+" )
-                && widthField.getText().length() > 0 )
+            if ( ( widthField.getText().matches( "[0-9]+" ) && widthField.getText().length() > 0 )
                 || ( heightField.getText().matches( "[0-9]+" )
                     && heightField.getText().length() > 0 ) )
             {
-                workspace.setMinWidth( Math.max(
-                    ( Double.valueOf( widthField.getText() ).doubleValue() ),
-                    150.0 ) );
-                workspace.setMaxWidth( Math.max(
-                    ( Double.valueOf( widthField.getText() ).doubleValue() ),
-                    150 ) );
-                workspace.setMinHeight( Math.max(
-                    ( Double.valueOf( heightField.getText() ).doubleValue() ),
-                    150 ) );
-                workspace.setMaxHeight( Math.max(
-                    ( Double.valueOf( heightField.getText() ).doubleValue() ),
-                    150 ) );
+                workspace.setMinWidth(
+                    Math.max( ( Double.valueOf( widthField.getText() ).doubleValue() ), 150.0 ) );
+                workspace.setMaxWidth(
+                    Math.max( ( Double.valueOf( widthField.getText() ).doubleValue() ), 150 ) );
+                workspace.setMinHeight(
+                    Math.max( ( Double.valueOf( heightField.getText() ).doubleValue() ), 150 ) );
+                workspace.setMaxHeight(
+                    Math.max( ( Double.valueOf( heightField.getText() ).doubleValue() ), 150 ) );
 
                 if ( ipValidation( ipField.getText() ) )
                 {

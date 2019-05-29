@@ -40,8 +40,7 @@ public class Server // extends Application
         {
 
             InetAddress IP = InetAddress.getLocalHost();
-            System.out.println(
-                "Sever Online\nIP: " + IP.getHostAddress() + "\nPort 6666\n" );
+            System.out.println( "Sever Online\nIP: " + IP.getHostAddress() + "\nPort 6666\n" );
             // renew the hashmap for file so that it's updated for client to
             // pull
             loadHashMap();
@@ -52,10 +51,8 @@ public class Server // extends Application
                 // initialization of the server socket and streams
                 ServerSocket ss = new ServerSocket( 6666 );
                 Socket socket = ss.accept();
-                ObjectInputStream ois = new ObjectInputStream(
-                    socket.getInputStream() );
-                ObjectOutputStream oos = new ObjectOutputStream(
-                    socket.getOutputStream() );
+                ObjectInputStream ois = new ObjectInputStream( socket.getInputStream() );
+                ObjectOutputStream oos = new ObjectOutputStream( socket.getOutputStream() );
 
                 System.out.println();
                 // receive byte
@@ -66,13 +63,11 @@ public class Server // extends Application
                     // saves the file and the date it was last modified
                     case 0:
                         System.out.println( "Case: Save" );
-                        DateTimeFormatter dtf = DateTimeFormatter
-                            .ofPattern( "yyyy-MM-dd HH:mm" );
+                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm" );
                         LocalDateTime time = LocalDateTime.now();
                         String Time = dtf.format( time );
                         String title = "data" + ( iterationNo - 1 );
-                        File file = new File(
-                            backupFileDirectory + "\\" + title + ".java" );
+                        File file = new File( backupFileDirectory + "\\" + title + ".java" );
                         PrintWriter write = new PrintWriter(
                             new BufferedWriter( new FileWriter( file ) ) );
                         map = new LinkedList<String>();
@@ -85,24 +80,19 @@ public class Server // extends Application
                                 {
                                     // prints all of the data into code format
                                     // then send all of it back
-                                    oos.writeObject(
-                                        docHeading( title, Time ) );
+                                    oos.writeObject( docHeading( title, Time ) );
                                     String body = docBody();
-                                    oos.writeObject( body.substring( 0,
-                                        body.length() - 2 ) );
+                                    oos.writeObject( body.substring( 0, body.length() - 2 ) );
                                     oos.writeObject( docEnding() );
-                                    System.out.println(
-                                        file.getName() + " sent to client" );
+                                    System.out.println( file.getName() + " sent to client" );
                                     // saves a backup file inside the server for
                                     // user to open
-                                    write.println(
-                                        "package ServerNetworking.Backup;\r\n"
-                                            + "\r\n" );
+                                    write
+                                        .println( "package ServerNetworking.Backup;\r\n" + "\r\n" );
                                     write.println( docHeading( title, Time ) );
                                     write.print( body );
                                     write.print( docEnding() );
-                                    System.out.println(
-                                        file.getName() + " backed up" );
+                                    System.out.println( file.getName() + " backed up" );
                                     write.close();
                                     fileMap.put( title, file );
                                     oos.close();
@@ -127,6 +117,8 @@ public class Server // extends Application
                                     while ( true )
                                     {
                                         String str = (String)ois.readObject();
+                                        System.out.println( str );
+
                                         if ( str.equals( "quit" ) )
                                         {
                                             break;
@@ -172,8 +164,7 @@ public class Server // extends Application
                     case 2:
                         System.out.println( "Case Retrieve" );
                         String fileName = (String)ois.readObject();
-                        System.out
-                            .println( "Sending " + fileName + " to Client" );
+                        System.out.println( "Sending " + fileName + " to Client" );
                         BufferedReader read = new BufferedReader(
                             new FileReader( fileMap.get( fileName ) ) );
                         String str = read.readLine();
@@ -210,26 +201,20 @@ public class Server // extends Application
      */
     private static String docHeading( String title, String time )
     {
-        return ( "import javafx.application.Application;\r\n"
-            + "import javafx.scene.Scene;\r\n"
+        return ( "import javafx.application.Application;\r\n" + "import javafx.scene.Scene;\r\n"
             + "import javafx.scene.control.Button;\r\n"
-            + "import javafx.scene.control.CheckBox;\r\n"
-            + "import javafx.scene.control.Label;\r\n"
+            + "import javafx.scene.control.CheckBox;\r\n" + "import javafx.scene.control.Label;\r\n"
             + "import javafx.scene.control.RadioButton;\r\n"
-            + "import javafx.scene.control.TextField;\r\n"
-            + "import javafx.scene.image.Image;\r\n"
-            + "import javafx.scene.image.ImageView;\r\n"
-            + "import javafx.scene.layout.Pane;\r\n"
+            + "import javafx.scene.control.TextField;\r\n" + "import javafx.scene.image.Image;\r\n"
+            + "import javafx.scene.image.ImageView;\r\n" + "import javafx.scene.layout.Pane;\r\n"
             + "import javafx.stage.Stage;\r\n\n" + "public class " + title
             + " extends Application { // Time of Creation: " + time + "\r\n\n"
             + "    public static void main( String[] args )\r\n" + "    {\r\n"
-            + "        launch( args );\r\n" + "    }\r\n" + "\r\n" + "\r\n"
-            + "    @Override\r\n" + "    public void start( Stage stage )\r\n"
-            + "    {\r\n"
+            + "        launch( args );\r\n" + "    }\r\n" + "\r\n" + "\r\n" + "    @Override\r\n"
+            + "    public void start( Stage stage )\r\n" + "    {\r\n"
             + "        stage.setTitle( \"\" ); // TODO Put title of window here. \r\n"
-            + "        Pane pane = new Pane();\r\n"
-            + "        Scene scene = new Scene( pane, " + map.getFirst()
-            + ");\r\n"
+            + "        Pane pane = new Pane();\r\n" + "        Scene scene = new Scene( pane, "
+            + map.getFirst() + ");\r\n"
             + "        pane.setStyle( \"-fx-background-color: #ffffff\" );\r\n"
             + "        stage.setScene( scene );\r\n" );
     }
@@ -270,21 +255,16 @@ public class Server // extends Application
     {
         File directory = new File( "ServerNetworking\\Backup" );
         backupFileDirectory = directory.getAbsolutePath();
-        System.out
-            .println( "Loading backup files from " + backupFileDirectory );
+        System.out.println( "Loading backup files from " + backupFileDirectory );
 
         File[] filesInDirectory = directory.listFiles();
         if ( filesInDirectory != null )
         {
             for ( File file : filesInDirectory )
             {
-                if ( file.getName()
-                    .substring( file.getName().length() - 5 )
-                    .equals( ".java" ) )
+                if ( file.getName().substring( file.getName().length() - 5 ).equals( ".java" ) )
                 {
-                    fileMap.put(
-                        file.getName()
-                            .substring( 0, file.getName().indexOf( ".java" ) ),
+                    fileMap.put( file.getName().substring( 0, file.getName().indexOf( ".java" ) ),
                         file );
                     iterationNo++;
                     System.out.println( "Loaded " + file.getName() );
@@ -299,8 +279,7 @@ public class Server // extends Application
     }
 
 
-    private static void toCode( String type, ObjectInputStream ois )
-        throws Exception
+    private static void toCode( String type, ObjectInputStream ois ) throws Exception
     {
         String name = (String)ois.readObject();
         String indent = "        ";
@@ -309,21 +288,17 @@ public class Server // extends Application
             out += "\" " + (String)ois.readObject() + "\" );\r\n";
         else
             out += ");\r\n";
-        out += indent + name + ".setTranslateX(" + (String)ois.readObject()
-            + ");\r\n";
-        out += indent + name + ".setTranslateY(" + (String)ois.readObject()
-            + ");\r\n";
+        out += indent + name + ".setTranslateX(" + (String)ois.readObject() + ");\r\n";
+        out += indent + name + ".setTranslateY(" + (String)ois.readObject() + ");\r\n";
         if ( RESIZABLE_LIST.contains( type ) )
         {
-            out += indent + name + ".setMinWidth(" + (String)ois.readObject()
-                + ");\r\n";
-            out += indent + name + ".setMinHeight(" + (String)ois.readObject()
-                + ");\r\n";
+            out += indent + name + ".setMinWidth(" + (String)ois.readObject() + ");\r\n";
+            out += indent + name + ".setMinHeight(" + (String)ois.readObject() + ");\r\n";
         }
         if ( type.equals( "ImageView" ) )
         {
-            out += indent + "Image " + name + "Image = new Image(\""
-                + ois.readObject() + "\");\r\n";
+            out += indent + "Image " + name + "Image = new Image(\"" + ois.readObject()
+                + "\");\r\n";
             out += indent + name + ".setImage(" + name + "Image);\r\n";
         }
         out += indent + "pane.getChildren().add(" + name + ");\r\n";

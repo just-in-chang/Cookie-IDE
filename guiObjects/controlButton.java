@@ -1,7 +1,5 @@
 package guiObjects;
 
-import java.util.LinkedList;
-
 import App.WorkspacePane;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -39,22 +37,15 @@ public class controlButton extends Button
      *            stack to add instance to in order to be able to save the
      *            configuration
      */
-    public controlButton(
-        String text,
-        Pane workspace,
-        Class<?> c,
-        LinkedList<Node> s,
-        Stage stage )
+    public controlButton( String text, Pane workspace, Class<?> c, Stage stage )
     {
         super( text );
         this.setOnMouseClicked( e -> {
             try
             {
-                Node node = (Node)c.getConstructor( String.class )
-                    .newInstance( text + count );
+                Node node = (Node)c.getConstructor( String.class ).newInstance( text + count );
                 workspace.getChildren().add( node );
                 ( (WorkspacePane)workspace ).addSelection( (guiObject)node );
-                s.add( node );
                 count++;
             }
             catch ( Exception ex )
