@@ -14,36 +14,38 @@ import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 
 public class Server // extends Application
 {
-	//storing server data
-    private static HashMap<String, String> map = new HashMap<String, String>();
-    //storing files inside hashMap
+    // storing server data
+    private static LinkedList<String> map = new LinkedList<String>();
+
+    // storing files inside hashMap
     private static HashMap<String, File> fileMap = new HashMap<String, File>();
-    
+
     private static byte iterationNo = 1;
-    
+
     private static String backupFileDirectory = "";
 
 
-    @SuppressWarnings("resource")
     public static void main( String[] args )
     {
         try
         {
-        	
+
             InetAddress IP = InetAddress.getLocalHost();
             System.out.println(
                 "Sever Online\nIP: " + IP.getHostAddress() + "\nPort 6666\n" );
-            //renew the hashmap for file so that it's updated for client to pull
+            // renew the hashmap for file so that it's updated for client to
+            // pull
             loadHashMap();
             while ( true )
             {
                 System.out.println( "Iteration Number " + iterationNo );
                 iterationNo++;
-                //initialization of the server socket and streams
+                // initialization of the server socket and streams
                 ServerSocket ss = new ServerSocket( 6666 );
                 Socket socket = ss.accept();
                 ObjectInputStream ois = new ObjectInputStream(
@@ -52,12 +54,12 @@ public class Server // extends Application
                     socket.getOutputStream() );
 
                 System.out.println();
-                //receive byte
+                // receive byte
                 byte type = ois.readByte();
-                //chooses either to save the files, or open and retrieve it
+                // chooses either to save the files, or open and retrieve it
                 switch ( type )
                 {
-                //saves the file and the date it was last modified
+                    // saves the file and the date it was last modified
                     case 0:
                         System.out.println( "Case: Save" );
                         DateTimeFormatter dtf = DateTimeFormatter
@@ -74,15 +76,18 @@ public class Server // extends Application
                             {
                                 try
                                 {
-                                	//prints all of the data into code format then send all of it back
+                                    // prints all of the data into code format
+                                    // then send all of it back
                                     oos.writeObject( docHeading() );
-                                    oos.writeObject( docBody() );
+                                    String body = docBody();
+                                    oos.writeObject( body );
                                     oos.writeObject( docEnding() );
                                     System.out.println(
                                         file.getName() + " sent to client" );
-                                    //saves a backup file inside the server for user to open
+                                    // saves a backup file inside the server for
+                                    // user to open
                                     write.println( docHeading() );
-                                    write.println( docBody() );
+                                    write.println( body );
                                     write.print( docEnding() );
                                     System.out.println(
                                         file.getName() + " backed up" );
@@ -104,9 +109,9 @@ public class Server // extends Application
                             {
                                 try
                                 {
-                                	//puts the information received from client into a hashmap to store
-                                    map.put( "docInfo",
-                                        (String)ois.readObject() );
+                                    // puts the information received from client
+                                    // into a hashmap to store
+                                    map.add( (String)ois.readObject() );
                                     while ( true )
                                     {
                                         String str = (String)ois.readObject();
@@ -130,7 +135,8 @@ public class Server // extends Application
                         ss.close();
                         System.out.println( "Save Success\n" );
                         break;
-                     //Opens the all the java files available for the user to select
+                    // Opens the all the java files available for the user to
+                    // select
                     case 1:
                         System.out.println( "Case Open" );
                         int mapSize = fileMap.keySet().size();
@@ -148,7 +154,7 @@ public class Server // extends Application
                         ss.close();
                         iterationNo--;
                         break;
-                    //Retrieves the file so that the code is sent to the user
+                    // Retrieves the file so that the code is sent to the user
                     case 2:
                         System.out.println( "Case Retrieve" );
                         String fileName = (String)ois.readObject();
@@ -176,8 +182,11 @@ public class Server // extends Application
         }
     }
 
+
     /**
-     * The code that's going to be placed inside a java file when the data is transferred over
+     * The code that's going to be placed inside a java file when the data is
+     * transferred over
+     * 
      * @return the start of the code
      */
     private static String docHeading()
@@ -193,25 +202,33 @@ public class Server // extends Application
             + "    {\r\n"
             + "        stage.setTitle( \"\" ); // TODO Put title of window here. \r\n"
             + "        Pane pane = new Pane();\r\n"
-            + "        Scene scene = new Scene( pane, " + map.get( "docInfo" )
+            + "        Scene scene = new Scene( pane, " + map.getFirst()
             + ");\r\n"
             + "        pane.setStyle( \"-fx-background-color: #ffffff\" );\r\n"
             + "        stage.setScene( scene );\r\n" );
     }
 
-    
+
     /**
-     * the body of the code
+     * 
+     * Main chunk of code.
+     * 
+     * @return Body of code with all the stuff
      */
     private static String docBody()
     {
         String out = "";
+        for ( String str : map )
+        {
+            out += "        " + str + "\r\n";
+        }
         return out;
     }
 
-    
+
     /**
-     * loads all the files inside the backup folder to a hashmap so that it is accessible for the user
+     * loads all the files inside the backup folder to a hashmap so that it is
+     * accessible for the user
      */
     private static void loadHashMap()
     {
