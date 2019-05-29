@@ -306,7 +306,7 @@ public class Server // extends Application
         String indent = "        ";
         String out = indent + type + " " + name + " = new " + type + "(";
         if ( LABELED_LIST.contains( type ) )
-            out += "\" " + (String)ois.readObject() + "\" );\r\n";
+            out += "\"" + (String)ois.readObject() + "\" );\r\n";
         else
             out += ");\r\n";
         out += indent + name + ".setTranslateX(" + (String)ois.readObject()
