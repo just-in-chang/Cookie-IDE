@@ -38,7 +38,6 @@ public class Server // extends Application
     {
         try
         {
-
             InetAddress IP = InetAddress.getLocalHost();
             System.out.println( "Sever Online\nIP: " + IP.getHostAddress() + "\nPort 6666\n" );
             // renew the hashmap for file so that it's updated for client to
@@ -112,7 +111,7 @@ public class Server // extends Application
                                 try
                                 {
                                     // puts the information received from client
-                                    // into a hashmap to store
+                                    // into a LinkedList to store
                                     map.add( (String)ois.readObject() );
                                     while ( true )
                                     {
@@ -127,8 +126,14 @@ public class Server // extends Application
                                     }
                                     putOut.run();
                                 }
+                                catch ( StringIndexOutOfBoundsException ex )
+                                {
+                                    putOut.run();
+                                }
                                 catch ( Exception ex )
                                 {
+                                    putOut.run();
+
                                     System.out.println( "oof" + ex );
                                 }
                             }

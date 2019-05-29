@@ -147,9 +147,9 @@ public class Main extends Application
         file.getItems().addAll( save, open );
         menu.getMenus().addAll( file );
         menuBar.getChildren().addAll( menu );
-        Compiler compile = new Compiler( serverIP );
 
         save.setOnAction( e -> {
+            Compiler compile = new Compiler( serverIP );
             LinkedList<Node> nodeList = new LinkedList<Node>();
             System.out.println( this.workspace.getChildren().size() );
             for ( Node n : this.workspace.getChildren() )
@@ -161,6 +161,7 @@ public class Main extends Application
         } );
 
         open.setOnAction( e -> {
+            Compiler compile = new Compiler( serverIP );
             compile.open( stage );
         } );
 
