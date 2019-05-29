@@ -75,6 +75,7 @@ public class Server // extends Application
                             backupFileDirectory + "\\" + title + ".java" );
                         PrintWriter write = new PrintWriter(
                             new BufferedWriter( new FileWriter( file ) ) );
+                        map = new LinkedList<String>();
                         Thread putOut = new Thread()
                         {
                             @Override
@@ -87,7 +88,8 @@ public class Server // extends Application
                                     oos.writeObject(
                                         docHeading( title, Time ) );
                                     String body = docBody();
-                                    oos.writeObject( body );
+                                    oos.writeObject( body.substring( 0,
+                                        body.length() - 2 ) );
                                     oos.writeObject( docEnding() );
                                     System.out.println(
                                         file.getName() + " sent to client" );
@@ -97,12 +99,12 @@ public class Server // extends Application
                                         "package ServerNetworking.Backup;\r\n"
                                             + "\r\n" );
                                     write.println( docHeading( title, Time ) );
-                                    write.println( body );
+                                    write.print( body );
                                     write.print( docEnding() );
                                     System.out.println(
                                         file.getName() + " backed up" );
                                     write.close();
-                                    fileMap.put( dtf.format( time ), file );
+                                    fileMap.put( title, file );
                                     oos.close();
                                 }
                                 catch ( Exception ex )
@@ -175,19 +177,20 @@ public class Server // extends Application
                         BufferedReader read = new BufferedReader(
                             new FileReader( fileMap.get( fileName ) ) );
                         String str = read.readLine();
+                        int count = 3;
                         while ( str != null )
                         {
-                            if ( !str.contains(
-                                "package ServerNetworking.Backup;" ) )
-                            {
+                            if ( count == 0 )
                                 oos.writeObject( str );
-                                str = read.readLine();
-                            }
+                            else
+                                count--;
+                            str = read.readLine();
                         }
                         oos.writeObject( "quit" );
                         oos.close();
                         ss.close();
                         System.out.println( "Retrieve Success\n" );
+                        iterationNo--;
                         break;
                 }
             }
@@ -214,10 +217,11 @@ public class Server // extends Application
             + "import javafx.scene.control.Label;\r\n"
             + "import javafx.scene.control.RadioButton;\r\n"
             + "import javafx.scene.control.TextField;\r\n"
+            + "import javafx.scene.image.Image;\r\n"
             + "import javafx.scene.image.ImageView;\r\n"
             + "import javafx.scene.layout.Pane;\r\n"
             + "import javafx.stage.Stage;\r\n\n" + "public class " + title
-            + " extends Application { // Time of Creation: " + time + "\r\n"
+            + " extends Application { // Time of Creation: " + time + "\r\n\n"
             + "    public static void main( String[] args )\r\n" + "    {\r\n"
             + "        launch( args );\r\n" + "    }\r\n" + "\r\n" + "\r\n"
             + "    @Override\r\n" + "    public void start( Stage stage )\r\n"
@@ -300,9 +304,9 @@ public class Server // extends Application
     {
         String name = (String)ois.readObject();
         String indent = "        ";
-        String out = indent + type + " " + name + " = new " + type + "(\"";
+        String out = indent + type + " " + name + " = new " + type + "(";
         if ( LABELED_LIST.contains( type ) )
-            out += " " + (String)ois.readObject() + "\" );\r\n";
+            out += "\" " + (String)ois.readObject() + "\" );\r\n";
         else
             out += ");\r\n";
         out += indent + name + ".setTranslateX(" + (String)ois.readObject()
@@ -315,6 +319,12 @@ public class Server // extends Application
                 + ");\r\n";
             out += indent + name + ".setMinHeight(" + (String)ois.readObject()
                 + ");\r\n";
+        }
+        if ( type.equals( "ImageView" ) )
+        {
+            out += indent + "Image " + name + "Image = new Image(\""
+                + ois.readObject() + "\");\r\n";
+            out += indent + name + ".setImage(" + name + "Image);\r\n";
         }
         out += indent + "pane.getChildren().add(" + name + ");\r\n";
         map.add( out );

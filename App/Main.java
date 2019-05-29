@@ -31,7 +31,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
@@ -311,8 +310,9 @@ public class Main extends Application
         rePane.getChildren().add( new Separator( Orientation.VERTICAL ) );
         rePane.getChildren().addAll( ePane );
         ePane.getChildren().addAll( label, coordPane );
-        
-        guiObject selected = ((WorkspacePane)workspace).getSelectableGroup().getSelected();
+
+        guiObject selected = ( (WorkspacePane)workspace ).getSelectableGroup()
+            .getSelected();
 
         if ( selected instanceof Labeled )
         {
@@ -328,11 +328,13 @@ public class Main extends Application
         {
             LabeledPane labelPane = new LabeledPane( "URL: " );
             ePane.getChildren().addAll( labelPane );
-            
-            labelPane.getTextField().setText( ((guiImageView)selected).getURL() );
+
+            labelPane.getTextField()
+                .setText( ( (guiImageView)selected ).getURL() );
 
             labelPane.getApplyButton().setOnAction( e -> {
-                ( (guiImageView)selectedNode ).setURL( labelPane.getTextField().getText() );
+                ( (guiImageView)selectedNode )
+                    .setURL( labelPane.getTextField().getText() );
             } );
         }
 

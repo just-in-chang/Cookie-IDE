@@ -13,6 +13,7 @@ import java.net.Socket;
 import java.util.LinkedList;
 
 import Miscellaneous.Notification;
+import guiObjects.guiImageView;
 import guiObjects.guiObject;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -322,8 +323,8 @@ public class Compiler
     {
         oos.writeObject( "ImageView" );
         oos.writeObject( ( (guiObject)n ).getName() );
-        // Need to retrieve image source
         boundsLocation( oos, boundsInScene );
+        oos.writeObject( ( (guiImageView)n ).getURL() );
     }
 
 
