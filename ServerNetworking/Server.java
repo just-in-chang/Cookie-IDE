@@ -29,6 +29,10 @@ public class Server // extends Application
 
     private static String backupFileDirectory = "";
 
+    private static final String LABELED_LIST = "ButtonLabelTextFieldRadioButtonCheckBox";
+
+    private static final String RESIZABLE_LIST = "ButtonLabelTextField";
+
 
     public static void main( String[] args )
     {
@@ -65,8 +69,9 @@ public class Server // extends Application
                         DateTimeFormatter dtf = DateTimeFormatter
                             .ofPattern( "yyyy-MM-dd_HHmm" );
                         LocalDateTime time = LocalDateTime.now();
-                        File file = new File( backupFileDirectory + "\\"
-                            + dtf.format( time ) + ".java" );
+                        String Time = dtf.format( time );
+                        File file = new File(
+                            backupFileDirectory + "\\" + Time + ".java" );
                         PrintWriter write = new PrintWriter(
                             new BufferedWriter( new FileWriter( file ) ) );
                         Thread putOut = new Thread()
@@ -78,7 +83,7 @@ public class Server // extends Application
                                 {
                                     // prints all of the data into code format
                                     // then send all of it back
-                                    oos.writeObject( docHeading() );
+                                    oos.writeObject( docHeading( Time ) );
                                     String body = docBody();
                                     oos.writeObject( body );
                                     oos.writeObject( docEnding() );
@@ -86,7 +91,7 @@ public class Server // extends Application
                                         file.getName() + " sent to client" );
                                     // saves a backup file inside the server for
                                     // user to open
-                                    write.println( docHeading() );
+                                    write.println( docHeading( Time ) );
                                     write.println( body );
                                     write.print( docEnding() );
                                     System.out.println(
@@ -116,8 +121,10 @@ public class Server // extends Application
                                     {
                                         String str = (String)ois.readObject();
                                         if ( str.equals( "quit" ) )
+                                        {
                                             break;
-                                        System.out.println( str );
+                                        }
+                                        toCode( str, ois );
                                     }
                                     putOut.run();
                                 }
@@ -189,13 +196,19 @@ public class Server // extends Application
      * 
      * @return the start of the code
      */
-    private static String docHeading()
+    private static String docHeading( String time )
     {
         return ( "import javafx.application.Application;\r\n"
             + "import javafx.scene.Scene;\r\n"
+            + "import javafx.scene.control.Button;\r\n"
+            + "import javafx.scene.control.CheckBox;\r\n"
+            + "import javafx.scene.control.Label;\r\n"
+            + "import javafx.scene.control.RadioButton;\r\n"
+            + "import javafx.scene.control.TextField;\r\n"
+            + "import javafx.scene.image.ImageView;\r\n"
             + "import javafx.scene.layout.Pane;\r\n"
-            + "import javafx.stage.Stage;\r\n" + "\r\n" + "\r\n"
-            + "public class out extends Application\r\n" + "{\r\n"
+            + "import javafx.stage.Stage;\r\n\n" + "public class " + time
+            + " extends Application{\r\n"
             + "    public static void main( String[] args )\r\n" + "    {\r\n"
             + "        launch( args );\r\n" + "    }\r\n" + "\r\n" + "\r\n"
             + "    @Override\r\n" + "    public void start( Stage stage )\r\n"
@@ -210,19 +223,29 @@ public class Server // extends Application
 
 
     /**
-     * 
-     * Main chunk of code.
-     * 
      * @return Body of code with all the stuff
      */
     private static String docBody()
     {
+        boolean meme = true;
         String out = "";
         for ( String code : map )
         {
-            out += "        " + code + "\r\n";
+            if ( !meme )
+                out += code + "\r\n";
+            else
+                meme = false;
         }
         return out;
+    }
+
+
+    /**
+     * @return the ending of the code
+     */
+    private static String docEnding()
+    {
+        return ( "        stage.show();\r\n" + "    }\r\n" + "}\r\n" );
     }
 
 
@@ -263,12 +286,27 @@ public class Server // extends Application
     }
 
 
-    /**
-     * @return the ending of the code
-     */
-    private static String docEnding()
+    private static void toCode( String type, ObjectInputStream ois )
+        throws Exception
     {
-        return ( "        stage.show();\r\n" + "    }\r\n" + "}\r\n" );
+        String name = (String)ois.readObject();
+        String indent = "        ";
+        String out = indent + type + " " + name + " = new " + type + "(\"";
+        if ( LABELED_LIST.contains( type ) )
+            out += " " + (String)ois.readObject() + "\" );\r\n";
+        else
+            out += ");\r\n";
+        out += indent + name + ".setTranslateX(" + (String)ois.readObject()
+            + ");\r\n";
+        out += indent + name + ".setTranslateY(" + (String)ois.readObject()
+            + ");\r\n";
+        if ( RESIZABLE_LIST.contains( type ) )
+        {
+            out += indent + name + ".setMinWidth(" + (String)ois.readObject()
+                + ");\r\n";
+            out += indent + name + ".setMinHeight(" + (String)ois.readObject()
+                + ");\r\n";
+        }
+        map.add( out );
     }
-
 }

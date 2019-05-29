@@ -13,6 +13,7 @@ import java.net.Socket;
 import java.util.LinkedList;
 
 import Miscellaneous.Notification;
+import guiObjects.guiObject;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -114,7 +115,7 @@ public class Compiler
                                 else if ( n instanceof TextField )
                                     sendTextField( oos, boundsInScene, n );
                                 else if ( n instanceof ImageView )
-                                    sendImageView( oos, boundsInScene );
+                                    sendImageView( oos, boundsInScene, n );
                                 else if ( n instanceof RadioButton )
                                     sendCheckableButton( "RadioButton",
                                         oos,
@@ -125,7 +126,6 @@ public class Compiler
                                         oos,
                                         boundsInScene,
                                         n );
-                                oos.writeObject( "endnodeweir" );
                             }
                             oos.writeObject( "quit" );
                         }
@@ -291,9 +291,9 @@ public class Compiler
         throws Exception
     {
         oos.writeObject( type );
+        oos.writeObject( ( (guiObject)n ).getName() );
         oos.writeObject( ( (Labeled)n ).getText() );
-        oos.writeObject( Double.toString( boundsInScene.getMinX() ) );
-        oos.writeObject( Double.toString( boundsInScene.getMinY() ) );
+        boundsLocation( oos, boundsInScene );
         oos.writeObject( Double.toString( boundsInScene.getWidth() ) );
         oos.writeObject( Double.toString( boundsInScene.getHeight() ) );
     }
@@ -306,6 +306,7 @@ public class Compiler
         throws Exception
     {
         oos.writeObject( "TextField" );
+        oos.writeObject( ( (guiObject)n ).getName() );
         oos.writeObject( ( (TextInputControl)n ).getText() );
         boundsLocation( oos, boundsInScene );
         oos.writeObject( Double.toString( boundsInScene.getWidth() ) );
@@ -313,10 +314,14 @@ public class Compiler
     }
 
 
-    private void sendImageView( ObjectOutputStream oos, Bounds boundsInScene )
+    private void sendImageView(
+        ObjectOutputStream oos,
+        Bounds boundsInScene,
+        Node n )
         throws Exception
     {
         oos.writeObject( "ImageView" );
+        oos.writeObject( ( (guiObject)n ).getName() );
         // Need to retrieve image source
         boundsLocation( oos, boundsInScene );
     }
@@ -330,6 +335,7 @@ public class Compiler
         throws Exception
     {
         oos.writeObject( type );
+        oos.writeObject( ( (guiObject)n ).getName() );
         oos.writeObject( ( (ButtonBase)n ).getText() );
         boundsLocation( oos, boundsInScene );
     }
