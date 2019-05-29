@@ -314,14 +314,13 @@ public class Compiler
     }
 
 
-    private void sendImageView(
-        ObjectOutputStream oos,
-        Bounds boundsInScene,
-        Node n )
+    private void sendImageView( ObjectOutputStream oos, Bounds boundsInScene )
         throws Exception
     {
         oos.writeObject( "ImageView" );
         // Need to retrieve image source
+        oos.writeObject( Double.toString( boundsInScene.getMinX() ) );
+        oos.writeObject( Double.toString( boundsInScene.getMinY() ) );
     }
 
 
