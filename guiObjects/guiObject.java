@@ -7,7 +7,7 @@ public interface guiObject
     public String getName();
 
 
-    public void setName( String name );
+    public void setName( String n );
 
 
     public boolean isThisSelected();

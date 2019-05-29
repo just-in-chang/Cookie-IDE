@@ -8,6 +8,7 @@ import Miscellaneous.Notification;
 import Miscellaneous.SelectableGroup;
 import guiObjects.controlButton;
 import guiObjects.guiButton;
+import guiObjects.guiCheckBox;
 import guiObjects.guiImageView;
 import guiObjects.guiLabel;
 import guiObjects.guiObject;
@@ -170,6 +171,7 @@ public class Main extends Application
         Label mouseY = new Label( "lmao" );
         Label selected = new Label( "Selected:  " );
         statusBar.getChildren().addAll( mouseX, mouseY, selected );
+        
         Thread statusUpdate = new Thread( new Runnable()
         {
             @Override
@@ -273,6 +275,11 @@ public class Main extends Application
             guiRadioButton.class,
             nodeList,
             stage ), 0, 5 );
+        controlPanel.add( new controlButton( "CheckBox",
+            workspace,
+            guiCheckBox.class,
+            nodeList,
+            stage ), 0, 6 );
 
         controlPanel.add( new Separator( Orientation.HORIZONTAL ), 0, 3 );
 
@@ -387,6 +394,7 @@ public class Main extends Application
                 if ( ipValidation( ipField.getText() ) )
                 {
                     serverIP = ipField.getText();
+                    System.out.println( serverIP );
                 }
 
                 popup.close();

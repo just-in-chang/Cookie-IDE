@@ -1,29 +1,25 @@
 package guiObjects;
 
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.CheckBox;
 
-
-public class guiRadioButton extends RadioButton implements guiObject
+public class guiCheckBox extends CheckBox implements guiObject
 {
     private String name;
-
+    
     private boolean select;
-
-
-    public guiRadioButton()
+    
+    public guiCheckBox()
     {
-        this( "" );
+        this("");
     }
-
-
-    public guiRadioButton( String label )
+    
+    public guiCheckBox( String label )
     {
-        super( label );
+        super(label);
         name = label;
         select = false;
         m.setManipulate( this, false );
     }
-
 
     @Override
     public String getName()
