@@ -86,6 +86,11 @@ public class Main extends Application
     private String serverIP;
 
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javafx.application.Application#start(javafx.stage.Stage)
+     */
     @Override
     public void start( Stage stage )
     {
@@ -139,6 +144,15 @@ public class Main extends Application
     }
 
 
+    /**
+     * Creates the menu bar.
+     * 
+     * @param stage
+     *            application stage
+     * @param workspace
+     *            pane to gather node information to compile into code
+     * @return
+     */
     public VBox menu( Stage stage, Pane workspace )
     {
         VBox menuBar = new VBox();
@@ -163,6 +177,14 @@ public class Main extends Application
     }
 
 
+    /**
+     * creates the status bar (at bottom) containing current mouse coordinates
+     * and the currently selected node
+     * 
+     * @param workspace
+     *            pane containing nodes to select
+     * @return HBox containing labels that indicate mouse x,y and selected node
+     */
     public HBox status( Pane workspace )
     {
         HBox statusBar = new HBox( 10 );
@@ -192,9 +214,9 @@ public class Main extends Application
                         public void run()
                         {
                             mouseX.setText(
-                                "X: " + ( (WorkspacePane)workspace ).getX() );
+                                "X: " + ( (WorkspacePane)workspace ).getMouseX() );
                             mouseY.setText(
-                                "Y: " + ( (WorkspacePane)workspace ).getY() );
+                                "Y: " + ( (WorkspacePane)workspace ).getMouseY() );
                             SelectableGroup tGroup = ( (WorkspacePane)workspace )
                                 .getSelectableGroup();
                             if ( workspace.getChildren().size() > 0 )
@@ -242,6 +264,16 @@ public class Main extends Application
     }
 
 
+    /**
+     * left hand side of the application containing buttons to create new nodes
+     * in the workspace
+     * 
+     * @param stage
+     *            application stage
+     * @param workspace
+     *            pane to add nodes to
+     * @return an HBox containing all the buttons that add nodes
+     */
     public HBox controlPanel( Stage stage, Pane workspace )
     {
         HBox controlBox = new HBox();
@@ -293,6 +325,15 @@ public class Main extends Application
     }
 
 
+    /**
+     * right hand side of the application which displays currently selected node
+     * and properties that can be changed (label text, image, etc.)
+     * 
+     * @param workspace
+     *            pane which contains nodes
+     * @return an HBox containing all elements that make up and display node
+     *         information
+     */
     public HBox editPanel( Pane workspace )
     {
         HBox rePane = new HBox();
@@ -342,6 +383,16 @@ public class Main extends Application
     }
 
 
+    /**
+     * sets the size of the workspace pane (set during the starting of the
+     * application); also sets server ip to connect to in order to save and
+     * compile
+     * 
+     * @param stage
+     *            application stage
+     * @param workspace
+     *            pane where nodes are to be added and modified
+     */
     private void setSize( Stage stage, WorkspacePane workspace )
     {
         final Stage popup = new Stage();
@@ -415,6 +466,13 @@ public class Main extends Application
     }
 
 
+    /**
+     * validates the given ip to make sure it can be connected to
+     * 
+     * @param ip
+     *            to validate
+     * @return true or false indicating if the ip is validated or not
+     */
     private static boolean ipValidation( String ip )
     {
         try
@@ -449,12 +507,6 @@ public class Main extends Application
         {
             return false;
         }
-    }
-
-
-    public Scene getScene()
-    {
-        return scene;
     }
 
 }

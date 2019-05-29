@@ -5,15 +5,29 @@ import guiObjects.guiObject;
 import javafx.scene.layout.Pane;
 
 
+/**
+ * javafx pane with added methods needed for correct implementation
+ *
+ * @author Andrew Chen
+ * @version May 29, 2019
+ * @author Period: 1
+ * @author Assignment: Cookie IDE
+ *
+ * @author Sources: TODO
+ */
 public class WorkspacePane extends Pane
 {
     private double x;
 
     private double y;
 
-    SelectableGroup group;
+    private SelectableGroup group;
 
 
+    /**
+     * constructs a pane with a SelectableGroup object; defines mouse behavior
+     * in order to update the status bar of mouse coordinates
+     */
     public WorkspacePane()
     {
         super();
@@ -22,41 +36,76 @@ public class WorkspacePane extends Pane
             x = e.getX();
             y = e.getY();
         } );
-        
+
     }
 
 
+    /**
+     * adds given node to the SelectableGroup
+     * 
+     * @param obj
+     *            node to be added
+     */
     public void addSelection( guiObject obj )
     {
         group.add( obj );
     }
 
 
+    /**
+     * returns the SelectableGroup
+     * 
+     * @return SelectableGroup
+     */
     public SelectableGroup getSelectableGroup()
     {
         return group;
     }
 
 
-    public double getX()
+    /**
+     * returns current mouse x coordinate in this pane
+     * 
+     * @return mouse x coordinate
+     */
+    public double getMouseX()
     {
         return x;
     }
 
 
-    public double getY()
+    /**
+     * returns current mouse y coordinate in this pane
+     * 
+     * @return mouse y coordinate
+     */
+    public double getMouseY()
     {
         return y;
     }
 
 
-    public void setX( double x )
+    /**
+     * sets mouse x coordinate because when hovering over nodes in this pane,
+     * mouse events will not fire for this pane
+     * 
+     * @param x
+     *            coordinate to set
+     */
+    public void setMouseX( double x )
     {
         this.x = x;
     }
 
 
-    public void setY( double y )
+    /**
+     * sets mouse y coordinate because when hovering over nodes in this pane,
+     * mouse events will not fire for this pane
+     * 
+     * @param y
+     *            coordinate to set
+     */
+    public void setMouseY( double y )
     {
         this.y = y;
     }

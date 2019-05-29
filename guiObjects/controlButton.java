@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 
 /**
- * creates a button to add an instance of a given class to a given javafx Pane
+ * creates a button to add an instance of a given class to the workspace pane
  *
  * @author Andrew Chen
  * @version May 7, 2019

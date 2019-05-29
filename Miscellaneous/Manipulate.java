@@ -12,6 +12,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 
+/**
+ *  used to modify mouse behavior of given node to implement position and resizing modification
+ *
+ *  @author  Andrew Chen
+ *  @version May 29, 2019
+ *  @author  Period: 1
+ *  @author  Assignment: Cookie IDE
+ *
+ *  @author  Sources: TODO
+ */
 public class Manipulate
 {
     private double x;
@@ -23,6 +33,9 @@ public class Manipulate
     private boolean activeDrag;
 
 
+    /**
+     * creates a Manipulate object with default values
+     */
     public Manipulate()
     {
         x = 0;
@@ -32,15 +45,20 @@ public class Manipulate
     }
 
 
+    /**
+     * method for general javafx control nodes to set mouse behavior; defines mouse drag to move the node or resize the node
+     * @param node node to set behavior
+     * @param resizeable checks if given node is able to be resized or not
+     */
     public void setManipulate( Node node, Boolean resizeable )
     {
         node.setOnMouseMoved( e -> {
             Control src = ( (Control)e.getSource() );
 
             ( (WorkspacePane)src.getParent() )
-                .setX( src.getTranslateX() + e.getX() );
+                .setMouseX( src.getTranslateX() + e.getX() );
             ( (WorkspacePane)src.getParent() )
-                .setY( src.getTranslateY() + e.getY() );
+                .setMouseY( src.getTranslateY() + e.getY() );
 
             if ( resizeable )
             {
@@ -98,9 +116,9 @@ public class Manipulate
                         parent.getMaxHeight() - src.getHeight() ) );
                 }
                 ( (WorkspacePane)src.getParent() )
-                    .setX( src.getTranslateX() + x );
+                    .setMouseX( src.getTranslateX() + x );
                 ( (WorkspacePane)src.getParent() )
-                    .setY( src.getTranslateY() + y );
+                    .setMouseY( src.getTranslateY() + y );
             }
             else
             {
@@ -133,15 +151,19 @@ public class Manipulate
     }
 
 
+    /**
+     * special method for ImageView class, as it has differing methods than regular javafx control nodes
+     * @param node
+     */
     public void imageManipulate( ImageView node )
     {
         node.setOnMouseMoved( e -> {
             Node src = ( (Node)e.getSource() );
 
             ( (WorkspacePane)src.getParent() )
-                .setX( src.getTranslateX() + e.getX() );
+                .setMouseX( src.getTranslateX() + e.getX() );
             ( (WorkspacePane)src.getParent() )
-                .setY( src.getTranslateY() + e.getY() );
+                .setMouseY( src.getTranslateY() + e.getY() );
         } );
         node.setOnMouseExited( e -> {
             if ( activeDrag == false )
@@ -181,8 +203,8 @@ public class Manipulate
                 src.setTranslateY( Math.min( Math.max( 0, moveY ),
                     parent.getMaxHeight() - src.getImage().getHeight() ) );
             }
-            ( (WorkspacePane)src.getParent() ).setX( src.getTranslateX() + x );
-            ( (WorkspacePane)src.getParent() ).setY( src.getTranslateY() + y );
+            ( (WorkspacePane)src.getParent() ).setMouseX( src.getTranslateX() + x );
+            ( (WorkspacePane)src.getParent() ).setMouseY( src.getTranslateY() + y );
         } );
         node.setOnMouseReleased( e -> {
             node.getScene().setCursor( Cursor.DEFAULT );
@@ -210,9 +232,9 @@ public class Manipulate
             Control src = ( (Control)e.getSource() );
 
             ( (WorkspacePane)src.getParent() )
-                .setX( src.getTranslateX() + e.getX() );
+                .setMouseX( src.getTranslateX() + e.getX() );
             ( (WorkspacePane)src.getParent() )
-                .setY( src.getTranslateY() + e.getY() );
+                .setMouseY( src.getTranslateY() + e.getY() );
             if ( ( e.getX() > src.getWidth() - 6 ) )
             {
                 resize = true;
@@ -256,9 +278,9 @@ public class Manipulate
                 node.setTranslateY( Math.min( Math.max( 0, moveY ),
                     parent.getMaxHeight() - node.getHeight() ) );
                 ( (WorkspacePane)node.getParent() )
-                    .setX( node.getTranslateX() + x );
+                    .setMouseX( node.getTranslateX() + x );
                 ( (WorkspacePane)node.getParent() )
-                    .setY( node.getTranslateY() + y );
+                    .setMouseY( node.getTranslateY() + y );
             }
             else
             {
