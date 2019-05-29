@@ -67,11 +67,12 @@ public class Server // extends Application
                     case 0:
                         System.out.println( "Case: Save" );
                         DateTimeFormatter dtf = DateTimeFormatter
-                            .ofPattern( "yyyy-MM-dd_HHmm" );
+                            .ofPattern( "yyyy-MM-dd HH:mm" );
                         LocalDateTime time = LocalDateTime.now();
                         String Time = dtf.format( time );
+                        String title = "data" + ( iterationNo - 1 );
                         File file = new File(
-                            backupFileDirectory + "\\" + Time + ".java" );
+                            backupFileDirectory + "\\" + title + ".java" );
                         PrintWriter write = new PrintWriter(
                             new BufferedWriter( new FileWriter( file ) ) );
                         Thread putOut = new Thread()
@@ -83,7 +84,8 @@ public class Server // extends Application
                                 {
                                     // prints all of the data into code format
                                     // then send all of it back
-                                    oos.writeObject( docHeading( Time ) );
+                                    oos.writeObject(
+                                        docHeading( title, Time ) );
                                     String body = docBody();
                                     oos.writeObject( body );
                                     oos.writeObject( docEnding() );
@@ -91,7 +93,10 @@ public class Server // extends Application
                                         file.getName() + " sent to client" );
                                     // saves a backup file inside the server for
                                     // user to open
-                                    write.println( docHeading( Time ) );
+                                    write.println(
+                                        "package ServerNetworking.Backup;\r\n"
+                                            + "\r\n" );
+                                    write.println( docHeading( title, Time ) );
                                     write.println( body );
                                     write.print( docEnding() );
                                     System.out.println(
@@ -172,8 +177,12 @@ public class Server // extends Application
                         String str = read.readLine();
                         while ( str != null )
                         {
-                            oos.writeObject( str );
-                            str = read.readLine();
+                            if ( !str.contains(
+                                "package ServerNetworking.Backup;" ) )
+                            {
+                                oos.writeObject( str );
+                                str = read.readLine();
+                            }
                         }
                         oos.writeObject( "quit" );
                         oos.close();
@@ -196,7 +205,7 @@ public class Server // extends Application
      * 
      * @return the start of the code
      */
-    private static String docHeading( String time )
+    private static String docHeading( String title, String time )
     {
         return ( "import javafx.application.Application;\r\n"
             + "import javafx.scene.Scene;\r\n"
@@ -207,8 +216,8 @@ public class Server // extends Application
             + "import javafx.scene.control.TextField;\r\n"
             + "import javafx.scene.image.ImageView;\r\n"
             + "import javafx.scene.layout.Pane;\r\n"
-            + "import javafx.stage.Stage;\r\n\n" + "public class " + time
-            + " extends Application{\r\n"
+            + "import javafx.stage.Stage;\r\n\n" + "public class " + title
+            + " extends Application { // Time of Creation: " + time + "\r\n"
             + "    public static void main( String[] args )\r\n" + "    {\r\n"
             + "        launch( args );\r\n" + "    }\r\n" + "\r\n" + "\r\n"
             + "    @Override\r\n" + "    public void start( Stage stage )\r\n"
@@ -307,6 +316,7 @@ public class Server // extends Application
             out += indent + name + ".setMinHeight(" + (String)ois.readObject()
                 + ");\r\n";
         }
+        out += indent + "pane.getChildren().add(" + name + ");\r\n";
         map.add( out );
     }
 }
