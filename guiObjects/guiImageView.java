@@ -10,16 +10,30 @@ public class guiImageView extends ImageView implements guiObject
     private String name;
 
     private boolean select;
+    
+    private String URL;
 
 
     public guiImageView( String label )
     {
         super( new Image( "https://i.redd.it/i2q0r20gyeo21.png" ) );
+        URL = "https://i.redd.it/i2q0r20gyeo21.png";
         m.imageManipulate( this );
         name = label;
         select = false;
     }
+    
+    public void setURL(String url)
+    {
+        Image i = new Image(url);
+        this.setImage( i );
+        URL = url;
+    }
 
+    public String getURL()
+    {
+        return URL;
+    }
 
     @Override
     public String getName()
