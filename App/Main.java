@@ -165,7 +165,6 @@ public class Main extends Application
         save.setOnAction( e -> {
             Compiler compile = new Compiler( serverIP );
             LinkedList<Node> nodeList = new LinkedList<Node>();
-            System.out.println( this.workspace.getChildren().size() );
             for ( Node n : this.workspace.getChildren() )
             {
                 System.out.println( ( (guiObject)n ).getName() );

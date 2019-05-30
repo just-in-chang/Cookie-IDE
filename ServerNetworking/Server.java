@@ -130,8 +130,6 @@ public class Server // extends Application
                                     while ( true )
                                     {
                                         String str = (String)ois.readObject();
-                                        System.out.println( str );
-
                                         if ( str.equals( "quit" ) )
                                         {
                                             break;
