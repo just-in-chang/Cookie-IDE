@@ -10,12 +10,6 @@ public class guiTextField extends TextField implements guiObject
     private boolean select;
 
 
-    public guiTextField()
-    {
-        this( "" );
-    }
-
-
     public guiTextField( String text )
     {
         super( text );

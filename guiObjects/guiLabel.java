@@ -20,12 +20,6 @@ public class guiLabel extends Label implements guiObject
     private boolean select;
 
 
-    public guiLabel()
-    {
-        this( "" );
-    }
-
-
     public guiLabel( String label )
     {
         super( label );

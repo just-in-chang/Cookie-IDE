@@ -2,24 +2,22 @@ package guiObjects;
 
 import javafx.scene.control.CheckBox;
 
+
 public class guiCheckBox extends CheckBox implements guiObject
 {
     private String name;
-    
+
     private boolean select;
-    
-    public guiCheckBox()
-    {
-        this("");
-    }
-    
+
+
     public guiCheckBox( String label )
     {
-        super(label);
+        super( label );
         name = label;
         select = false;
         m.setManipulate( this, false );
     }
+
 
     @Override
     public String getName()

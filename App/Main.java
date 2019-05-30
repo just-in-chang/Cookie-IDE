@@ -84,6 +84,11 @@ public class Main extends Application
     private String serverIP;
 
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javafx.application.Application#start(javafx.stage.Stage)
+     */
     @Override
     public void start( Stage stage )
     {
@@ -137,6 +142,15 @@ public class Main extends Application
     }
 
 
+    /**
+     * Creates the menu bar.
+     * 
+     * @param stage
+     *            application stage
+     * @param workspace
+     *            pane to gather node information to compile into code
+     * @return
+     */
     public VBox menu( Stage stage, Pane workspace )
     {
         VBox menuBar = new VBox();
@@ -154,7 +168,7 @@ public class Main extends Application
             System.out.println( this.workspace.getChildren().size() );
             for ( Node n : this.workspace.getChildren() )
             {
-                System.out.println( ((guiObject)n).getName() );
+                System.out.println( ( (guiObject)n ).getName() );
                 nodeList.add( n );
             }
             compile.send( nodeList, workspace, stage );
@@ -169,6 +183,14 @@ public class Main extends Application
     }
 
 
+    /**
+     * creates the status bar (at bottom) containing current mouse coordinates
+     * and the currently selected node
+     * 
+     * @param workspace
+     *            pane containing nodes to select
+     * @return HBox containing labels that indicate mouse x,y and selected node
+     */
     public HBox status( Pane workspace )
     {
         HBox statusBar = new HBox( 10 );
@@ -197,16 +219,21 @@ public class Main extends Application
                         @Override
                         public void run()
                         {
-                            mouseX.setText( "X: " + ( (WorkspacePane)workspace ).getX() );
-                            mouseY.setText( "Y: " + ( (WorkspacePane)workspace ).getY() );
+
+                            mouseX.setText( "X: "
+                                + ( (WorkspacePane)workspace ).getMouseX() );
+                            mouseY.setText( "Y: "
+                                + ( (WorkspacePane)workspace ).getMouseY() );
+
                             SelectableGroup tGroup = ( (WorkspacePane)workspace )
                                 .getSelectableGroup();
                             if ( workspace.getChildren().size() > 0 )
                             {
-                                selected.setText(
-                                    "Selected:  '" + tGroup.getSelected().getName() + "'" );
+                                selected.setText( "Selected:  '"
+                                    + tGroup.getSelected().getName() + "'" );
 
-                                if ( !tGroup.getSelected().equals( selectedNode ) )
+                                if ( !tGroup.getSelected()
+                                    .equals( selectedNode ) )
                                 {
                                     window.setRight( editPanel( workspace ) );
 
@@ -215,17 +242,23 @@ public class Main extends Application
                                 selectedNode = tGroup.getSelected();
 
                                 Bounds boundsInScene = ( (Node)selectedNode )
-                                    .localToParent( ( (Node)selectedNode ).getLayoutBounds() );
+                                    .localToParent( ( (Node)selectedNode )
+                                        .getLayoutBounds() );
 
-                                editPanelLabel.setText( tGroup.getSelected().getName() );
+                                editPanelLabel
+                                    .setText( tGroup.getSelected().getName() );
                                 coordPane.getxLabel()
-                                    .setText( Double.toString( boundsInScene.getMinX() ) );
+                                    .setText( Double
+                                        .toString( boundsInScene.getMinX() ) );
                                 coordPane.getyLabel()
-                                    .setText( Double.toString( boundsInScene.getMinY() ) );
+                                    .setText( Double
+                                        .toString( boundsInScene.getMinY() ) );
                                 coordPane.getWidthLabel()
-                                    .setText( Double.toString( tGroup.getSelected().getWidth() ) );
+                                    .setText( Double.toString(
+                                        tGroup.getSelected().getWidth() ) );
                                 coordPane.getHeightLabel()
-                                    .setText( Double.toString( tGroup.getSelected().getHeight() ) );
+                                    .setText( Double.toString(
+                                        tGroup.getSelected().getHeight() ) );
                             }
                         }
                     } );
@@ -239,11 +272,22 @@ public class Main extends Application
     }
 
 
+    /**
+     * left hand side of the application containing buttons to create new nodes
+     * in the workspace
+     * 
+     * @param stage
+     *            application stage
+     * @param workspace
+     *            pane to add nodes to
+     * @return an HBox containing all the buttons that add nodes
+     */
     public HBox controlPanel( Stage stage, Pane workspace )
     {
         HBox controlBox = new HBox();
         GridPane controlPanel = new GridPane();
-        controlBox.getChildren().addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
+        controlBox.getChildren()
+            .addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
         controlPanel.setVgap( 10 );
         controlPanel.add( new controlButton( "Button",
             workspace,
@@ -289,6 +333,15 @@ public class Main extends Application
     }
 
 
+    /**
+     * right hand side of the application which displays currently selected node
+     * and properties that can be changed (label text, image, etc.)
+     * 
+     * @param workspace
+     *            pane which contains nodes
+     * @return an HBox containing all elements that make up and display node
+     *         information
+     */
     public HBox editPanel( Pane workspace )
     {
         HBox rePane = new HBox();
@@ -307,7 +360,8 @@ public class Main extends Application
         rePane.getChildren().addAll( ePane );
         ePane.getChildren().addAll( label, coordPane );
 
-        guiObject selected = ( (WorkspacePane)workspace ).getSelectableGroup().getSelected();
+        guiObject selected = ( (WorkspacePane)workspace ).getSelectableGroup()
+            .getSelected();
 
         if ( selected instanceof Labeled )
         {
@@ -315,7 +369,8 @@ public class Main extends Application
             ePane.getChildren().addAll( labelPane );
 
             labelPane.getApplyButton().setOnAction( e -> {
-                ( (Labeled)selectedNode ).setText( labelPane.getTextField().getText() );
+                ( (Labeled)selectedNode )
+                    .setText( labelPane.getTextField().getText() );
             } );
         }
         else if ( selected instanceof ImageView )
@@ -323,10 +378,12 @@ public class Main extends Application
             LabeledPane labelPane = new LabeledPane( "URL: " );
             ePane.getChildren().addAll( labelPane );
 
-            labelPane.getTextField().setText( ( (guiImageView)selected ).getURL() );
+            labelPane.getTextField()
+                .setText( ( (guiImageView)selected ).getURL() );
 
             labelPane.getApplyButton().setOnAction( e -> {
-                ( (guiImageView)selectedNode ).setURL( labelPane.getTextField().getText() );
+                ( (guiImageView)selectedNode )
+                    .setURL( labelPane.getTextField().getText() );
             } );
         }
 
@@ -334,6 +391,16 @@ public class Main extends Application
     }
 
 
+    /**
+     * sets the size of the workspace pane (set during the starting of the
+     * application); also sets server ip to connect to in order to save and
+     * compile
+     * 
+     * @param stage
+     *            application stage
+     * @param workspace
+     *            pane where nodes are to be added and modified
+     */
     private void setSize( Stage stage, WorkspacePane workspace )
     {
         final Stage popup = new Stage();
@@ -368,18 +435,23 @@ public class Main extends Application
         Button butt = new Button( "Submit" );
         butt.setMinWidth( griddy.getBoundsInParent().getWidth() );
         butt.setOnAction( e -> {
-            if ( ( widthField.getText().matches( "[0-9]+" ) && widthField.getText().length() > 0 )
+            if ( ( widthField.getText().matches( "[0-9]+" )
+                && widthField.getText().length() > 0 )
                 || ( heightField.getText().matches( "[0-9]+" )
                     && heightField.getText().length() > 0 ) )
             {
-                workspace.setMinWidth(
-                    Math.max( ( Double.valueOf( widthField.getText() ).doubleValue() ), 150.0 ) );
-                workspace.setMaxWidth(
-                    Math.max( ( Double.valueOf( widthField.getText() ).doubleValue() ), 150 ) );
-                workspace.setMinHeight(
-                    Math.max( ( Double.valueOf( heightField.getText() ).doubleValue() ), 150 ) );
-                workspace.setMaxHeight(
-                    Math.max( ( Double.valueOf( heightField.getText() ).doubleValue() ), 150 ) );
+                workspace.setMinWidth( Math.max(
+                    ( Double.valueOf( widthField.getText() ).doubleValue() ),
+                    150.0 ) );
+                workspace.setMaxWidth( Math.max(
+                    ( Double.valueOf( widthField.getText() ).doubleValue() ),
+                    150 ) );
+                workspace.setMinHeight( Math.max(
+                    ( Double.valueOf( heightField.getText() ).doubleValue() ),
+                    150 ) );
+                workspace.setMaxHeight( Math.max(
+                    ( Double.valueOf( heightField.getText() ).doubleValue() ),
+                    150 ) );
 
                 if ( ipValidation( ipField.getText() ) )
                 {
@@ -402,6 +474,13 @@ public class Main extends Application
     }
 
 
+    /**
+     * validates the given ip to make sure it can be connected to
+     * 
+     * @param ip
+     *            to validate
+     * @return true or false indicating if the ip is validated or not
+     */
     private static boolean ipValidation( String ip )
     {
         try
@@ -436,12 +515,6 @@ public class Main extends Application
         {
             return false;
         }
-    }
-
-
-    public Scene getScene()
-    {
-        return scene;
     }
 
 }

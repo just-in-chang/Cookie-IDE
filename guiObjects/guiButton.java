@@ -21,12 +21,6 @@ public class guiButton extends Button implements guiObject
     private boolean select;
 
 
-    public guiButton()
-    {
-        this( "" );
-    }
-
-
     public guiButton( String label )
     {
         super( label );

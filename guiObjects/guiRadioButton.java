@@ -10,12 +10,6 @@ public class guiRadioButton extends RadioButton implements guiObject
     private boolean select;
 
 
-    public guiRadioButton()
-    {
-        this( "" );
-    }
-
-
     public guiRadioButton( String label )
     {
         super( label );
