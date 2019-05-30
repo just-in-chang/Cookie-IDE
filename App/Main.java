@@ -47,7 +47,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
-// git add .
 public class Main extends Application
 {
     /**
@@ -285,44 +284,41 @@ public class Main extends Application
         GridPane controlPanel = new GridPane();
         controlBox.getChildren()
             .addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
-        controlPanel.setVgap( 10 );
+        controlPanel.setVgap( 5 );
         controlPanel.add( new controlButton( "Button",
-            workspace,
-            guiButton.class,
-
+            workspace, guiButton.class,
             stage ), 0, 0 );
+        
         controlPanel.add( new controlButton( "Label",
             workspace,
             guiLabel.class,
-
             stage ), 0, 1 );
+        
         controlPanel.add( new controlButton( "TextField",
             workspace,
             guiTextField.class,
-
             stage ), 0, 2 );
+        
         controlPanel.add( new controlButton( "ImageView",
             workspace,
             guiImageView.class,
-
-            stage ), 0, 4 );
+            stage ), 0, 3 );
+        
         controlPanel.add( new controlButton( "RadioButton",
             workspace,
             guiRadioButton.class,
-
-            stage ), 0, 5 );
+            stage ), 0, 4 );
+        
         controlPanel.add( new controlButton( "CheckBox",
             workspace,
             guiCheckBox.class,
-
-            stage ), 0, 6 );
-
-        controlPanel.add( new Separator( Orientation.HORIZONTAL ), 0, 3 );
+            stage ), 0, 5 );
 
         for ( Node ass : controlPanel.getChildren() )
         {
             if ( ass instanceof controlButton )
-                ( (controlButton)ass ).setMinWidth( 80 );
+                ( (controlButton)ass ).setMinWidth( 100 );
+                ( (controlButton)ass ).setMinHeight( 100 );
         }
 
         controlPanel.setPadding( new Insets( 25, 25, 25, 25 ) );
