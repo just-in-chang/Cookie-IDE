@@ -258,7 +258,6 @@ public class Server // extends Application
             else
                 meme = false;
         }
-        System.out.println( out );
         return out;
     }
 

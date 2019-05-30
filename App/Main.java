@@ -157,7 +157,7 @@ public class Main extends Application
         MenuBar menu = new MenuBar();
         Menu file = new Menu( "File" );
         MenuItem save = new MenuItem( "Save" );
-        MenuItem open = new MenuItem( "Save Backup" );
+        MenuItem open = new MenuItem( "Retrieve Backup" );
         file.getItems().addAll( save, open );
         menu.getMenus().addAll( file );
         menuBar.getChildren().addAll( menu );
@@ -167,7 +167,6 @@ public class Main extends Application
             LinkedList<Node> nodeList = new LinkedList<Node>();
             for ( Node n : this.workspace.getChildren() )
             {
-                System.out.println( ( (guiObject)n ).getName() );
                 nodeList.add( n );
             }
             compile.send( nodeList, workspace, stage );
@@ -211,14 +210,13 @@ public class Main extends Application
                     }
                     catch ( Exception e )
                     {
-                        System.out.println( e );
+                        // System.out.println( e );
                     }
                     Platform.runLater( new Runnable()
                     {
                         @Override
                         public void run()
                         {
-
                             mouseX.setText( "X: "
                                 + ( (WorkspacePane)workspace ).getMouseX() );
                             mouseY.setText( "Y: "
@@ -427,7 +425,7 @@ public class Main extends Application
         }
         catch ( UnknownHostException e1 )
         {
-            e1.printStackTrace();
+            // e1.printStackTrace();
         }
         TextField ipField = new TextField( serverIP );
         griddy.add( ipField, 1, 2 );
