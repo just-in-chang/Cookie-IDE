@@ -11,11 +11,6 @@ import javafx.stage.Stage;
  * creates a button to add an instance of a given class to the workspace pane
  *
  * @author Andrew Chen
- * @version May 7, 2019
- * @author Period: 1
- * @author Assignment: Cookie IDE
- *
- * @author Sources: TODO
  */
 public class controlButton extends Button
 {
@@ -43,7 +38,8 @@ public class controlButton extends Button
         this.setOnMouseClicked( e -> {
             try
             {
-                Node node = (Node)c.getConstructor( String.class ).newInstance( text + count );
+                Node node = (Node)c.getConstructor( String.class )
+                    .newInstance( text + count );
                 workspace.getChildren().add( node );
                 ( (WorkspacePane)workspace ).addSelection( (guiObject)node );
                 count++;
