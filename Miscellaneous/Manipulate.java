@@ -221,6 +221,10 @@ public class Manipulate
     }
 
 
+    /**
+     * sets event handling for textfields
+     * @param node textfield to set manipulability
+     */
     public void textFieldManipulate( TextField node )
     {
         node.setOnMouseMoved( e -> {
