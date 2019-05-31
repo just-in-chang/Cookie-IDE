@@ -9,11 +9,6 @@ import javafx.scene.layout.Pane;
  * javafx pane with added methods needed for correct implementation
  *
  * @author Andrew Chen
- * @version May 29, 2019
- * @author Period: 1
- * @author Assignment: Cookie IDE
- *
- * @author Sources: TODO
  */
 public class WorkspacePane extends Pane
 {

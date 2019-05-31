@@ -16,11 +16,6 @@ import javafx.scene.layout.Pane;
  *  used to modify mouse behavior of given node to implement position and resizing modification
  *
  *  @author  Andrew Chen
- *  @version May 29, 2019
- *  @author  Period: 1
- *  @author  Assignment: Cookie IDE
- *
- *  @author  Sources: TODO
  */
 public class Manipulate
 {

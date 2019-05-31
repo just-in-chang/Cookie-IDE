@@ -3,6 +3,11 @@ package guiObjects;
 import javafx.scene.control.TextField;
 
 
+/**
+ *  textfield that can be moved around and resized (in width)
+ *
+ *  @author  Andrew Chen
+ */
 public class guiTextField extends TextField implements guiObject
 {
     private String name;
@@ -10,6 +15,10 @@ public class guiTextField extends TextField implements guiObject
     private boolean select;
 
 
+    /**
+     * Constructs a guiTextField with given text/name and sets its manipulability
+     * @param text
+     */
     public guiTextField( String text )
     {
         super( text );
@@ -19,6 +28,9 @@ public class guiTextField extends TextField implements guiObject
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#getName()
+     */
     @Override
     public String getName()
     {
@@ -26,6 +38,9 @@ public class guiTextField extends TextField implements guiObject
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#setName(java.lang.String)
+     */
     @Override
     public void setName( String name )
     {
@@ -34,6 +49,9 @@ public class guiTextField extends TextField implements guiObject
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#isThisSelected()
+     */
     @Override
     public boolean isThisSelected()
     {
@@ -41,6 +59,9 @@ public class guiTextField extends TextField implements guiObject
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#setSelection(boolean)
+     */
     @Override
     public void setSelection( boolean b )
     {

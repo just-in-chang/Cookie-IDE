@@ -5,25 +5,36 @@ import java.util.ArrayList;
 import guiObjects.guiObject;
 
 
+/**
+ *  ArrayList that holds all the nodes from the workspace pane and manages their select state
+ *
+ *  @author  Andrew Chen
+ */
 public class SelectableGroup
 {
     private ArrayList<guiObject> group;
 
 
+    /**
+     * Constructs an ArrayList of guiObjects
+     */
     public SelectableGroup()
     {
         group = new ArrayList<guiObject>();
     }
 
 
-    public boolean add( guiObject node )
+    /**
+     * adds a node to the ArrayList
+     * @param node node to add
+     */
+    public void add( guiObject node )
     {
         group.add( node );
         if ( group.size() == 1 )
         {
             node.setSelection( true );
         }
-        return true;
     }
 
 
