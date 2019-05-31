@@ -4,6 +4,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 
+/**
+ *  imageview that can be moved around and set its image url
+ *
+ *  @author  Andrew Chen
+ */
 public class guiImageView extends ImageView implements guiObject
 {
 
@@ -14,6 +19,10 @@ public class guiImageView extends ImageView implements guiObject
     private String URL;
 
 
+    /**
+     * Constructs an guiImageView with given name and a default image
+     * @param label name to set
+     */
     public guiImageView( String label )
     {
         super( new Image( "https://i.redd.it/i2q0r20gyeo21.png" ) );

@@ -6,12 +6,7 @@ import javafx.scene.control.Button;
 /**
  * button that can be manipulated in size and position
  *
- * @author Andrew
- * @version May 8, 2019
- * @author Period: 1
- * @author Assignment: Cookie IDE
- *
- * @author Sources: TODO
+ * @author Andrew Chen
  */
 public class guiButton extends Button implements guiObject
 {
