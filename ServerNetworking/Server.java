@@ -63,7 +63,7 @@ public class Server // extends Application
                 System.out.println( "Iteration Number " + iterationNo );
                 iterationNo++;
                 // initialization of the server socket and streams
-                ServerSocket ss = new ServerSocket( 6666 );
+                ServerSocket ss = new ServerSocket( 6969 );
                 Socket socket = ss.accept();
                 ObjectInputStream ois = new ObjectInputStream(
                     socket.getInputStream() );
