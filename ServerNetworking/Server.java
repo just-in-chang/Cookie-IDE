@@ -17,6 +17,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 
+/**
+ * The server side, receives files and saves it into the backup folder in the
+ * computer that runs the server. Client can retrieve and access the files.
+ * 
+ * @author Justin and Nick
+ *
+ */
 public class Server // extends Application
 {
     // storing server data
@@ -34,13 +41,20 @@ public class Server // extends Application
     private static final String RESIZABLE_LIST = "ButtonLabelTextField";
 
 
+    /**
+     * 
+     * Initializes a server object.
+     * 
+     * @param args
+     *            Arguments for main
+     */
     public static void main( String[] args )
     {
         try
         {
             InetAddress IP = InetAddress.getLocalHost();
             System.out.println(
-                "Sever Online\nIP: " + IP.getHostAddress() + "\nPort 6666\n" );
+                "Sever Online\nIP: " + IP.getHostAddress() + "\nPort 6969\n" );
             // renew the hashmap for file so that it's updated for client to
             // pull
             loadHashMap();
@@ -308,6 +322,17 @@ public class Server // extends Application
     }
 
 
+    /**
+     * 
+     * Turns the Nodes received into code
+     * 
+     * @param type
+     *            Type of node
+     * @param ois
+     *            Input stream to receive information for node
+     * @throws Exception
+     *             Any exception
+     */
     private static void toCode( String type, ObjectInputStream ois )
         throws Exception
     {

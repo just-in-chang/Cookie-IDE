@@ -44,6 +44,12 @@ public class Compiler
     private static String IP;
 
 
+    /**
+     * Creates a connection to the server with given IP
+     * 
+     * @param ip
+     *            IPv4
+     */
     public Compiler( String ip )
     {
         IP = ip;
@@ -52,7 +58,7 @@ public class Compiler
 
     /**
      * 
-     * Write your method description here.
+     * Sends nodes on workspace to the server and retrieves the code
      * 
      * @param list
      * @param workspace
@@ -79,7 +85,7 @@ public class Compiler
             }
             else
             {
-                Socket socket = new Socket( IP, 6666 );
+                Socket socket = new Socket( IP, 6969 );
                 ObjectOutputStream oos = new ObjectOutputStream(
                     socket.getOutputStream() );
                 ObjectInputStream ois = new ObjectInputStream(
@@ -190,6 +196,12 @@ public class Compiler
     }
 
 
+    /**
+     * 
+     * Selects file to save a backup file from the server.
+     * 
+     * @param stage
+     */
     public void open( final Stage stage )
     {
         FileChooser fileChoose = new FileChooser();
@@ -230,6 +242,17 @@ public class Compiler
     }
 
 
+    /**
+     * 
+     * Retrieves the backup file from the server.
+     * 
+     * @param fileName
+     *            Name of backup file.
+     * @param stage
+     *            Primary stage
+     * @param file
+     *            File to write the backup in
+     */
     private void retrieve( String fileName, final Stage stage, File file )
     {
         try
@@ -284,6 +307,21 @@ public class Compiler
     }
 
 
+    /**
+     * 
+     * Sends a labeled node.
+     * 
+     * @param type
+     *            Type of labeled.
+     * @param oos
+     *            Output stream.
+     * @param boundsInScene
+     *            Bounds of the node.
+     * @param n
+     *            The node.
+     * @throws Exception
+     *             Any exception
+     */
     private void sendLabeled(
         String type,
         ObjectOutputStream oos,
@@ -300,6 +338,19 @@ public class Compiler
     }
 
 
+    /**
+     * 
+     * Sends a text field.
+     * 
+     * @param oos
+     *            Output stream.
+     * @param boundsInScene
+     *            Bounds of node.
+     * @param n
+     *            Node
+     * @throws Exception
+     *             Any exceptions
+     */
     private void sendTextField(
         ObjectOutputStream oos,
         Bounds boundsInScene,
@@ -315,6 +366,19 @@ public class Compiler
     }
 
 
+    /**
+     * 
+     * Sends an image view.
+     * 
+     * @param oos
+     *            Output stream
+     * @param boundsInScene
+     *            Bounds of node
+     * @param n
+     *            node
+     * @throws Exception
+     *             Any exception
+     */
     private void sendImageView(
         ObjectOutputStream oos,
         Bounds boundsInScene,
@@ -328,6 +392,21 @@ public class Compiler
     }
 
 
+    /**
+     * 
+     * Sends nodes that are selectable.
+     * 
+     * @param type
+     *            Type of selectable node
+     * @param oos
+     *            Output stream
+     * @param boundsInScene
+     *            Bounds of node
+     * @param n
+     *            Node
+     * @throws Exception
+     *             Any exception
+     */
     private void sendCheckableButton(
         String type,
         ObjectOutputStream oos,
@@ -342,6 +421,17 @@ public class Compiler
     }
 
 
+    /**
+     * 
+     * Returns x and y coordinates of Node in bounds.
+     * 
+     * @param oos
+     *            Output stream
+     * @param boundsInScene
+     *            Bounds of node
+     * @throws Exception
+     *             Any Exceptions
+     */
     private void boundsLocation( ObjectOutputStream oos, Bounds boundsInScene )
         throws Exception
     {
@@ -350,6 +440,16 @@ public class Compiler
     }
 
 
+    /**
+     * 
+     * Opens popup that allows you to select which backup file.
+     * 
+     * @param stage
+     *            Primary stage
+     * @param ois
+     *            Input stream
+     * @return Name of file
+     */
     private String openPane( Stage stage, ObjectInputStream ois )
     {
         final Stage popup = new Stage();

@@ -47,10 +47,16 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
+/**
+ * 
+ * Main client class for the Cookie IDE
+ *
+ * @author Justin Chang
+ */
 public class Main extends Application
 {
     /**
-     * main class lmao
+     * Launches GUI.
      * 
      * @param args
      *            command line arguments USED!
@@ -83,10 +89,11 @@ public class Main extends Application
     private String serverIP;
 
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Starts the GUI.
      * 
-     * @see javafx.application.Application#start(javafx.stage.Stage)
+     * @param stage
+     *            Primary stage
      */
     @Override
     public void start( Stage stage )
@@ -285,30 +292,31 @@ public class Main extends Application
         controlBox.getChildren()
             .addAll( controlPanel, new Separator( Orientation.VERTICAL ) );
         controlPanel.setVgap( 5 );
-        controlPanel.add( new controlButton( "Button",
-            workspace, guiButton.class,
-            stage ), 0, 0 );
-        
-        controlPanel.add( new controlButton( "Label",
-            workspace,
-            guiLabel.class,
-            stage ), 0, 1 );
-        
+        controlPanel.add(
+            new controlButton( "Button", workspace, guiButton.class, stage ),
+            0,
+            0 );
+
+        controlPanel.add(
+            new controlButton( "Label", workspace, guiLabel.class, stage ),
+            0,
+            1 );
+
         controlPanel.add( new controlButton( "TextField",
             workspace,
             guiTextField.class,
             stage ), 0, 2 );
-        
+
         controlPanel.add( new controlButton( "ImageView",
             workspace,
             guiImageView.class,
             stage ), 0, 3 );
-        
+
         controlPanel.add( new controlButton( "RadioButton",
             workspace,
             guiRadioButton.class,
             stage ), 0, 4 );
-        
+
         controlPanel.add( new controlButton( "CheckBox",
             workspace,
             guiCheckBox.class,
@@ -318,7 +326,7 @@ public class Main extends Application
         {
             if ( ass instanceof controlButton )
                 ( (controlButton)ass ).setMinWidth( 100 );
-                ( (controlButton)ass ).setMinHeight( 100 );
+            ( (controlButton)ass ).setMinHeight( 100 );
         }
 
         controlPanel.setPadding( new Insets( 25, 25, 25, 25 ) );

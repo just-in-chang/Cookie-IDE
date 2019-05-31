@@ -7,6 +7,12 @@ import java.awt.TrayIcon;
 import javax.swing.ImageIcon;
 
 
+/**
+ * 
+ * Creates notifications.
+ *
+ * @author Justin Chang
+ */
 public class Notification
 {
 
@@ -20,18 +26,27 @@ public class Notification
     private TrayIcon trayIcon = new TrayIcon( image, "Tray Demo" );
 
 
+    /**
+     * Creates a notification object
+     */
     public Notification()
     {
         rItWorkBro = System.getProperty( "os.name" ).contains( "Windows" );
     }
 
 
+    /**
+     * Sends Successful save notification
+     */
     public void saveSuccess()
     {
         notificationSend( "Save completed. ", TrayIcon.MessageType.INFO );
     }
 
 
+    /**
+     * Sends failure to save notification
+     */
     public void saveFail()
     {
         notificationSend(
@@ -40,12 +55,20 @@ public class Notification
     }
 
 
+    /**
+     * 
+     * Sends canceling a save notification.
+     */
     public void saveCancel()
     {
         notificationSend( "Save canceled. ", TrayIcon.MessageType.WARNING );
     }
 
 
+    /**
+     * 
+     * Sends connection failure notification.
+     */
     public void connectionFail()
     {
         notificationSend( "Failed to connect to server. Unable to save. ",
@@ -53,6 +76,10 @@ public class Notification
     }
 
 
+    /**
+     * 
+     * Sends initialization failure notification.
+     */
     public void initializationFail()
     {
         notificationSend( "Failed to initialize. Please check parameters. ",
@@ -60,6 +87,15 @@ public class Notification
     }
 
 
+    /**
+     * 
+     * Sends notification.
+     * 
+     * @param str
+     *            Type of notification
+     * @param type
+     *            Notification background type
+     */
     private void notificationSend( String str, TrayIcon.MessageType type )
     {
         if ( rItWorkBro )

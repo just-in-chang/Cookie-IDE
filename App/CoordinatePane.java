@@ -5,11 +5,20 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 
+/**
+ * 
+ * Pane used in edit panel.
+ *
+ * @author Justin
+ */
 public class CoordinatePane extends GridPane
 {
     private Label xLabel, yLabel, widthLabel, heightLabel;
 
 
+    /**
+     * Initializes a coordinate pane to be used
+     */
     public CoordinatePane()
     {
         this.setVgap( 10 );
@@ -45,51 +54,50 @@ public class CoordinatePane extends GridPane
     }
 
 
+    /**
+     * 
+     * Returns the xLabel.
+     * 
+     * @return xLabel
+     */
     public Label getxLabel()
     {
         return xLabel;
     }
 
 
-    public void setxLabel( Label xLabel )
-    {
-        this.xLabel = xLabel;
-    }
-
-
+    /**
+     * 
+     * Returns the yLabel.
+     * 
+     * @return yLabel
+     */
     public Label getyLabel()
     {
         return yLabel;
     }
 
 
-    public void setyLabel( Label yLabel )
-    {
-        this.yLabel = yLabel;
-    }
-
-
+    /**
+     * 
+     * Returns the widthLabel.
+     * 
+     * @return width Label
+     */
     public Label getWidthLabel()
     {
         return widthLabel;
     }
 
 
-    public void setWidthLabel( Label widthLabel )
-    {
-        this.widthLabel = widthLabel;
-    }
-
-
+    /**
+     * Returns height label.
+     * 
+     * @return height Label
+     */
     public Label getHeightLabel()
     {
         return heightLabel;
-    }
-
-
-    public void setHeightLabel( Label lengthLabel )
-    {
-        this.heightLabel = lengthLabel;
     }
 
 }

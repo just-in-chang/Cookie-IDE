@@ -7,6 +7,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 
+/**
+ * Pane for editing Labeled Nodes
+ *
+ * @author Justin
+ */
 public class LabeledPane extends GridPane
 {
     private TextField textField;
@@ -14,6 +19,12 @@ public class LabeledPane extends GridPane
     private Button applyButton;
 
 
+    /**
+     * Creates a Pane to edit labeled node.
+     * 
+     * @param labelName
+     *            Name of node
+     */
     public LabeledPane( String labelName )
     {
         this.setVgap( 10 );
@@ -29,12 +40,24 @@ public class LabeledPane extends GridPane
     }
 
 
+    /**
+     * 
+     * Returns textField.
+     * 
+     * @return textField
+     */
     public TextField getTextField()
     {
         return textField;
     }
 
 
+    /**
+     * 
+     * Returns the apply button to make edits.
+     * 
+     * @return Apply button.
+     */
     public Button getApplyButton()
     {
         return applyButton;
