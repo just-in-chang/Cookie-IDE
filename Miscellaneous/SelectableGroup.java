@@ -26,7 +26,9 @@ public class SelectableGroup
 
     /**
      * adds a node to the ArrayList
-     * @param node node to add
+     * 
+     * @param node
+     *            node to add
      */
     public void add( guiObject node )
     {
@@ -39,8 +41,10 @@ public class SelectableGroup
 
 
     /**
-     * TODO Write your method description here.
+     * sets the given node's selection state
+     * 
      * @param toggle
+     *            node to set
      */
     public void setSelected( guiObject toggle )
     {
@@ -54,6 +58,11 @@ public class SelectableGroup
     }
 
 
+    /**
+     * return the currently selected node
+     * 
+     * @return selected node
+     */
     public guiObject getSelected()
     {
         guiObject selected = null;
@@ -66,6 +75,11 @@ public class SelectableGroup
     }
 
 
+    /**
+     * returns the index of the currently selected node
+     * 
+     * @return index of the selected node
+     */
     public int getSelectedIndex()
     {
         return group.indexOf( getSelected() );

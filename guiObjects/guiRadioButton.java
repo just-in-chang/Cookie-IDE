@@ -3,6 +3,11 @@ package guiObjects;
 import javafx.scene.control.RadioButton;
 
 
+/**
+ *  radiobutton that can be moved around
+ *
+ *  @author  Andrew Chen
+ */
 public class guiRadioButton extends RadioButton implements guiObject
 {
     private String name;
@@ -10,6 +15,10 @@ public class guiRadioButton extends RadioButton implements guiObject
     private boolean select;
 
 
+    /**
+     * Constructs guiRadioButton with given name and sets its manipulability
+     * @param label
+     */
     public guiRadioButton( String label )
     {
         super( label );
@@ -19,6 +28,9 @@ public class guiRadioButton extends RadioButton implements guiObject
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#getName()
+     */
     @Override
     public String getName()
     {
@@ -26,6 +38,9 @@ public class guiRadioButton extends RadioButton implements guiObject
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#setName(java.lang.String)
+     */
     @Override
     public void setName( String n )
     {
@@ -33,6 +48,9 @@ public class guiRadioButton extends RadioButton implements guiObject
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#isThisSelected()
+     */
     @Override
     public boolean isThisSelected()
     {
@@ -40,6 +58,9 @@ public class guiRadioButton extends RadioButton implements guiObject
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#setSelection(boolean)
+     */
     @Override
     public void setSelection( boolean b )
     {

@@ -5,7 +5,7 @@ import javafx.scene.image.ImageView;
 
 
 /**
- *  imageview that can be moved around and set its image url
+ *  an imageview that can be modified in position and be set its URL
  *
  *  @author  Andrew Chen
  */
@@ -32,6 +32,10 @@ public class guiImageView extends ImageView implements guiObject
         select = false;
     }
     
+    /**
+     * sets the current image url
+     * @param url to set the image
+     */
     public void setURL(String url)
     {
         Image i = new Image(url);
@@ -39,11 +43,18 @@ public class guiImageView extends ImageView implements guiObject
         URL = url;
     }
 
+    /**
+     * gets the current image url
+     * @return URL - current image url
+     */
     public String getURL()
     {
         return URL;
     }
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#getName()
+     */
     @Override
     public String getName()
     {
@@ -51,6 +62,9 @@ public class guiImageView extends ImageView implements guiObject
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#setName(java.lang.String)
+     */
     @Override
     public void setName( String n )
     {
@@ -58,6 +72,9 @@ public class guiImageView extends ImageView implements guiObject
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#isThisSelected()
+     */
     @Override
     public boolean isThisSelected()
     {
@@ -65,6 +82,9 @@ public class guiImageView extends ImageView implements guiObject
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#setSelection(boolean)
+     */
     @Override
     public void setSelection( boolean b )
     {
@@ -72,12 +92,18 @@ public class guiImageView extends ImageView implements guiObject
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#getWidth()
+     */
     public double getWidth()
     {
         return this.getImage().getWidth();
     }
 
 
+    /* (non-Javadoc)
+     * @see guiObjects.guiObject#getHeight()
+     */
     public double getHeight()
     {
         return this.getImage().getHeight();
