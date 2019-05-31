@@ -54,7 +54,7 @@ public class Server // extends Application
         {
             InetAddress IP = InetAddress.getLocalHost();
             System.out.println(
-                "Sever Online\nIP: " + IP.getHostAddress() + "\nPort 6969\n" );
+                "Sever Online\nIP: " + IP.getHostAddress() + "\nPort 1337\n" );
             // renew the hashmap for file so that it's updated for client to
             // pull
             loadHashMap();
@@ -63,7 +63,7 @@ public class Server // extends Application
                 System.out.println( "Iteration Number " + iterationNo );
                 iterationNo++;
                 // initialization of the server socket and streams
-                ServerSocket ss = new ServerSocket( 6969 );
+                ServerSocket ss = new ServerSocket( 1337 );
                 Socket socket = ss.accept();
                 ObjectInputStream ois = new ObjectInputStream(
                     socket.getInputStream() );

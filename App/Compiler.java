@@ -85,7 +85,7 @@ public class Compiler
             }
             else
             {
-                Socket socket = new Socket( IP, 6969 );
+                Socket socket = new Socket( IP, 1337 );
                 ObjectOutputStream oos = new ObjectOutputStream(
                     socket.getOutputStream() );
                 ObjectInputStream ois = new ObjectInputStream(
@@ -221,7 +221,7 @@ public class Compiler
         {
             try
             {
-                Socket socket = new Socket( IP, 6969 );
+                Socket socket = new Socket( IP, 1337 );
                 ObjectOutputStream oos = new ObjectOutputStream(
                     socket.getOutputStream() );
                 ObjectInputStream ois = new ObjectInputStream(
@@ -257,7 +257,7 @@ public class Compiler
     {
         try
         {
-            Socket socket = new Socket( IP, 6969 );
+            Socket socket = new Socket( IP, 1337 );
             ObjectOutputStream oos = new ObjectOutputStream(
                 socket.getOutputStream() );
             ObjectInputStream ois = new ObjectInputStream(
