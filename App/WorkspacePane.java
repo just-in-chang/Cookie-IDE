@@ -2,6 +2,8 @@ package App;
 
 import Miscellaneous.SelectableGroup;
 import guiObjects.guiObject;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 
 
@@ -30,6 +32,18 @@ public class WorkspacePane extends Pane
         this.setOnMouseMoved( e -> {
             x = e.getX();
             y = e.getY();
+        } );
+        
+        ContextMenu cMenu = new ContextMenu();
+        MenuItem clear = new MenuItem( "Clear" );
+        cMenu.getItems().add( clear );
+
+        clear.setOnAction( e -> {
+            this.getChildren().clear();
+        } );
+
+        this.setOnContextMenuRequested( e -> {
+            cMenu.show( this, e.getScreenX(), e.getScreenY() );
         } );
 
     }

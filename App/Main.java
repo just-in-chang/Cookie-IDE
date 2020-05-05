@@ -52,6 +52,8 @@ import javafx.stage.Stage;
  * Main client class for the Cookie IDE
  *
  * @author Justin Chang
+ * @author Andrew Chen
+ * @author Nick Cheng
  */
 public class Main extends Application
 {
@@ -164,7 +166,8 @@ public class Main extends Application
         Menu file = new Menu( "File" );
         MenuItem save = new MenuItem( "Save" );
         MenuItem open = new MenuItem( "Retrieve Backup" );
-        file.getItems().addAll( save, open );
+        MenuItem reset = new MenuItem( "Reset Workspace");
+        file.getItems().addAll( save, open, reset );
         menu.getMenus().addAll( file );
         menuBar.getChildren().addAll( menu );
 
@@ -182,6 +185,11 @@ public class Main extends Application
             Compiler compile = new Compiler( serverIP );
             compile.open( stage );
         } );
+        
+        reset.setOnAction( e -> {
+            this.workspace.getChildren().clear();
+            setSize( stage, this.workspace);
+        });
 
         return menuBar;
     }
